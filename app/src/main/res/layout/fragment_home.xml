@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".activities.HomeActivity">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/light_grey"
+            android:padding="5dp"
+            android:text="Welcome Dummy"
+            android:textAlignment="center"
+            android:textSize="18dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/title"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:id="@+id/project_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Select A Project"
+                android:textAlignment="center"
+                android:textSize="15dp" />
+
+            <LinearLayout
+                android:id="@+id/projects_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/project_title"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/border">
+
+                <Spinner
+                    android:id="@+id/projects"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/projects_container"
+                android:layout_margin="10dp"
+                android:clickable="true"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/one"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/mark_attendance"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/border"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/border_round"
+                            android:backgroundTint="@color/c1"
+                            android:backgroundTintMode="src_atop"
+                            android:padding="10dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/ic_assignment_black_24dp"
+                            android:tint="@color/c1" />
+
+                        <TextView
+                            android:id="@+id/mark_attendance_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:breakStrategy="high_quality"
+                            android:padding="5dp"
+                            android:text="Attendance"
+                            android:textAlignment="center"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/manage_inventory"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/border"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/border_round"
+                            android:backgroundTint="@color/c2"
+                            android:backgroundTintMode="src_atop"
+                            android:padding="10dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/ic_add_shopping_cart_black_24dp"
+                            android:tint="@color/c2" />
+
+                        <TextView
+                            android:id="@+id/manage_inventory_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:breakStrategy="high_quality"
+                            android:padding="5dp"
+                            android:text="Inventory"
+                            android:textAlignment="center"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/two"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/issued_items"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/border"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/border_round"
+                            android:backgroundTint="@color/color1"
+                            android:backgroundTintMode="src_atop"
+                            android:padding="10dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/ic_shopping_cart_black_24dp"
+                            android:tint="@color/color1" />
+
+                        <TextView
+                            android:id="@+id/issued_items_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:breakStrategy="high_quality"
+                            android:padding="5dp"
+                            android:text="Issue Item"
+                            android:textAlignment="center"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/request_items"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/border"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/border_round"
+                            android:backgroundTint="@color/c3"
+                            android:backgroundTintMode="src_atop"
+                            android:padding="10dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/ic_receipt_black_24dp"
+                            android:tint="@color/c3" />
+
+                        <TextView
+                            android:id="@+id/request_items_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:breakStrategy="high_quality"
+                            android:padding="5dp"
+                            android:text="Request Item"
+                            android:textAlignment="center"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/three"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/work_progress"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/border"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/border_round"
+                            android:backgroundTint="@color/c4"
+                            android:backgroundTintMode="src_atop"
+                            android:padding="10dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/ic_trending_up_black_24dp"
+                            android:tint="@color/c4" />
+
+                        <TextView
+                            android:id="@+id/work_progress_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:breakStrategy="high_quality"
+                            android:padding="5dp"
+                            android:text="Work Progress"
+                            android:textAlignment="center"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/purchase"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/border"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/border_round"
+                            android:backgroundTint="@color/c5"
+                            android:backgroundTintMode="src_atop"
+                            android:padding="10dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/ic_shopping_basket_black_24dp"
+                            android:tint="@color/c5" />
+
+                        <TextView
+                            android:id="@+id/purchase_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:breakStrategy="high_quality"
+                            android:padding="5dp"
+                            android:text="Purchase Orders"
+                            android:textAlignment="center"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/light_grey"
+                android:paddingTop="10dp"
+                android:text="Build&amp;Live © 2018"
+                android:textAlignment="center"
+                android:textSize="15dp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+</ScrollView>

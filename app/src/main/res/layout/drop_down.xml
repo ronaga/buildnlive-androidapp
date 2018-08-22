@@ -1,0 +1,12 @@
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/text1"
+    android:singleLine="true"
+    android:paddingTop= "8dp"
+    android:paddingBottom="8dp"
+    android:background="@color/white"
+    android:paddingLeft="5dp"
+    android:textSize="15dp"
+    android:textColor="@color/black"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="buildnlive.com.buildlive">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".activities.HomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activities.MarkAttendance" />
+        <activity android:name=".activities.AddItem" />
+        <activity android:name=".activities.IssuedItems" />
+        <activity android:name=".activities.RequestItems" />
+        <activity android:name=".activities.WorkProgress" />
+        <activity android:name=".activities.DailyWorkProgressActivities" />
+        <activity android:name=".activities.PurchaseOrder" />
+        <activity
+            android:name=".activities.MainActivity"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".activities.PreviewImage" />
+        <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.PurchaseOrderListing" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity android:name=".activities.Main2Activity"></activity>
+    </application>
+
+</manifest>

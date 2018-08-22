@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <RelativeLayout
+        android:id="@+id/controls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/edit"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="10dp"
+            android:background="@drawable/border"
+            android:backgroundTint="@color/color3"
+            android:elevation="10dp"
+            android:src="@drawable/ic_edit_black_24dp"
+            android:tint="@color/white" />
+
+        <ImageButton
+            android:id="@+id/undo"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/border"
+            android:backgroundTint="@color/color3"
+            android:elevation="10dp"
+            android:src="@drawable/ic_undo_black_24dp"
+            android:tint="@color/white" />
+
+        <ImageButton
+            android:id="@+id/redo"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/undo"
+            android:layout_toRightOf="@+id/undo"
+            android:background="@drawable/border"
+            android:backgroundTint="@color/color3"
+            android:elevation="10dp"
+            android:src="@drawable/ic_redo_black_24dp"
+            android:tint="@color/white" />
+
+        <!--<ImageButton
+            android:id="@+id/zoomin"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/redo"
+            android:layout_toRightOf="@+id/redo"
+            android:background="@drawable/border"
+            android:backgroundTint="@color/color3"
+            android:elevation="10dp"
+            android:src="@drawable/ic_zoom_in_black_24dp"
+            android:tint="@color/white" />
+
+        <ImageButton
+            android:id="@+id/zoomout"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/zoomin"
+            android:layout_toRightOf="@+id/zoomin"
+            android:background="@drawable/border"
+            android:backgroundTint="@color/color3"
+            android:elevation="10dp"
+            android:src="@drawable/ic_zoom_out_black_24dp"
+            android:tint="@color/white" />-->
+
+
+    </RelativeLayout>
+
+
+    <com.byox.drawview.views.DrawView
+        android:id="@+id/draw_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/controls"
+        android:layout_margin="10dp"
+        app:dv_draw_alpha="255"
+        app:dv_draw_anti_alias="true"
+        app:dv_draw_color="@color/colorAccent"
+        app:dv_draw_corners="round"
+        app:dv_draw_dither="true"
+        app:dv_draw_enable_zoom="true"
+        app:dv_draw_font_family="default_font"
+        app:dv_draw_font_size="12"
+        app:dv_draw_max_zoom_factor="8"
+        app:dv_draw_mode="draw"
+        app:dv_draw_style="stroke"
+        app:dv_draw_tool="pen"
+        app:dv_draw_width="4"
+        app:dv_draw_zoomregion_maxscale="5"
+        app:dv_draw_zoomregion_minscale="2"
+        app:dv_draw_zoomregion_scale="4" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floating_button"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="20dp"
+        android:background="@color/color3"
+        android:src="@drawable/ic_check_black_24dp"
+        app:backgroundTint="@color/color3" />
+
+</RelativeLayout>

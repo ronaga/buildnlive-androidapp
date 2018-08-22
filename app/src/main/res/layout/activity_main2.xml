@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainrel"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".activities.Main2Activity">
+
+    <Button
+        android:id="@+id/btnzoom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Zoom" />
+
+    <Button
+        android:id="@+id/btnset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/btnzoom"
+        android:text="Done" />
+
+    <!--<ImageView
+        android:id="@+id/imageview1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:scaleType="matrix"
+        android:src="@drawable/back"
+        android:visibility="visible" />-->
+
+    <RelativeLayout
+        android:id="@+id/paint_paint_base_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/btnset"
+        android:orientation="horizontal" />
+
+    <LinearLayout
+        android:id="@+id/paint_paint_base_layout2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnzoom"
+        android:orientation="horizontal"
+        android:visibility="gone" />
+
+</RelativeLayout>
