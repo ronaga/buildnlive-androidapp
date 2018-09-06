@@ -14,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,17 +25,17 @@ import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.activities.AddItem;
+import buildnlive.com.buildlive.activities.IndentItems;
 import buildnlive.com.buildlive.activities.IssuedItems;
+import buildnlive.com.buildlive.activities.LocalPurchase;
 import buildnlive.com.buildlive.activities.MarkAttendance;
 import buildnlive.com.buildlive.activities.PurchaseOrder;
 import buildnlive.com.buildlive.activities.RequestItems;
 import buildnlive.com.buildlive.activities.WorkProgress;
-import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Project;
 import buildnlive.com.buildlive.elements.ProjectMember;
 import buildnlive.com.buildlive.utils.Config;
 import io.realm.Realm;
-import io.realm.RealmObject;
 import io.realm.RealmResults;
 
 import static buildnlive.com.buildlive.activities.LoginActivity.PREF_KEY_NAME;
@@ -44,7 +43,7 @@ import static buildnlive.com.buildlive.utils.Config.PREF_NAME;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
     private TextView title;
-    private LinearLayout markAttendance, manageInventory, issuedItems, requestItems, workProgress, purchaseOrder;
+    private LinearLayout markAttendance, manageInventory, issuedItems, requestItems, workProgress, purchaseOrder,siteRequest,localPurchase;
     private SharedPreferences pref;
     private Spinner projects;
     private static App app;
@@ -59,6 +58,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -66,12 +66,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Home");
+        pref = getActivity().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         markAttendance = view.findViewById(R.id.mark_attendance);
         manageInventory = view.findViewById(R.id.manage_inventory);
-        pref = getActivity().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         issuedItems = view.findViewById(R.id.issued_items);
         requestItems = view.findViewById(R.id.request_items);
         projects = view.findViewById(R.id.projects);
+        siteRequest=view.findViewById(R.id.request_list);
+        localPurchase=view.findViewById(R.id.local_purchase);
+
+
         Realm realm = Realm.getDefaultInstance();
         final RealmResults<Project> projects = realm.where(Project.class).findAll();
         for (Project p : projects) {
@@ -103,7 +107,33 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         requestItems.setOnClickListener(this);
         workProgress.setOnClickListener(this);
         purchaseOrder.setOnClickListener(this);
-        title.setText("Welcome " + pref.getString(PREF_KEY_NAME, "Dummy").split(" ")[0]);
+        siteRequest.setOnClickListener(this);
+        localPurchase.setOnClickListener(this);
+
+        switch (App.permissions) {
+            case "Storekeeper":
+                markAttendance.setVisibility(View.GONE);
+                requestItems.setVisibility(View.GONE);
+                siteRequest.setVisibility(View.GONE);
+                workProgress.setVisibility(View.GONE);
+                break;
+            case "Siteengineer":
+                markAttendance.setVisibility(View.GONE);
+                requestItems.setVisibility(View.GONE);
+                manageInventory.setVisibility(View.GONE);
+                purchaseOrder.setVisibility(View.GONE);
+                issuedItems.setVisibility(View.GONE);
+
+                break;
+            case "Siteadmin":
+                siteRequest.setVisibility(View.GONE);
+                issuedItems.setVisibility(View.GONE);
+                break;
+        }
+
+            title.setText("Welcome " + pref.getString(PREF_KEY_NAME, "Dummy").split(" ")[0]);
+
+
     }
 
     private void syncProject() {
@@ -163,6 +193,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.purchase:
                 startActivity(new Intent(getContext(), PurchaseOrder.class));
+                break;
+            case R.id.request_list:
+                startActivity(new Intent(getContext(),IndentItems.class));
+                break;
+            case R.id.local_purchase:
+                startActivity(new Intent(getContext(),LocalPurchase.class));
                 break;
         }
     }

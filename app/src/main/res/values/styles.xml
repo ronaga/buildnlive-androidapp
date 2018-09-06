@@ -22,5 +22,27 @@
         <item name="colorPrimary">#000000</item>
         <item name="colorPrimaryDark">#000000</item>
     </style>
+    <style name="PrimaryApproveButton" parent="Theme.AppCompat.Light">
+        <!--<item name="android:buttonStyle">@style/Widget.AppCompat.Button.Borderless.Colored</item>-->
+        <item name="colorControlHighlight">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorButtonNormal">#00FF00</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+    <style name="PrimaryRejectButton" parent="Theme.AppCompat.Light">
+        <!--<item name="android:buttonStyle">@style/Widget.AppCompat.Button.Borderless.Colored</item>-->
+        <item name="colorControlHighlight">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorButtonNormal">#FF0000</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+    <style name="PrimaryReviewButton" parent="Theme.AppCompat.Light">
+        <!--<item name="android:buttonStyle">@style/Widget.AppCompat.Button.Borderless.Colored</item>-->
+        <item name="colorControlHighlight">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorButtonNormal">@color/c2</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
 
 </resources>

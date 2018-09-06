@@ -24,6 +24,13 @@ public class Config {
     public static final String REQ_PURCHASE_ORDER = "http://buildnlive.com/app/mobileapp/index.php?r=site/SitePurchaseOrder&user_id=[0]&project_id=[1]";
     public static final String REQ_PURCHASE_ORDER_LISTING = "http://buildnlive.com/app/mobileapp/index.php?r=site/PurchaseOrderList&user_id=[0]&purchase_order_id=[1]";
     public static final String REQ_PURCHASE_ORDER_UPDATE = "http://buildnlive.com/app/mobileapp/index.php?r=site/GetPurchaseOrderList";
-
+    public static final String REQ_SENT_CATEGORIES= "http://buildnlive.com/app/mobileapp/index.php?r=site/SentCategories&user_id=[0]";
+    public static final String GET_SITE_LIST="http://buildnlive.com/app/mobileapp/index.php?r=site/SendItemList&cat_id=[0]&user_id=[1]";
+    public static final String SEND_REQUEST_SITE_LIST="http://buildnlive.com/app/mobileapp/index.php?r=site/SiteRequestItem&user_id=[0]";
+    public static final String SEND_REQUEST_STATUS="http://buildnlive.com/app/mobileapp/index.php?r=site/SendRequestStatus&user_id=[0] ";
+    public static final String SEND_LOCAL_PURCHASE="http://buildnlive.com/app/mobileapp/index.php?r=site/LocalPurchase";
+    public static final String SEND_SITE_PAYMENTS="http://buildnlive.com/app/mobileapp/index.php?r=site/SitePayments";
+    public static final String SEND_NOTIFICATIONS="http://buildnlive.com/app/mobileapp/index.php?r=site/SendNotifications&user_id=[0]&project_id=[1]";
+    public static final String GET_NOTIFICATIONS="http://buildnlive.com/app/mobileapp/index.php?r=site/GetNotifications";
     public static final String PREF_NAME = "OGIL";
 }

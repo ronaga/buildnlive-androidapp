@@ -32,6 +32,13 @@
         <activity android:name=".activities.WorkProgress" />
         <activity android:name=".activities.DailyWorkProgressActivities" />
         <activity android:name=".activities.PurchaseOrder" />
+        <activity android:name=".activities.NotificationActivity"/>
+        <activity android:name=".activities.NotificationActivity2"/>
+        <activity android:name=".activities.IndentItems"/>
+        <activity android:name=".activities.LocalPurchase"/>
+        <service android:name=".NotificationService"/>
+
+
         <activity
             android:name=".activities.MainActivity"
             android:theme="@style/AppTheme" />

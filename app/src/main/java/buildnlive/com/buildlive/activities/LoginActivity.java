@@ -2,8 +2,8 @@ package buildnlive.com.buildlive.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -42,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final String PREF_KEY_CONTACT = "user_contact";
     public static final String PREF_KEY_USER_ID = "user_id";
     public static final String PREF_KEY_PROJECTS = "user_projects";
+    public static final String PREF_KEY_PERMISSIONS = "user_permissions";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,12 +99,15 @@ public class LoginActivity extends AppCompatActivity {
                     try {
                         JSONObject obj = new JSONObject(response);
                         String id = obj.getString("id");
+                        String perm= obj.getString("role");
                         pref.edit().putBoolean(PREF_KEY_LOGGED_IN, true).apply();
                         pref.edit().putString(PREF_KEY_USER_ID, id).apply();
                         pref.edit().putString(PREF_KEY_EMAIL, obj.getString("login_name")).apply();
                         pref.edit().putString(PREF_KEY_NAME, obj.getString("first_name") + " " + obj.getString("last_name")).apply();
                         pref.edit().putString(PREF_KEY_CONTACT, obj.getString("contact_mobile")).apply();
+                        pref.edit().putString(PREF_KEY_PERMISSIONS,perm).apply();
                         App.userId = id;
+                        App.permissions=perm;
                         JSONArray array = obj.getJSONArray("project_list");
                         Realm realm = Realm.getDefaultInstance();
                         for (int i = 0; i < array.length(); i++) {

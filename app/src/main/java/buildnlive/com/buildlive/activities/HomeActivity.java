@@ -1,28 +1,26 @@
 package buildnlive.com.buildlive.activities;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-
 import android.support.v4.content.ContextCompat;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -32,11 +30,14 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 
 import buildnlive.com.buildlive.App;
+import buildnlive.com.buildlive.NotificationService;
 import buildnlive.com.buildlive.R;
+import buildnlive.com.buildlive.elements.Notification;
 import buildnlive.com.buildlive.fragments.HomeFragment;
 import buildnlive.com.buildlive.fragments.PlansFragment;
-import buildnlive.com.buildlive.utils.Config;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
 import static buildnlive.com.buildlive.activities.LoginActivity.PREF_KEY_EMAIL;
 import static buildnlive.com.buildlive.activities.LoginActivity.PREF_KEY_NAME;
@@ -49,14 +50,40 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private SharedPreferences pref;
     public static final String PREF_KEY_LOGGED_IN = "is_logged_in";
     private App app;
+    private AlarmManager alarm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Realm realm =Realm.getDefaultInstance();
+
+        startService(new Intent(this, NotificationService.class));
+        Intent intent = new Intent(this, NotificationService.class);
+        PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
+
+       alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        // Start service every 4 hour
+
+        alarm = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        alarm.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
+                SystemClock.elapsedRealtime() + 14400*1000,
+                14400*1000, pintent);
+// 4 hours in miliSec 14400*1000
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED, WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
         setContentView(R.layout.activity_home);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        realm.where(Notification.class).findAllAsync().addChangeListener(new RealmChangeListener<RealmResults<Notification>>() {
+            @Override
+            public void onChange(RealmResults<Notification> notifications) {
+                imageButton.setImageResource(R.drawable.ic_notifications_black_24dp);
+            }
+        });
+
         app = (App) getApplication();
         pref = app.getPref();
         fragment = HomeFragment.newInstance(app);
@@ -69,7 +96,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),NotificationActivity.class));
+                imageButton.setImageResource(R.drawable.ic_notifications_none_black_24dp);
+                startActivity(new Intent(getApplicationContext(),NotificationActivity2.class));
 
             }
         });

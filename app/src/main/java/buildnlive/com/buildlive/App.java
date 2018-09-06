@@ -18,7 +18,7 @@ import buildnlive.com.buildlive.utils.Config;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
-import static buildnlive.com.buildlive.activities.LoginActivity.PREF_KEY_NAME;
+import static buildnlive.com.buildlive.activities.LoginActivity.PREF_KEY_PERMISSIONS;
 import static buildnlive.com.buildlive.activities.LoginActivity.PREF_KEY_PROJECTS;
 import static buildnlive.com.buildlive.activities.LoginActivity.PREF_KEY_USER_ID;
 import static buildnlive.com.buildlive.utils.Config.PREF_NAME;
@@ -29,6 +29,7 @@ public class App extends Application {
     public static String userId;
     public static String projectId;
     public static String belongsTo;
+    public static String permissions;
 
     @Override
     public void onCreate() {
@@ -44,6 +45,7 @@ public class App extends Application {
         userId = pref.getString(PREF_KEY_USER_ID, "dummy");
         projectId = pref.getString(PREF_KEY_PROJECTS, "{}");
         belongsTo = projectId + userId;
+        permissions=pref.getString(PREF_KEY_PERMISSIONS,"");
     }
 
     public void sendNetworkRequest(final String URL, final int METHOD, final Map<String, String> params, final Interfaces.NetworkInterfaceListener listener) {

@@ -1,27 +1,23 @@
 package buildnlive.com.buildlive.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amulyakhare.textdrawable.TextDrawable;
-import com.amulyakhare.textdrawable.util.ColorGenerator;
-
 import buildnlive.com.buildlive.R;
-import buildnlive.com.buildlive.activities.MarkAttendance;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView markAttendance, managInventory, issuedItems, requestItems, workProgress;
-
+//    private AlarmManager alarm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         markAttendance = findViewById(R.id.mark_attendance);
         managInventory = findViewById(R.id.manage_inventory);

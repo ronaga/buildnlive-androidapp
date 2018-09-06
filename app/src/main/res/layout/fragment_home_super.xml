@@ -80,6 +80,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/border"
                         android:gravity="center"
+                        android:visibility="gone"
                         android:orientation="vertical">
 
                         <ImageView
@@ -334,44 +335,44 @@
                             android:layout_height="match_parent"
                             android:breakStrategy="high_quality"
                             android:padding="5dp"
-                            android:text="Indent Item"
+                            android:text="Site Request"
                             android:textAlignment="center"
                             android:textSize="18dp" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/local_purchase"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="10dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/border"
-                        android:clickable="true"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                    <!--<LinearLayout-->
+                    <!--android:id="@+id/purchase"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_margin="10dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:background="@drawable/border"-->
+                    <!--android:clickable="true"-->
+                    <!--android:gravity="center"-->
+                    <!--android:orientation="vertical">-->
 
-                        <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_margin="10dp"
-                            android:background="@drawable/border_round"
-                            android:backgroundTint="@color/c2"
-                            android:backgroundTintMode="src_atop"
-                            android:padding="10dp"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/ic_shopping_basket_black_24dp"
-                            android:tint="@color/c2" />
+                    <!--<ImageView-->
+                    <!--android:layout_width="50dp"-->
+                    <!--android:layout_height="50dp"-->
+                    <!--android:layout_margin="10dp"-->
+                    <!--android:background="@drawable/border_round"-->
+                    <!--android:backgroundTint="@color/c5"-->
+                    <!--android:backgroundTintMode="src_atop"-->
+                    <!--android:padding="10dp"-->
+                    <!--android:scaleType="fitXY"-->
+                    <!--android:src="@drawable/ic_shopping_basket_black_24dp"-->
+                    <!--android:tint="@color/c5" />-->
 
-                        <TextView
-                            android:id="@+id/local_purchase_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:breakStrategy="high_quality"
-                            android:padding="5dp"
-                            android:text="Local Purchase"
-                            android:textAlignment="center"
-                            android:textSize="18dp" />
-                    </LinearLayout>
+                    <!--<TextView-->
+                    <!--android:id="@+id/purchase_text"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:breakStrategy="high_quality"-->
+                    <!--android:padding="5dp"-->
+                    <!--android:text="Purchase Orders"-->
+                    <!--android:textAlignment="center"-->
+                    <!--android:textSize="18dp" />-->
+                    <!--</LinearLayout>-->
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
