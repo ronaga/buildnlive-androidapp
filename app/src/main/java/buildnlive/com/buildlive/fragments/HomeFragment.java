@@ -112,23 +112,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         switch (App.permissions) {
             case "Storekeeper":
-                markAttendance.setVisibility(View.GONE);
-                requestItems.setVisibility(View.GONE);
                 siteRequest.setVisibility(View.GONE);
                 workProgress.setVisibility(View.GONE);
                 break;
             case "Siteengineer":
                 markAttendance.setVisibility(View.GONE);
-                requestItems.setVisibility(View.GONE);
                 manageInventory.setVisibility(View.GONE);
                 purchaseOrder.setVisibility(View.GONE);
                 issuedItems.setVisibility(View.GONE);
+                localPurchase.setVisibility(View.GONE);
 
                 break;
             case "Siteadmin":
                 siteRequest.setVisibility(View.GONE);
                 issuedItems.setVisibility(View.GONE);
+                purchaseOrder.setVisibility(View.GONE);
+
                 break;
+            case "Siteincharge":
+                siteRequest.setVisibility(View.GONE);
+
         }
 
             title.setText("Welcome " + pref.getString(PREF_KEY_NAME, "Dummy").split(" ")[0]);
