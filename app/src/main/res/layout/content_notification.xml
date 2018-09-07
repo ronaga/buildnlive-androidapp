@@ -53,12 +53,14 @@
             <TextView
                 android:id="@+id/date"
                 android:layout_weight="1"
+                android:textAlignment="textEnd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:breakStrategy="high_quality"
                 android:padding="5dp"
                 android:text="Title"
-                android:textSize="15dp" />
+                android:textSize="15dp"
+                android:gravity="end" />
 
         </LinearLayout>
 
@@ -96,23 +98,16 @@
                 android:textSize="14sp"
                 />
 
-                <!--<Button-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="Approve"/>-->
+            <Button
+                android:id="@+id/read_notification"
+                android:layout_weight="6"
+                android:textSize="12sp"
+                android:layout_marginRight="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Read"
+                android:layout_marginEnd="5dp" />
 
-                <!--<Button-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="Approve"/>-->
-
-                <!--<Button-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="Approve"/>-->
         </LinearLayout>
 
         <LinearLayout
@@ -183,6 +178,7 @@
                 android:text="Not Received"/>
 
         </LinearLayout>
+
 
 
 

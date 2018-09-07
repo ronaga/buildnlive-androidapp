@@ -120,6 +120,7 @@ public class SendRequestFragment extends Fragment {
                             hider.setVisibility(View.GONE);
                             if (response.equals("1")) {
                                 Toast.makeText(getContext(), "Item Requested", Toast.LENGTH_LONG).show();
+
                                 getActivity().finish();
                                 Realm realm = Realm.getDefaultInstance();
                                 realm.executeTransaction(new Realm.Transaction() {

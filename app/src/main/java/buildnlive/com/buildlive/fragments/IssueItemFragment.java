@@ -31,7 +31,6 @@ import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Issue;
 import buildnlive.com.buildlive.elements.Item;
 import buildnlive.com.buildlive.elements.ProjectMember;
-import buildnlive.com.buildlive.elements.Worker;
 import buildnlive.com.buildlive.utils.Config;
 import io.realm.Realm;
 import io.realm.RealmResults;

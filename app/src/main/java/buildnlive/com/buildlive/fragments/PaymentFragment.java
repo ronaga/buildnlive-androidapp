@@ -46,7 +46,6 @@ public class PaymentFragment extends Fragment {
 
 
     public static PaymentFragment newInstance() {
-//        siteIndentItem = u;
         return new PaymentFragment();
     }
 

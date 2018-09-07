@@ -54,7 +54,6 @@ public class LocalPurchaseFragment extends Fragment {
 
 
     public static LocalPurchaseFragment newInstance() {
-//        siteIndentItem = u;
         return new LocalPurchaseFragment();
     }
 

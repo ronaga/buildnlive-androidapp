@@ -43,6 +43,14 @@
         <item name="colorButtonNormal">@color/c2</item>
         <item name="android:textColor">#ffffff</item>
     </style>
+    <!--<style name="PrimaryReadButton" parent="Theme.AppCompat.Light">-->
+        <!--&lt;!&ndash;<item name="android:buttonStyle">@style/Widget.AppCompat.Button.Borderless.Colored</item>&ndash;&gt;-->
+        <!--<item name="colorControlHighlight">@color/colorAccent</item>-->
+        <!--<item name="colorAccent">@color/colorPrimary</item>-->
+        <!--<item name="colorButtonNormal">#ffff66</item>-->
+        <!--<item name="android:textColor">#ffffff</item>-->
+    <!--</style>-->
+
 
 
 </resources>

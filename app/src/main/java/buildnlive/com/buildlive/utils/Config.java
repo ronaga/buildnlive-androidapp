@@ -32,5 +32,6 @@ public class Config {
     public static final String SEND_SITE_PAYMENTS="http://buildnlive.com/app/mobileapp/index.php?r=site/SitePayments";
     public static final String SEND_NOTIFICATIONS="http://buildnlive.com/app/mobileapp/index.php?r=site/SendNotifications&user_id=[0]&project_id=[1]";
     public static final String GET_NOTIFICATIONS="http://buildnlive.com/app/mobileapp/index.php?r=site/GetNotifications";
+    public static final String GET_NOTIFICATIONS_COUNT="http://buildnlive.com/app/mobileapp/index.php?r=site/GetNotificationCount";
     public static final String PREF_NAME = "OGIL";
 }

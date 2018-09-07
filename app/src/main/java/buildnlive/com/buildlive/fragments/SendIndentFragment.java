@@ -228,6 +228,7 @@ public class SendIndentFragment extends Fragment{
             public void onNetworkRequestComplete(String response) {
                 if (response.equals("Success")) {
                     Toast.makeText(getContext(), "Request Generated", Toast.LENGTH_SHORT).show();
+                    IndentItemAdapter.ViewHolder.CHECKOUT=false;
                     getActivity().finish();
                 }
             }

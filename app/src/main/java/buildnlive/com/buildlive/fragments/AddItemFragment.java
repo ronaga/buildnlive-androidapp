@@ -170,6 +170,7 @@ public class AddItemFragment extends Fragment implements Interfaces.SyncListener
             public void onNetworkRequestComplete(String response) {
                 if (response.equals("1")) {
                     Toast.makeText(getContext(), "Request Generated", Toast.LENGTH_SHORT).show();
+                    AddItemAdapter.ViewHolder.CHECKOUT=false;
                     getActivity().finish();
                 }
             }

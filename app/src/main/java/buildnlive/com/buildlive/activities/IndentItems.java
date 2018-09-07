@@ -13,11 +13,10 @@ import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.fragments.SendIndentFragment;
 import buildnlive.com.buildlive.fragments.ViewIndentFragment;
-import io.realm.Realm;
+
 
 public class IndentItems extends AppCompatActivity {
     private App app;
-    private Realm realm;
     private Fragment fragment;
     private TextView edit, view;
 
@@ -26,7 +25,6 @@ public class IndentItems extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_indent_item);
         app = (App) getApplication();
-        realm = Realm.getDefaultInstance();
         fragment = SendIndentFragment.newInstance();
 
         changeScreen();

@@ -1,14 +1,10 @@
 package buildnlive.com.buildlive.activities;
 
 import android.Manifest;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -29,15 +25,20 @@ import android.widget.TextView;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
 import buildnlive.com.buildlive.App;
-import buildnlive.com.buildlive.NotificationService;
+import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
-import buildnlive.com.buildlive.elements.Notification;
+import buildnlive.com.buildlive.console;
+import buildnlive.com.buildlive.fragments.AboutUsFragment;
 import buildnlive.com.buildlive.fragments.HomeFragment;
 import buildnlive.com.buildlive.fragments.PlansFragment;
+import buildnlive.com.buildlive.utils.Config;
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmResults;
 
 import static buildnlive.com.buildlive.activities.LoginActivity.PREF_KEY_EMAIL;
 import static buildnlive.com.buildlive.activities.LoginActivity.PREF_KEY_NAME;
@@ -45,12 +46,24 @@ import static buildnlive.com.buildlive.activities.LoginActivity.PREF_KEY_NAME;
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ImageButton imageButton;
     private ImageView imageView;
+    private TextView badge;
     private ColorGenerator generator = ColorGenerator.MATERIAL;
     private Fragment fragment;
     private SharedPreferences pref;
     public static final String PREF_KEY_LOGGED_IN = "is_logged_in";
     private App app;
-    private AlarmManager alarm;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        try {
+            sendRequest();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,31 +71,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         Realm realm =Realm.getDefaultInstance();
 
-        startService(new Intent(this, NotificationService.class));
-        Intent intent = new Intent(this, NotificationService.class);
-        PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
-
-       alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-        // Start service every 4 hour
-
-        alarm = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        alarm.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
-                SystemClock.elapsedRealtime() + 14400*1000,
-                14400*1000, pintent);
-// 4 hours in miliSec 14400*1000
-
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED, WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
         setContentView(R.layout.activity_home);
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        realm.where(Notification.class).findAllAsync().addChangeListener(new RealmChangeListener<RealmResults<Notification>>() {
-            @Override
-            public void onChange(RealmResults<Notification> notifications) {
-                imageButton.setImageResource(R.drawable.ic_notifications_black_24dp);
-            }
-        });
 
         app = (App) getApplication();
         pref = app.getPref();
@@ -91,13 +83,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             finish();
         }
+        badge=findViewById(R.id.badge_notification);
 
         imageButton = findViewById(R.id.notification);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                imageButton.setImageResource(R.drawable.ic_notifications_none_black_24dp);
-                startActivity(new Intent(getApplicationContext(),NotificationActivity2.class));
+                badge.setVisibility(View.GONE);
+                startActivity(new Intent(getApplicationContext(),NotificationActivity.class));
 
             }
         });
@@ -147,6 +140,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_plans:
                 fragment = PlansFragment.newInstance((App) getApplication());
+                break;
+            case R.id.nav_about:
+                fragment= AboutUsFragment.newInstance();
                 break;
             case R.id.nav_logout:
                 logout();
@@ -200,5 +196,38 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 .beginTransaction()
                 .replace(R.id.content_frame, fragment)
                 .commit();
+    }
+
+
+    private void sendRequest() throws JSONException {
+        App app= ((App)getApplication());
+        HashMap<String, String> params = new HashMap<>();
+        JSONObject jsonObject=new JSONObject();
+        jsonObject.put("project_id", App.projectId).put("user_id", App.userId);
+        params.put("notification_count", jsonObject.toString());
+        console.log("Res:" + params);
+        app.sendNetworkRequest(Config.GET_NOTIFICATIONS_COUNT, 1, params, new Interfaces.NetworkInterfaceListener() {
+            @Override
+            public void onNetworkRequestStart() {
+
+            }
+
+            @Override
+            public void onNetworkRequestError(String error) {
+
+            }
+
+            @Override
+            public void onNetworkRequestComplete(String response) {
+                console.log(response);
+                if (response.equals("0")) {
+                    badge.setVisibility(View.GONE);
+                }
+                else{
+                    badge.setVisibility(View.VISIBLE);
+                    badge.setText(response);
+                }
+            }
+        });
     }
 }

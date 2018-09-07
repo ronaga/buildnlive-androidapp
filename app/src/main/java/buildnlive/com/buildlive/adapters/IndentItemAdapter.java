@@ -39,7 +39,7 @@ public class IndentItemAdapter extends RecyclerView.Adapter<IndentItemAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_add_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_add_indent_item, parent, false);
         return new ViewHolder(v);
     }
 
@@ -50,7 +50,7 @@ public class IndentItemAdapter extends RecyclerView.Adapter<IndentItemAdapter.Vi
             if (items.get(position).isUpdated())
                 holder.bind(context, items.get(position), position, listener);
         } else {
-            holder.bind(context, items.get(position), position, listener);
+                holder.bind(context, items.get(position), position, listener);
         }
     }
 
@@ -95,7 +95,6 @@ public class IndentItemAdapter extends RecyclerView.Adapter<IndentItemAdapter.Vi
                         listener.onItemInteract(pos, 100);
                     }
                 });
-
             } else {
                 check.setVisibility(View.VISIBLE);
                 close.setVisibility(View.GONE);
