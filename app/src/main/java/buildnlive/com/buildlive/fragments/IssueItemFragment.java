@@ -1,8 +1,10 @@
 package buildnlive.com.buildlive.fragments;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +49,7 @@ public class IssueItemFragment extends Fragment {
     private Realm realm;
     private ArrayAdapter item_adapter, receiver_adapter;
     private String selectedItem, selectedReceiver, itemName, receiverName;
+    private AlertDialog.Builder builder;
 
     public static IssueItemFragment newInstance(App a) {
         app = a;
@@ -64,6 +67,7 @@ public class IssueItemFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         progress = view.findViewById(R.id.progress);
         hider = view.findViewById(R.id.hider);
+        builder = new AlertDialog.Builder(getContext());
         submit = view.findViewById(R.id.submit);
         quantity = view.findViewById(R.id.quantity);
         max = view.findViewById(R.id.max_quantity);
@@ -92,19 +96,42 @@ public class IssueItemFragment extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (quantity.getText().toString().length() > 0 && selectedItem.length() > 0 && selectedReceiver.length() > 0) {
-                    try {
-                        if (Float.parseFloat(quantity.getText().toString()) > Float.parseFloat(max.getText().toString())) {
-                            Toast.makeText(getContext(), "Check Quantity!", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        sendIssue();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    Toast.makeText(getContext(), "Fill Data Properly!", Toast.LENGTH_LONG).show();
-                }
+
+                builder.setMessage("Do you want to Submit?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                if (quantity.getText().toString().length() > 0 && selectedItem.length() > 0 && selectedReceiver.length() > 0) {
+                                    try {
+                                        if (Float.parseFloat(quantity.getText().toString()) > Float.parseFloat(max.getText().toString())) {
+                                            Toast.makeText(getContext(), "Check Quantity!", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                        sendIssue();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    Toast.makeText(getContext(), "Fill Data Properly!", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //  Action for 'NO' Button
+                                dialog.cancel();
+
+                            }
+                        });
+                //Creating dialog box
+                AlertDialog alert = builder.create();
+                //Setting the title manually
+                alert.setTitle("Issue Item");
+                alert.show();
+
+
+
             }
         });
 

@@ -37,7 +37,7 @@ public class PurchaseOrder extends AppCompatActivity {
                 changeScreen();
             }
         });
-        view = findViewById(R.id.view);
+//        view = findViewById(R.id.view);
     }
 
     private void changeScreen() {

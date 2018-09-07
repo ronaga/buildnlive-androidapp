@@ -1,8 +1,10 @@
 package buildnlive.com.buildlive.fragments;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -51,6 +53,7 @@ public class SendRequestFragment extends Fragment {
     private TextView unit;
     private boolean isSelected;
     private int itemSelected = 0;
+    private AlertDialog.Builder builder;
     private EditText name, description, quantity;
 
     public static SendRequestFragment newInstance(App a) {
@@ -70,6 +73,7 @@ public class SendRequestFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         name = view.findViewById(R.id.name);
+        builder=new AlertDialog.Builder(getContext());
         description = view.findViewById(R.id.message);
         type = view.findViewById(R.id.type);
         progress = view.findViewById(R.id.progress);
@@ -81,67 +85,87 @@ public class SendRequestFragment extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isSelected) {
-                    HashMap<String, String> params = new HashMap<>();
-                    params.put("user_id", App.userId);
-                    params.put("project_id", App.projectId);
-                    try {
-                        JSONObject req = new JSONObject()
-                                .put("label", name.getText().toString())
-                                .put("specs", description.getText().toString())
-                                .put("form_type_id", ids.get(material.getSelectedItemPosition()))
-                                .put("form_type", type_data.get(type.getSelectedItemPosition()).toLowerCase())
-                                .put("quantity", quantity.getText().toString())
-                                .put("units", unit.getText().toString())
-                                .put("material", material_data.get(itemSelected))
-                                .put("date", Utils.fromTimeStampToDate(System.currentTimeMillis()));
-                        console.log("Req:" + req.toString());
-                        params.put("request", req.toString());
-                        data = req.toString();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    app.sendNetworkRequest(Config.SEND_REQUEST_ITEM, Request.Method.POST, params, new Interfaces.NetworkInterfaceListener() {
-                        @Override
-                        public void onNetworkRequestStart() {
-                            progress.setVisibility(View.VISIBLE);
-                            hider.setVisibility(View.VISIBLE);
-                        }
+                builder.setMessage("Do you want to Submit?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
 
-                        @Override
-                        public void onNetworkRequestError(String error) {
-                            progress.setVisibility(View.GONE);
-                            hider.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onNetworkRequestComplete(String response) {
-                            progress.setVisibility(View.GONE);
-                            hider.setVisibility(View.GONE);
-                            if (response.equals("1")) {
-                                Toast.makeText(getContext(), "Item Requested", Toast.LENGTH_LONG).show();
-
-                                getActivity().finish();
-                                Realm realm = Realm.getDefaultInstance();
-                                realm.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        try {
-                                            buildnlive.com.buildlive.elements.Request request = new buildnlive.com.buildlive.elements.Request().parseFromString(data);
-                                            realm.copyToRealmOrUpdate(request);
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
+                                if (isSelected) {
+                                    HashMap<String, String> params = new HashMap<>();
+                                    params.put("user_id", App.userId);
+                                    params.put("project_id", App.projectId);
+                                    try {
+                                        JSONObject req = new JSONObject()
+                                                .put("label", name.getText().toString())
+                                                .put("specs", description.getText().toString())
+                                                .put("form_type_id", ids.get(material.getSelectedItemPosition()))
+                                                .put("form_type", type_data.get(type.getSelectedItemPosition()).toLowerCase())
+                                                .put("quantity", quantity.getText().toString())
+                                                .put("units", unit.getText().toString())
+                                                .put("material", material_data.get(itemSelected))
+                                                .put("date", Utils.fromTimeStampToDate(System.currentTimeMillis()));
+                                        console.log("Req:" + req.toString());
+                                        params.put("request", req.toString());
+                                        data = req.toString();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
                                     }
-                                });
-                            } else {
-                                Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
+                                    app.sendNetworkRequest(Config.SEND_REQUEST_ITEM, Request.Method.POST, params, new Interfaces.NetworkInterfaceListener() {
+                                        @Override
+                                        public void onNetworkRequestStart() {
+                                            progress.setVisibility(View.VISIBLE);
+                                            hider.setVisibility(View.VISIBLE);
+                                        }
+
+                                        @Override
+                                        public void onNetworkRequestError(String error) {
+                                            progress.setVisibility(View.GONE);
+                                            hider.setVisibility(View.GONE);
+                                        }
+
+                                        @Override
+                                        public void onNetworkRequestComplete(String response) {
+                                            progress.setVisibility(View.GONE);
+                                            hider.setVisibility(View.GONE);
+                                            if (response.equals("1")) {
+                                                Toast.makeText(getContext(), "Item Requested", Toast.LENGTH_LONG).show();
+
+                                                getActivity().finish();
+                                                Realm realm = Realm.getDefaultInstance();
+                                                realm.executeTransaction(new Realm.Transaction() {
+                                                    @Override
+                                                    public void execute(Realm realm) {
+                                                        try {
+                                                            buildnlive.com.buildlive.elements.Request request = new buildnlive.com.buildlive.elements.Request().parseFromString(data);
+                                                            realm.copyToRealmOrUpdate(request);
+                                                        } catch (JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
+                                                });
+                                            } else {
+                                                Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    Toast.makeText(getContext(), "Select Something Please", Toast.LENGTH_LONG).show();
+                                }
                             }
-                        }
-                    });
-                } else {
-                    Toast.makeText(getContext(), "Select Something Please", Toast.LENGTH_LONG).show();
-                }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //  Action for 'NO' Button
+                                dialog.cancel();
+
+                            }
+                        });
+                //Creating dialog box
+                AlertDialog alert = builder.create();
+                //Setting the title manually
+                alert.setTitle("Request Item");
+                alert.show();
+
             }
         });
 

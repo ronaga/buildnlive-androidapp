@@ -73,11 +73,16 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
         adapter = new DailyWorkActivityAdapter(getApplicationContext(), activities, new DailyWorkActivityAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int pos, View view) {
+
                 menuUpdate(activities.get(pos));
             }
         });
         items.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         items.setAdapter(adapter);
+//        if(adapter.getItemCount()==0)
+//        {
+//            Toast.makeText(this,"Nothing to Display",Toast.LENGTH_LONG).show();
+//        }
         fetchActivities(id);
     }
 
@@ -255,6 +260,10 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
                         JSONObject sch = par.getJSONObject("activity_schedule");
                         final Activity activity = new Activity().parseFromJSON(sch.getJSONObject("activity_details"), par.getString("activity_list_id"), sch.getString("activity_duration"), sch.getString("qty"), sch.getString("units"), sch.getString("schedule_start_date"), sch.getString("schedule_finish_date"), sch.getString("current_status"), sch.getString("qty_completed"));
                         activities.add(activity);
+                    }
+                    if(activities.isEmpty())
+                    {
+                        Toast.makeText(getApplicationContext(),"Nothing to Display",Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

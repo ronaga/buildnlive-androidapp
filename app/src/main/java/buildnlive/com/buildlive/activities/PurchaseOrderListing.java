@@ -1,5 +1,6 @@
 package buildnlive.com.buildlive.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -57,6 +58,7 @@ public class PurchaseOrderListing extends AppCompatActivity {
     private PurchaseOrderListingAdapter adapter;
     private List<OrderItem> itemList;
     private Button submit;
+    private AlertDialog.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +75,7 @@ public class PurchaseOrderListing extends AppCompatActivity {
         });
         list.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         list.setAdapter(adapter);
+        builder=new AlertDialog.Builder(this);
         app = (App) getApplication();
         Bundle bundle = getIntent().getExtras();
         id = bundle.getString("id");
@@ -80,11 +83,34 @@ public class PurchaseOrderListing extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    pushOrders();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+
+                //Setting message manually and performing action on button click
+                builder.setMessage("Do you want to Submit?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                try {
+                                    pushOrders();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //  Action for 'NO' Button
+                                dialog.cancel();
+
+                            }
+                        });
+                //Creating dialog box
+                AlertDialog alert = builder.create();
+                //Setting the title manually
+                alert.setTitle("Purchase Order");
+                alert.show();
+
+
+
             }
         });
     }
@@ -118,6 +144,10 @@ public class PurchaseOrderListing extends AppCompatActivity {
             @Override
             public void onNetworkRequestComplete(String response) {
                 console.log(response);
+                if(response.equals("1")){
+                    Toast.makeText(getApplicationContext(),"Request generated",Toast.LENGTH_LONG).show();
+                    finish();
+                }
             }
         });
     }
