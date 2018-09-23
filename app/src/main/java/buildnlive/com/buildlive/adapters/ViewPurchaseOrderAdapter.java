@@ -61,7 +61,7 @@ public class ViewPurchaseOrderAdapter extends RecyclerView.Adapter<ViewPurchaseO
         }
 
         public void bind(final Context context, final Order item, final int pos, final OnItemClickListener listener) {
-            name.setText("Purchase Order-" + (pos + 1));
+            name.setText("Purchase Order-" + item.getSerialNo());
             date.setText(item.getDeliveryDate());
             status.setText(item.getStatus());
             itemView.setOnClickListener(new View.OnClickListener() {

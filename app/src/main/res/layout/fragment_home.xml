@@ -213,7 +213,7 @@
                             android:layout_height="match_parent"
                             android:breakStrategy="high_quality"
                             android:padding="5dp"
-                            android:text="Request Item"
+                            android:text="Request Form"
                             android:textAlignment="center"
                             android:textSize="18dp" />
                     </LinearLayout>
@@ -334,7 +334,7 @@
                             android:layout_height="match_parent"
                             android:breakStrategy="high_quality"
                             android:padding="5dp"
-                            android:text="Indent Item"
+                            android:text="Request Item"
                             android:textAlignment="center"
                             android:textSize="18dp" />
                     </LinearLayout>
@@ -368,7 +368,7 @@
                             android:layout_height="match_parent"
                             android:breakStrategy="high_quality"
                             android:padding="5dp"
-                            android:text="Local Purchase"
+                            android:text="Purchase &amp; Payments"
                             android:textAlignment="center"
                             android:textSize="18dp" />
                     </LinearLayout>

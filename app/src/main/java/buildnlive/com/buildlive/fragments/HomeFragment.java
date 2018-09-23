@@ -127,6 +127,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 siteRequest.setVisibility(View.GONE);
                 issuedItems.setVisibility(View.GONE);
                 purchaseOrder.setVisibility(View.GONE);
+                manageInventory.setVisibility(View.GONE);
+                workProgress.setVisibility(View.GONE);
+
 
                 break;
             case "Siteincharge":

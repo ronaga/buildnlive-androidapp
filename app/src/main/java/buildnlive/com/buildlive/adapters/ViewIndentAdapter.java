@@ -14,12 +14,11 @@ import buildnlive.com.buildlive.elements.RequestList;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
 
-public class ViewIndentAdapter extends RealmRecyclerViewAdapter<RequestList, ViewIndentAdapter.ViewHolder> {
+public class ViewIndentAdapter extends RecyclerView.Adapter<ViewIndentAdapter.ViewHolder> {
     private final List<RequestList> items;
     private Context context;
 
-    public ViewIndentAdapter(Context context, OrderedRealmCollection<RequestList> users) {
-        super(users, true);
+    public ViewIndentAdapter(Context context, List<RequestList> users) {
         this.items = users;
         this.context = context;
     }

@@ -15,12 +15,13 @@ import java.util.List;
 
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.elements.Issue;
+import buildnlive.com.buildlive.elements.ViewIssue;
 
 public class ViewIssueAdapter extends RecyclerView.Adapter<ViewIssueAdapter.ViewHolder> {
-    private final List<Issue> items;
+    private final List<ViewIssue> items;
     private Context context;
 
-    public ViewIssueAdapter(Context context, List<Issue> users) {
+    public ViewIssueAdapter(Context context, List<ViewIssue> users) {
         this.items = users;
         this.context = context;
     }
@@ -43,19 +44,24 @@ public class ViewIssueAdapter extends RecyclerView.Adapter<ViewIssueAdapter.View
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView name, worker, quantity;
+        private TextView name, worker, quantity,status;
 
         public ViewHolder(View view) {
             super(view);
             name = view.findViewById(R.id.name);
             worker = view.findViewById(R.id.worker);
             quantity = view.findViewById(R.id.quantity);
+            status= view.findViewById(R.id.status);
         }
 
-        public void bind(final Context context, final Issue item, final int pos) {
+        public void bind(final Context context, final ViewIssue item, final int pos) {
             name.setText(item.getItemName());
-            worker.setText(item.getLabourName());
-            quantity.setText(item.getQuantity() + " units");
+            worker.setText(item.getReciever());
+            quantity.setText(item.getQuantity() + " " + item.getUnit());
+            if(item.getStatus().equals("Yes")){
+                status.setText("Received");
+            }
+            else status.setText("Not Received");
         }
     }
 }

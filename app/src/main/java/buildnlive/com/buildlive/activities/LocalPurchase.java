@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import buildnlive.com.buildlive.App;
@@ -23,7 +24,7 @@ public class LocalPurchase extends AppCompatActivity {
     private Fragment fragment;
     private TextView edit, view;
     Interfaces.SyncListener listener;
-
+    private ImageButton back;
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -37,7 +38,13 @@ public class LocalPurchase extends AppCompatActivity {
         app = (App) getApplication();
         realm = Realm.getDefaultInstance();
         fragment = LocalPurchaseFragment.newInstance();
-
+        back =findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         changeScreen();
         edit = findViewById(R.id.edit);
         edit.setOnClickListener(new View.OnClickListener() {

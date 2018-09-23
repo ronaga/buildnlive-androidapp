@@ -2,10 +2,19 @@ package buildnlive.com.buildlive.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
+import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +32,23 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 import buildnlive.com.buildlive.App;
+import buildnlive.com.buildlive.BuildConfig;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
+import buildnlive.com.buildlive.adapters.SingleImageAdapter;
 import buildnlive.com.buildlive.console;
+import buildnlive.com.buildlive.elements.Packet;
+import buildnlive.com.buildlive.utils.AdvancedRecyclerView;
 import buildnlive.com.buildlive.utils.Config;
 
 public class PaymentFragment extends Fragment {
@@ -43,6 +63,11 @@ public class PaymentFragment extends Fragment {
     private Spinner purposeSpinner,paymentTypeSpinner,paymentModeSpinner;
     private AlertDialog.Builder builder;
     private RadioGroup radioGroup;
+    public static final int QUALITY = 10;
+    public static final int REQUEST_CAPTURE_IMAGE = 7190;
+    private String imagePath;
+    private ArrayList<Packet> images;
+    private SingleImageAdapter imagesAdapter;
 
 
     public static PaymentFragment newInstance() {
@@ -146,6 +171,35 @@ public class PaymentFragment extends Fragment {
             hider.setVisibility(View.GONE);
         }
 
+        final AdvancedRecyclerView list = view.findViewById(R.id.images);
+        images = new ArrayList<>();
+        images.add(new Packet());
+        imagesAdapter = new SingleImageAdapter(getContext(), images, new SingleImageAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Packet packet, int pos, View view) {
+                if (pos == 0) {
+                    Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (pictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+
+                        File photoFile = null;
+                        try {
+                            photoFile = createImageFile();
+                        } catch (IOException ex) {
+                        }
+                        if (photoFile != null) {
+                            Uri photoURI = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", photoFile);
+                            pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                            imagePath = photoFile.getAbsolutePath();
+                            startActivityForResult(pictureIntent, REQUEST_CAPTURE_IMAGE);
+                        }
+                    }
+                }
+            }
+        });
+        list.setAdapter(imagesAdapter);
+        list.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        list.setmMaxHeight(350);
+
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,7 +219,7 @@ public class PaymentFragment extends Fragment {
                                 if(validate(purpose,details,amount,to,payment_mode,payment_type,type_of_payment))
                                 {
                                     try {
-                                        sendRequest(purpose,details,amount,to,reason,overheads,payment_mode,payment_type,type_of_payment);
+                                        sendRequest(purpose,details,amount,to,reason,overheads,payment_mode,payment_type,type_of_payment,images);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -224,18 +278,30 @@ public class PaymentFragment extends Fragment {
         return val;
     }
 
-    private void sendRequest(String purpose, String details, String amount, String to, final String reason, String overheads, String payment_mode, String payment_type, String type_of_payment) throws JSONException {
+    private void sendRequest(String purpose, String details, String amount, String to, final String reason, String overheads, String payment_mode, String payment_type, String type_of_payment,ArrayList<Packet> images) throws JSONException {
         App app= ((App)getActivity().getApplication());
         HashMap<String, String> params = new HashMap<>();
-        params.put("site_payments", App.userId);
-        JSONArray array = new JSONArray();
         JSONObject jsonObject=new JSONObject();
-        jsonObject.put("project_id", App.projectId).put("user_id", App.userId).put("purpose",purpose)
+        jsonObject.put("project_id", App.projectId).put("user_id", App.userId).put("purpose",purpose).put("details",details)
                 .put("amount",amount).put("payee",to).put("reason",reason)
                 .put("overheads",overheads).put("payment_mode",payment_mode).put("payment_type",payment_type)
                 .put("type_of_payment",type_of_payment);
         params.put("site_payments", jsonObject.toString());
         console.log("Res:" + params);
+        JSONArray array =new JSONArray();
+        for (Packet p : images) {
+            if (p.getName() != null) {
+                Bitmap bm = BitmapFactory.decodeFile(p.getName());
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bm.compress(Bitmap.CompressFormat.JPEG, QUALITY, baos);
+                byte[] b = baos.toByteArray();
+                String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+                array.put(encodedImage);
+            }
+        }
+        params.put("images",array.toString());
+        console.log("Image"+params);
+
         app.sendNetworkRequest(Config.SEND_SITE_PAYMENTS, 1, params, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
@@ -256,6 +322,27 @@ public class PaymentFragment extends Fragment {
                 }
             }
         });
+    }
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "IMG_" + timeStamp + "_";
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        return image;
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CAPTURE_IMAGE) {
+            if (resultCode == android.app.Activity.RESULT_OK) {
+                Packet packet = images.remove(0);
+                packet.setName(imagePath);
+                images.add(0, new Packet());
+                images.add(packet);
+                imagesAdapter.notifyDataSetChanged();
+            } else if (resultCode == android.app.Activity.RESULT_CANCELED) {
+                console.log("Canceled");
+            }
+        }
     }
 
 }

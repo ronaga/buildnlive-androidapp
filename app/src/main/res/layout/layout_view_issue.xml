@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:layout_weight="5"
+            android:layout_weight="4"
             android:padding="3dp"
             android:textAlignment="center" />
 
@@ -38,7 +38,16 @@
             android:padding="5dp"
             android:text="105A"
             android:textAlignment="textEnd"
-            android:gravity="end"></TextView>
+            android:gravity="end"/>
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:padding="5dp"
+            android:text="105A"
+            android:textAlignment="textEnd"
+            android:gravity="end"/>
 
     </LinearLayout>
 

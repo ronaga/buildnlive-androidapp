@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ public class NotificationActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private ArrayList<Notification> notificationList=new ArrayList<>();
     private RecyclerView recyclerView;
+    private ImageButton back;
     NotificationsAdapter adapter;
     AlertDialog.Builder builder;
 
@@ -130,6 +132,13 @@ public class NotificationActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
+        back= findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         app = (App) getApplication();
         progressBar= findViewById(R.id.progress);
         realm = Realm.getDefaultInstance();

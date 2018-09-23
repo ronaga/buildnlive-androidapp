@@ -3,22 +3,28 @@ package buildnlive.com.buildlive.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.elements.IndentItem;
+import buildnlive.com.buildlive.elements.Item;
 
-public class IndentItemAdapter extends RecyclerView.Adapter<IndentItemAdapter.ViewHolder> {
+public class IndentItemAdapter extends RecyclerView.Adapter<IndentItemAdapter.ViewHolder> implements Filterable{
+
 
     public interface OnItemSelectedListener {
         void onItemCheck(boolean checked);
@@ -26,12 +32,13 @@ public class IndentItemAdapter extends RecyclerView.Adapter<IndentItemAdapter.Vi
         void onItemInteract(int pos, int flag);
     }
 
-    private List<IndentItem> items;
+    private List<IndentItem> items,filteredItems;
     private Context context;
     private OnItemSelectedListener listener;
 
     public IndentItemAdapter(Context context, List<IndentItem> users, OnItemSelectedListener listener) {
         this.items = users;
+        this.filteredItems=users;
         this.context = context;
         this.listener = listener;
     }
@@ -48,15 +55,15 @@ public class IndentItemAdapter extends RecyclerView.Adapter<IndentItemAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         if (ViewHolder.CHECKOUT) {
             if (items.get(position).isUpdated())
-                holder.bind(context, items.get(position), position, listener);
+                holder.bind(context, filteredItems.get(position), position, listener);
         } else {
-                holder.bind(context, items.get(position), position, listener);
+                holder.bind(context, filteredItems.get(position), position, listener);
         }
     }
 
     @Override
     public int getItemCount(){
-        return items.size();
+        return filteredItems.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -128,4 +135,45 @@ public class IndentItemAdapter extends RecyclerView.Adapter<IndentItemAdapter.Vi
             }
         }
     }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    filteredItems = items;
+                } else {
+                    List<IndentItem> filteredList = new ArrayList<>();
+                    for (IndentItem row : items) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getName().toLowerCase().contains(charString.toLowerCase()) ) {
+                            filteredList.add(row);
+//                            Log.i("Filter",row.getName());
+                        }
+                    }
+
+                    filteredItems = filteredList;
+//                    Log.i("filteredItems",filteredItems.get(0).getName());
+//                    Log.i("filteredItems",filteredItems.get(1).getName());
+
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filteredItems;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                filteredItems = (ArrayList<IndentItem>) filterResults.values;
+                notifyDataSetChanged();
+            }
+
+        };
+    }
+
 }

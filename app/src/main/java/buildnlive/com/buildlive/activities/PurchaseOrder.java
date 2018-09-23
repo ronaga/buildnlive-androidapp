@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import buildnlive.com.buildlive.App;
@@ -17,6 +18,7 @@ public class PurchaseOrder extends AppCompatActivity {
     private App app;
     private TextView edit, view;
     private Fragment fragment;
+    private ImageButton back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +27,13 @@ public class PurchaseOrder extends AppCompatActivity {
         app = (App) getApplication();
         edit = findViewById(R.id.edit);
         view = findViewById(R.id.view);
+        back =findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         fragment = ViewPurchaseOrderFragment.newInstance(app);
         changeScreen();
         edit = findViewById(R.id.edit);

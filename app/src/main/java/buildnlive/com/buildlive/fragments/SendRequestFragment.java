@@ -3,6 +3,7 @@ package buildnlive.com.buildlive.fragments;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -55,7 +56,7 @@ public class SendRequestFragment extends Fragment {
     private int itemSelected = 0;
     private AlertDialog.Builder builder;
     private EditText name, description, quantity;
-
+    Snackbar snackbar;
     public static SendRequestFragment newInstance(App a) {
         app = a;
         return new SendRequestFragment();
@@ -150,6 +151,7 @@ public class SendRequestFragment extends Fragment {
                                     });
                                 } else {
                                     Toast.makeText(getContext(), "Select Something Please", Toast.LENGTH_LONG).show();
+//                                    snackbar = Snackbar.make(view,"Select Something",Snackbar.LENGTH_LONG);
                                 }
                             }
                         })

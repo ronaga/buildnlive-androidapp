@@ -9,12 +9,14 @@ public class Order {
     private String createdOn;
     private String status;
     private String deliveryDate;
+    private String serial_no;
 
-    public Order(String orderId, String createdOn, String status, String deliveryDate) {
+    public Order(String orderId, String createdOn, String status, String deliveryDate,String serial_no) {
         this.orderId = orderId;
         this.createdOn = createdOn;
         this.status = status;
         this.deliveryDate = deliveryDate;
+        this.serial_no= serial_no;
     }
 
     public Order() {
@@ -25,6 +27,7 @@ public class Order {
         setCreatedOn(object.getString("date_created"));
         setStatus(object.getString("status"));
         setDeliveryDate(object.getString("delivery_dat"));
+        setSerialNo(object.getString("serial_no"));
         return this;
     }
 
@@ -59,4 +62,9 @@ public class Order {
     public void setDeliveryDate(String deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
+
+    public void setSerialNo(String serial_no) {
+        this.serial_no = serial_no;
+    }
+    public String getSerialNo(){return  serial_no;}
 }

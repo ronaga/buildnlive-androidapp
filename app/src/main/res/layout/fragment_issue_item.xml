@@ -55,7 +55,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/border"
                 android:hint="Quantity"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:padding="5dp"
                 android:textSize="16dp" />
 

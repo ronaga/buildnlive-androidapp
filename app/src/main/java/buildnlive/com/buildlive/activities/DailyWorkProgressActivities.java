@@ -263,7 +263,7 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
                     }
                     if(activities.isEmpty())
                     {
-                        Toast.makeText(getApplicationContext(),"Nothing to Display",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),"Nothing to Display",Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

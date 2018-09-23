@@ -15,6 +15,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
@@ -30,6 +33,7 @@ public class ViewIndentFragment extends Fragment {
     private static App app;
     private ProgressBar progress;
     private TextView hider;
+    private static List<RequestList> requestList =new ArrayList<>();
 
     public static ViewIndentFragment newInstance(App a) {
         app = a;
@@ -48,15 +52,12 @@ public class ViewIndentFragment extends Fragment {
         items = view.findViewById(R.id.requests);
         progress = view.findViewById(R.id.progress);
         hider = view.findViewById(R.id.hider);
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<RequestList> requests = realm.where(RequestList.class).findAllAsync();
-        ViewIndentAdapter adapter = new ViewIndentAdapter(getContext(), requests);
-        items.setAdapter(adapter);
-        items.setLayoutManager(new LinearLayoutManager(getContext()));
+
         refresh();
     }
 
     private void refresh() {
+        requestList.clear();
         String url = Config.SEND_REQUEST_STATUS;
         url = url.replace("[0]", App.userId);
         app.sendNetworkRequest(url, 0, null, new Interfaces.NetworkInterfaceListener() {
@@ -77,24 +78,29 @@ public class ViewIndentFragment extends Fragment {
                 console.log("Response:" + response);
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
-                Realm realm = Realm.getDefaultInstance();
                 try {
                     JSONArray array = new JSONArray(response);
                     for (int i = 0; i < array.length(); i++) {
                         final JSONObject obj = array.getJSONObject(i);
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                try {
-                                    RequestList request = new RequestList().parseFromJSON(obj);
-                                    realm.copyToRealmOrUpdate(request);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
+                        requestList.add(new RequestList().parseFromJSON(obj));
+
+//                        realm.executeTransaction(new Realm.Transaction() {
+//                            @Override
+//                            public void execute(Realm realm) {
+//                                try {
+//                                    RequestList request = new RequestList().parseFromJSON(obj);
+//                                    realm.copyToRealmOrUpdate(request);
+//                                } catch (JSONException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                        });
                     }
-                    realm.close();
+                    ViewIndentAdapter adapter = new ViewIndentAdapter(getContext(), requestList);
+                    items.setAdapter(adapter);
+                    items.setLayoutManager(new LinearLayoutManager(getContext()));
+//                    realm.close();
+
                 } catch (JSONException e) {
 
                 }

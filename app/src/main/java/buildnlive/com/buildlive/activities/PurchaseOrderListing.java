@@ -43,6 +43,7 @@ import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.adapters.ActivityImagesAdapter;
 import buildnlive.com.buildlive.adapters.DailyWorkActivityAdapter;
 import buildnlive.com.buildlive.adapters.PurchaseOrderListingAdapter;
+import buildnlive.com.buildlive.adapters.SingleImageAdapter;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Activity;
 import buildnlive.com.buildlive.elements.Order;
@@ -59,12 +60,20 @@ public class PurchaseOrderListing extends AppCompatActivity {
     private List<OrderItem> itemList;
     private Button submit;
     private AlertDialog.Builder builder;
+    public static final int QUALITY = 10;
+    public static final int REQUEST_CAPTURE_IMAGE = 7190;
+    private String imagePath;
+    private ArrayList<Packet> images;
+    private SingleImageAdapter imagesAdapter;
+    private EditText challan,invoice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purchase_order_listing);
         list = findViewById(R.id.items);
+        challan= findViewById(R.id.challan);
+        invoice =findViewById(R.id.invoice);
         itemList = new ArrayList<>();
         submit = findViewById(R.id.submit);
         adapter = new PurchaseOrderListingAdapter(getApplicationContext(), itemList, new PurchaseOrderListingAdapter.OnItemClickListener() {
@@ -80,6 +89,36 @@ public class PurchaseOrderListing extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         id = bundle.getString("id");
         fetchOrders();
+
+        final AdvancedRecyclerView list = findViewById(R.id.images);
+        images = new ArrayList<>();
+        images.add(new Packet());
+        imagesAdapter = new SingleImageAdapter(getApplicationContext(), images, new SingleImageAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Packet packet, int pos, View view) {
+                if (pos == 0) {
+                    Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (pictureIntent.resolveActivity(getPackageManager()) != null) {
+
+                        File photoFile = null;
+                        try {
+                            photoFile = createImageFile();
+                        } catch (IOException ex) {
+                        }
+                        if (photoFile != null) {
+                            Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", photoFile);
+                            pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                            imagePath = photoFile.getAbsolutePath();
+                            startActivityForResult(pictureIntent, REQUEST_CAPTURE_IMAGE);
+                        }
+                    }
+                }
+            }
+        });
+        list.setAdapter(imagesAdapter);
+        list.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+        list.setmMaxHeight(350);
+
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,7 +129,7 @@ public class PurchaseOrderListing extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 try {
-                                    pushOrders();
+                                    pushOrders(images);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -115,7 +154,7 @@ public class PurchaseOrderListing extends AppCompatActivity {
         });
     }
 
-    private void pushOrders() throws JSONException{
+    private void pushOrders(ArrayList<Packet> images) throws JSONException{
         String url = Config.REQ_PURCHASE_ORDER_UPDATE;
         HashMap<String, String> params = new HashMap<>();
         params.put("user_id", App.userId);
@@ -130,6 +169,22 @@ public class PurchaseOrderListing extends AppCompatActivity {
             }
         }
         params.put("purchase_order_list", array.toString());
+        params.put("challan",challan.getText().toString());
+        params.put("invoice",invoice.getText().toString());
+        JSONArray imageArray =new JSONArray();
+        for (Packet p : images) {
+            if (p.getName() != null) {
+                Bitmap bm = BitmapFactory.decodeFile(p.getName());
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bm.compress(Bitmap.CompressFormat.JPEG, QUALITY, baos);
+                byte[] b = baos.toByteArray();
+                String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+                imageArray.put(encodedImage);
+            }
+        }
+        console.log("Params" + params);
+        params.put("images",imageArray.toString());
+        console.log("Image"+params);
         app.sendNetworkRequest(url, 1, params, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
@@ -182,4 +237,26 @@ public class PurchaseOrderListing extends AppCompatActivity {
             }
         });
     }
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "IMG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        return image;
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CAPTURE_IMAGE) {
+            if (resultCode == android.app.Activity.RESULT_OK) {
+                Packet packet = images.remove(0);
+                packet.setName(imagePath);
+                images.add(0, new Packet());
+                images.add(packet);
+                imagesAdapter.notifyDataSetChanged();
+            } else if (resultCode == android.app.Activity.RESULT_CANCELED) {
+                console.log("Canceled");
+            }
+        }
+    }
+
 }

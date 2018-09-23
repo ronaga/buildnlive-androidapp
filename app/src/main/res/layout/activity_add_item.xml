@@ -6,6 +6,19 @@
     android:background="@color/light_grey"
     tools:context=".activities.MarkAttendance">
 
+    <LinearLayout
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageButton
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_back_black"
+            android:background="@color/transparent"/>
+
 
     <LinearLayout
         android:id="@+id/action"
@@ -22,7 +35,9 @@
             android:background="@drawable/round_right_selected"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="Request Items"
+            android:text="Indent Item"
+            android:singleLine="true"
+            android:ellipsize="marquee"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="20dp" />
@@ -34,10 +49,13 @@
             android:background="@drawable/round_left"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="View items"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:text="View Inventory"
             android:textAlignment="center"
             android:textColor="@color/color2"
             android:textSize="20dp" />
+    </LinearLayout>
     </LinearLayout>
 
     <!--<android.support.v7.widget.SearchView-->
@@ -48,5 +66,5 @@
         android:id="@+id/attendance_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/action" />
+        android:layout_below="@+id/top" />
 </RelativeLayout>

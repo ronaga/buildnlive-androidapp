@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,8 +33,7 @@ public class AddItem extends AppCompatActivity {
     private App app;
     private TextView edit, view;
     private Fragment fragment;
-    private Interfaces.SyncListener listener;
-
+    private ImageButton back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,8 +41,14 @@ public class AddItem extends AppCompatActivity {
         app = (App) getApplication();
         edit = findViewById(R.id.edit);
         view = findViewById(R.id.view);
-        fragment = AddItemFragment.newInstance(itemsList);
-        listener = (Interfaces.SyncListener) fragment;
+        back = findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        fragment = AddItemFragment.newInstance();
         changeScreen();
         edit = findViewById(R.id.edit);
         edit.setOnClickListener(new View.OnClickListener() {
@@ -50,8 +56,7 @@ public class AddItem extends AppCompatActivity {
             public void onClick(View v) {
                 enableEdit();
                 disableView();
-                fragment = AddItemFragment.newInstance(itemsList);
-                listener = (Interfaces.SyncListener) fragment;
+                fragment = AddItemFragment.newInstance();
                 changeScreen();
             }
         });
@@ -61,55 +66,12 @@ public class AddItem extends AppCompatActivity {
             public void onClick(View v) {
                 enableView();
                 disableEdit();
-                fragment = ViewItemFragment.newInstance(itemsList);
-                listener = null;
+                fragment = ViewItemFragment.newInstance(app);
                 changeScreen();
             }
         });
-        refresh();
     }
 
-    private void refresh() {
-        String requestUrl = Config.REQ_GET_INVENTORY;
-        requestUrl = requestUrl.replace("[0]", App.userId);
-        requestUrl = requestUrl.replace("[1]", App.projectId);
-
-        app.sendNetworkRequest(requestUrl, Request.Method.GET, null, new Interfaces.NetworkInterfaceListener() {
-            @Override
-            public void onNetworkRequestStart() {
-                if (listener != null) {
-                    listener.onSyncStart();
-                }
-            }
-
-            @Override
-            public void onNetworkRequestError(String error) {
-                if (listener != null) {
-                    listener.onSyncError(error);
-                }
-                console.error("Network request failed with error :" + error);
-                Toast.makeText(getApplicationContext(), "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onNetworkRequestComplete(String response) {
-                console.log(response);
-                if (listener != null) {
-                    listener.onSyncFinish();
-                }
-                try {
-                    JSONArray array = new JSONArray(response);
-                    for (int i = 0; i < array.length(); i++) {
-                        itemsList.add(new Item().parseFromJSON(array.getJSONObject(i)));
-                    }
-                    if (listener != null)
-                        listener.onSync(itemsList);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 
     private void changeScreen() {
         getSupportFragmentManager()

@@ -1,26 +1,34 @@
 package buildnlive.com.buildlive.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
 import buildnlive.com.buildlive.R;
+import buildnlive.com.buildlive.elements.IndentItem;
 import buildnlive.com.buildlive.elements.Item;
+import buildnlive.com.buildlive.fragments.AddItemFragment;
 
-public class AddItemAdapter extends RecyclerView.Adapter<AddItemAdapter.ViewHolder> {
+public class AddItemAdapter extends RecyclerView.Adapter<AddItemAdapter.ViewHolder> implements Filterable{
+
 
     public interface OnItemSelectedListener {
         void onItemCheck(boolean checked);
@@ -28,12 +36,13 @@ public class AddItemAdapter extends RecyclerView.Adapter<AddItemAdapter.ViewHold
         void onItemInteract(int pos, int flag);
     }
 
-    private List<Item> items;
+    private List<Item> items,filteredItems;
     private Context context;
     private OnItemSelectedListener listener;
 
     public AddItemAdapter(Context context, List<Item> users, OnItemSelectedListener listener) {
         this.items = users;
+        this.filteredItems=users;
         this.context = context;
         this.listener = listener;
     }
@@ -48,17 +57,18 @@ public class AddItemAdapter extends RecyclerView.Adapter<AddItemAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         if (ViewHolder.CHECKOUT) {
-            if (items.get(position).isUpdated())
-                holder.bind(context, items.get(position), position, listener);
+            if (filteredItems.get(position).isUpdated())
+                holder.bind(context, filteredItems.get(position), position, listener);
         } else {
-            holder.bind(context, items.get(position), position, listener);
+            holder.bind(context, filteredItems.get(position), position, listener);
         }
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return filteredItems.size();
     }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private static int checkCount = 0;
@@ -78,6 +88,7 @@ public class AddItemAdapter extends RecyclerView.Adapter<AddItemAdapter.ViewHold
         }
 
         public void bind(final Context context, final Item item, final int pos, final OnItemSelectedListener listener) {
+
             name.setText(item.getName());
             unit.setText(item.getUnit());
             if (CHECKOUT) {
@@ -128,4 +139,49 @@ public class AddItemAdapter extends RecyclerView.Adapter<AddItemAdapter.ViewHold
             }
         }
     }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    filteredItems = items;
+                } else {
+                    List<Item> filteredList = new ArrayList<>();
+                    for (Item row : items) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getName().toLowerCase().contains(charString.toLowerCase()) ) {
+                            filteredList.add(row);
+//                            Log.i("Filter",row.getName());
+                        }
+                    }
+
+                    filteredItems = filteredList;
+//                    Log.i("filteredItems",filteredItems.get(0).getName());
+//                    Log.i("filteredItems",filteredItems.get(1).getName());
+
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filteredItems;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                filteredItems = (ArrayList<Item>) filterResults.values;
+                for(Item i:filteredItems){
+//                    Log.i("Publish:filteredItems",i.getName());
+                }
+                notifyDataSetChanged();
+            }
+
+        };
+    }
+
+
 }

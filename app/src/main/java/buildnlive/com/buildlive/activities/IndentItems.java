@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import buildnlive.com.buildlive.App;
@@ -19,6 +20,7 @@ public class IndentItems extends AppCompatActivity {
     private App app;
     private Fragment fragment;
     private TextView edit, view;
+    private ImageButton back;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -26,7 +28,13 @@ public class IndentItems extends AppCompatActivity {
         setContentView(R.layout.activity_indent_item);
         app = (App) getApplication();
         fragment = SendIndentFragment.newInstance();
-
+        back = findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         changeScreen();
         edit = findViewById(R.id.edit);
         edit.setOnClickListener(new View.OnClickListener() {
