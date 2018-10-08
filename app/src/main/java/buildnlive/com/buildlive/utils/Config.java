@@ -34,5 +34,10 @@ public class Config {
     public static final String GET_NOTIFICATIONS="http://buildnlive.com/app/mobileapp/index.php?r=site/GetNotifications";
     public static final String GET_NOTIFICATIONS_COUNT="http://buildnlive.com/app/mobileapp/index.php?r=site/GetNotificationCount";
     public static final String GET_ISSUE_STATUS="http://buildnlive.com/app/mobileapp/index.php?r=site/SendIssueStatus&user_id=[0]&project_id=[1]";
+    public static final String GET_LABOUR_VENDOR_LIST="http://buildnlive.com/app/mobileapp/index.php?r=site/GetContractorList&user_id=[0]&project_id=[1]";
+    public static final String GET_LABOUR_LIST="http://buildnlive.com/app/mobileapp/index.php?r=site/GetLabourCount&user_id=[0]&project_id=[1]&vendor_id=[2]";
+    public static final String SEND_LABOUR_LIST="http://buildnlive.com/app/mobileapp/index.php?r=site/SaveLabourTransfer";
+    public static final String VIEW_LABOUR_LIST="http://buildnlive.com/app/mobileapp/index.php?r=site/SendTransferDetails&user_id=[0]&project_id=[1]";
+    public static final String SEND_COMMENTS="http://buildnlive.com/app/mobileapp/index.php?r=site/UpdateLabourTransfer";
     public static final String PREF_NAME = "OGIL";
 }

@@ -182,11 +182,14 @@ public class IssueItemFragment extends Fragment {
         app.sendNetworkRequest(requestUrl, Request.Method.GET, null, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
-
+                progress.setVisibility(View.VISIBLE);
+                hider.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onNetworkRequestError(String error) {
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
                 console.error("Network request failed with error :" + error);
                 Toast.makeText(getContext(), "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
             }
@@ -194,6 +197,8 @@ public class IssueItemFragment extends Fragment {
             @Override
             public void onNetworkRequestComplete(String response) {
                 console.log(response);
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
                 try {
                     JSONArray array = new JSONArray(response);
                     for (int i = 0; i < array.length(); i++) {
@@ -221,7 +226,8 @@ public class IssueItemFragment extends Fragment {
         app.sendNetworkRequest(Config.SEND_ISSUED_ITEM, 1, params, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
-
+                progress.setVisibility(View.VISIBLE);
+                hider.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -233,8 +239,8 @@ public class IssueItemFragment extends Fragment {
             @Override
             public void onNetworkRequestComplete(String response) {
                 console.log("Response:" + response);
-                progress.setVisibility(View.VISIBLE);
-                hider.setVisibility(View.VISIBLE);
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
                 if (response.equals("1")) {
                     try {
                         final Issue issue = new Issue().parseFromJSON(obj, itemName, receiverName);

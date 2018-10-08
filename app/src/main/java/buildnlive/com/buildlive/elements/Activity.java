@@ -24,9 +24,9 @@ public class Activity implements Serializable {
     private String end;
     private String status;
     private String belongsTo;
-    private String completed;
+    private String qty_completed;
 
-    public Activity(String id, String activityId, String activityListId, String activityName, String units, String duration, String quantity, String start, String end, String status) {
+    public Activity(String id, String activityId, String activityListId, String activityName, String units, String duration, String quantity, String start, String end, String status,String qty_completed) {
         this.id = id;
         this.activityId = activityId;
         this.activityListId = activityListId;
@@ -37,34 +37,43 @@ public class Activity implements Serializable {
         this.end = end;
         this.units = units;
         this.status = status;
+        this.qty_completed=qty_completed;
     }
 
     public Activity() {
     }
 
-    public Activity parseFromJSON(JSONObject obj, String activityListId, String duration, String quantity, String units, String start, String end, String status, String completed) throws JSONException {
+    public Activity parseFromJSON(JSONObject obj, String activityListId, String duration, String quantity, String units, String start, String end, String status,String qty_completed) throws JSONException {
         setActivityListId(activityListId);
         setDuration(duration);
         setQuantity(quantity);
+        setQuantityCompleted(qty_completed);
         setStart(start);
         setEnd(end);
         setStatus(status);
         setUnits(units);
-        setActivityId(obj.getString("activity_id"));
-        setActivityName(obj.getString("activity_name"));
-        setCompleted(completed);
+        setActivityId(obj.getString("work_activity_id"));
+        setActivityName(obj.getString("work_activity_name"));
         setId(getActivityId() + App.belongsTo);
         setBelongsTo(App.belongsTo);
         return this;
     }
 
-    public String getCompleted() {
-        return completed;
+    private void setQuantityCompleted(String qty_completed) {
+        this.qty_completed=qty_completed;
     }
 
-    public void setCompleted(String completed) {
-        this.completed = completed;
+    public String getQty_completed() {
+        return qty_completed;
     }
+//
+//    public String getCompleted() {
+//        return completed;
+//    }
+//
+//    public void setCompleted(String completed) {
+//        this.completed = completed;
+//    }
 
     public String getId() {
         return id;

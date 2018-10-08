@@ -5,50 +5,64 @@
     android:layout_height="match_parent"
     android:background="@color/light_grey"
     tools:context=".activities.RequestItems">
+
     <LinearLayout
         android:id="@+id/top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-    <ImageButton
-        android:id="@+id/back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_back_black"
-        android:background="@color/transparent"/>
-    <LinearLayout
-        android:id="@+id/action"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:layout_alignParentLeft="true">
 
-        <TextView
-            android:id="@+id/edit"
+        <ImageButton
+            android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/round_right_selected"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="Daily Works"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="20dp" />
+            android:layout_gravity="center"
+            android:background="@color/transparent"
+            android:src="@drawable/ic_back_black" />
 
-        <TextView
-            android:id="@+id/view"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/action"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/round_left"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="Weekly Works"
-            android:textAlignment="center"
-            android:textColor="@color/color2"
-            android:textSize="20dp" />
-    </LinearLayout>
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="99dp"
+                android:layout_marginLeft="99dp"
+                android:background="@drawable/round"
+                android:gravity="center"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="Daily Works"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="20dp" />
+
+            <!--<TextView-->
+                <!--android:id="@+id/filter"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentEnd="true"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_marginEnd="10dp"-->
+                <!--android:layout_marginRight="10dp"-->
+                <!--android:text="Filter" />-->
+
+
+        </RelativeLayout>
+
     </LinearLayout>
 
     <!--<android.support.v7.widget.SearchView-->

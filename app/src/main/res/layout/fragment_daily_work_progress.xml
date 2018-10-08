@@ -12,6 +12,16 @@
         android:layout_below="@+id/separator2"
         android:layout_marginTop="30dp" />
 
+    <TextView
+        android:id="@+id/no_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="Nothing To Show"
+        android:textSize="30sp" />
+
     <ProgressBar
         android:id="@+id/progress"
         android:layout_width="wrap_content"

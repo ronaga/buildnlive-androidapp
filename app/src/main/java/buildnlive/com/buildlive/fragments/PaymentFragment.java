@@ -305,16 +305,21 @@ public class PaymentFragment extends Fragment {
         app.sendNetworkRequest(Config.SEND_SITE_PAYMENTS, 1, params, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
-
+            progress.setVisibility(View.VISIBLE);
+            hider.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onNetworkRequestError(String error) {
-
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
+                Toast.makeText(getContext(),"Something went wrong, Try again later",Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onNetworkRequestComplete(String response) {
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
                 console.log(response);
                 if (response.equals("1")) {
                     Toast.makeText(getContext(), "Request Generated", Toast.LENGTH_SHORT).show();

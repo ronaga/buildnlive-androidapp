@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +36,7 @@ public class ViewIssueFragment extends Fragment {
     private Realm realm;
     private ProgressBar progress;
     private static App app;
+    private TextView hider;
 
     public static ViewIssueFragment newInstance(App a) {
         app=a;
@@ -53,7 +55,8 @@ public class ViewIssueFragment extends Fragment {
 //        realm = Realm.getDefaultInstance();
 //        itemsList = realm.where(Issue.class).equalTo("belongsTo", App.belongsTo).findAll();
         items = view.findViewById(R.id.items);
-
+        progress=view.findViewById(R.id.progress);
+        hider=view.findViewById(R.id.hider);
         ViewIssueAdapter adapter = new ViewIssueAdapter(getContext(), itemsList);
         items.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         items.setAdapter(adapter);
@@ -69,21 +72,21 @@ public class ViewIssueFragment extends Fragment {
         app.sendNetworkRequest(url, 0, null, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
-//                progress.setVisibility(View.VISIBLE);
-//                hider.setVisibility(View.VISIBLE);
+                progress.setVisibility(View.VISIBLE);
+                hider.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onNetworkRequestError(String error) {
-//                progress.setVisibility(View.GONE);
-//                hider.setVisibility(View.GONE);
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
             }
 
             @Override
             public void onNetworkRequestComplete(String response) {
                 console.log("Response:" + response);
-//                progress.setVisibility(View.GONE);
-//                hider.setVisibility(View.GONE);
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
 //                Realm realm = Realm.getDefaultInstance();
                 try {
                     JSONArray array = new JSONArray(response);

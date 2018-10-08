@@ -234,16 +234,21 @@ public class AddItemFragment extends Fragment{
         app.sendNetworkRequest(Config.INVENTORY_ITEM_REQUEST, 1, params, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
-
+                progress.setVisibility(View.VISIBLE);
+                hider.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onNetworkRequestError(String error) {
-
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
+                Toast.makeText(getContext(),"Error:"+error,Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onNetworkRequestComplete(String response) {
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
                 if (response.equals("1")) {
                     Toast.makeText(getContext(), "Request Generated", Toast.LENGTH_SHORT).show();
                     AddItemAdapter.ViewHolder.CHECKOUT=false;
@@ -262,12 +267,14 @@ public class AddItemFragment extends Fragment{
         app.sendNetworkRequest(requestUrl, Request.Method.GET, null, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
-            progress.setVisibility(View.VISIBLE);
+                progress.setVisibility(View.VISIBLE);
+                hider.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
                 console.error("Network request failed with error :" + error);
                 Toast.makeText(getContext(), "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
             }
@@ -276,6 +283,7 @@ public class AddItemFragment extends Fragment{
             public void onNetworkRequestComplete(String response) {
 //                console.log(response);
                 progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
                 try {
                     JSONArray array = new JSONArray(response);
                     for (int i = 0; i < array.length(); i++) {

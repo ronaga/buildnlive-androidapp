@@ -60,6 +60,7 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
     private List<Activity> activities;
     private String id;
     public static final int QUALITY = 10;
+    private TextView no_content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,7 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         id = bundle.getString("id");
         items = findViewById(R.id.items);
+        no_content=findViewById(R.id.no_content);
         activities = new ArrayList<>();
         adapter = new DailyWorkActivityAdapter(getApplicationContext(), activities, new DailyWorkActivityAdapter.OnItemClickListener() {
             @Override
@@ -99,7 +101,7 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
         alertDialog.show();
         final TextView disable = dialogView.findViewById(R.id.disableView);
         final TextView max = dialogView.findViewById(R.id.max);
-        max.setText("Max: " + activity.getQuantity() + " " + activity.getUnits());
+        max.setText("Total: " + activity.getQuantity() + " " + activity.getUnits());
         final ProgressBar progress = dialogView.findViewById(R.id.progress);
         final EditText message = dialogView.findViewById(R.id.message);
         final EditText quantity = dialogView.findViewById(R.id.quantity);
@@ -132,7 +134,7 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
         list.setAdapter(imagesAdapter);
         list.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
         list.setmMaxHeight(400);
-        completed.setText("Completed: " + activity.getCompleted() + " " + activity.getUnits());
+        completed.setText("Completed: " + activity.getQty_completed() + " " + activity.getUnits());
         TextView title = dialogView.findViewById(R.id.alert_title);
         title.setText("Activity Status");
         final TextView alert_message = dialogView.findViewById(R.id.alert_message);
@@ -186,7 +188,7 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
 
     private void submit(Activity activity, String message, String quantity, ArrayList<Packet> images, final AlertDialog alertDialog) throws JSONException {
         float q = Float.parseFloat(quantity);
-        float c = Float.parseFloat(activity.getCompleted());
+        float c = Float.parseFloat(activity.getQty_completed());
         float qo = Float.parseFloat(activity.getQuantity());
         if (q <= (qo - c)) {
             HashMap<String, String> params = new HashMap<>();
@@ -210,6 +212,7 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
                     array.put(encodedImage);
                 }
             }
+            params.put("images",array.toString());
 
             app.sendNetworkRequest(Config.REQ_DAILY_WORK_ACTIVITY_UPDATE, 1, params, new Interfaces.NetworkInterfaceListener() {
                 @Override
@@ -240,6 +243,7 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
         String url = Config.REQ_DAILY_WORK_ACTIVITY;
         url = url.replace("[0]", App.userId);
         url = url.replace("[1]", id);
+        console.log(url);
         app.sendNetworkRequest(url, 0, null, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
@@ -257,13 +261,37 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
                     JSONArray array = new JSONArray(response);
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject par = array.getJSONObject(i);
-                        JSONObject sch = par.getJSONObject("activity_schedule");
-                        final Activity activity = new Activity().parseFromJSON(sch.getJSONObject("activity_details"), par.getString("activity_list_id"), sch.getString("activity_duration"), sch.getString("qty"), sch.getString("units"), sch.getString("schedule_start_date"), sch.getString("schedule_finish_date"), sch.getString("current_status"), sch.getString("qty_completed"));
+                        JSONObject sch = par.getJSONObject("work_schedule");
+                        final Activity activity = new Activity().parseFromJSON(sch.getJSONObject("work_details"), par.getString("activity_list_id"),sch.getString("work_duration"),
+                                 sch.getString("qty"), sch.getString("units"),
+                                sch.getString("schedule_start_date"), sch.getString("schedule_finish_date"),
+                                sch.getString("current_status"), sch.getString("qty_completed"));
                         activities.add(activity);
+
+                        console.log(""+activities.get(i));
                     }
                     if(activities.isEmpty())
                     {
-                        Toast.makeText(getApplicationContext(),"Nothing to Display",Toast.LENGTH_SHORT).show();
+                          no_content.setVisibility(View.VISIBLE);
+//                        LayoutInflater inflater = getLayoutInflater();
+//                        View dialogView = inflater.inflate(R.layout.alert_dialog, null);
+//                        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getApplicationContext(), R.style.PinDialog);
+//                        final AlertDialog alertDialog = dialogBuilder.setCancelable(false).setView(dialogView).create();
+//                        alertDialog.show();
+//                        final EditText alert_message=dialogView.findViewById(R.id.alert_message);
+//                        final Button close=dialogView.findViewById(R.id.negative);
+//                        final Button approve=dialogView.findViewById(R.id.positive);
+//
+//                        approve.setVisibility(View.GONE);
+//                        close.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                alertDialog.dismiss();
+//                            }
+//                        });
+//
+//                        alert_message.setText("Nothing to Show");
+//                        Toast.makeText(getApplicationContext(),"Nothing to Display",Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

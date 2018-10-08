@@ -66,6 +66,8 @@ public class PurchaseOrderListing extends AppCompatActivity {
     private ArrayList<Packet> images;
     private SingleImageAdapter imagesAdapter;
     private EditText challan,invoice;
+    private ProgressBar progress;
+    private TextView hider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,8 @@ public class PurchaseOrderListing extends AppCompatActivity {
         list = findViewById(R.id.items);
         challan= findViewById(R.id.challan);
         invoice =findViewById(R.id.invoice);
+        progress=findViewById(R.id.progress);
+        hider=findViewById(R.id.hider);
         itemList = new ArrayList<>();
         submit = findViewById(R.id.submit);
         adapter = new PurchaseOrderListingAdapter(getApplicationContext(), itemList, new PurchaseOrderListingAdapter.OnItemClickListener() {
@@ -188,17 +192,21 @@ public class PurchaseOrderListing extends AppCompatActivity {
         app.sendNetworkRequest(url, 1, params, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
-
+                progress.setVisibility(View.VISIBLE);
+                hider.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onNetworkRequestError(String error) {
-
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
             }
 
             @Override
             public void onNetworkRequestComplete(String response) {
                 console.log(response);
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
                 if(response.equals("1")){
                     Toast.makeText(getApplicationContext(),"Request generated",Toast.LENGTH_LONG).show();
                     finish();
@@ -213,17 +221,21 @@ public class PurchaseOrderListing extends AppCompatActivity {
         app.sendNetworkRequest(url, 0, null, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
-
+                progress.setVisibility(View.VISIBLE);
+                hider.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onNetworkRequestError(String error) {
-
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
             }
 
             @Override
             public void onNetworkRequestComplete(String response) {
                 console.log(response);
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
                 try {
                    itemList.clear();
                     JSONArray array = new JSONArray(response);

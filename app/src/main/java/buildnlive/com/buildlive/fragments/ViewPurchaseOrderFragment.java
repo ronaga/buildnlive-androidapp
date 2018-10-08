@@ -69,10 +69,7 @@ public class ViewPurchaseOrderFragment extends Fragment {
         });
         list.setAdapter(adapter);
         list.setLayoutManager(new LinearLayoutManager(getContext()));
-        if (LOADING)
-            progress.setVisibility(View.VISIBLE);
-        else
-            progress.setVisibility(View.GONE);
+
         requestPurchaseOrder();
     }
 
@@ -82,16 +79,19 @@ public class ViewPurchaseOrderFragment extends Fragment {
         app.sendNetworkRequest(url, 0, null, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
-
-            }
+                progress.setVisibility(View.VISIBLE);
+                hider.setVisibility(View.VISIBLE);}
 
             @Override
             public void onNetworkRequestError(String error) {
-
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
             }
 
             @Override
             public void onNetworkRequestComplete(String response) {
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
                 console.log("Res:" + response);
                 orders.clear();
                 try {

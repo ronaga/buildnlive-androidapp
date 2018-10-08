@@ -1,8 +1,6 @@
 package buildnlive.com.buildlive.fragments;
 
 import android.app.AlertDialog;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,32 +31,33 @@ import java.util.List;
 import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
-import buildnlive.com.buildlive.adapters.AddItemAdapter;
 import buildnlive.com.buildlive.adapters.CategorySpinAdapter;
-import buildnlive.com.buildlive.adapters.IndentItemAdapter;
+import buildnlive.com.buildlive.adapters.LabourSpinAdapter;
+import buildnlive.com.buildlive.adapters.RequestLabourAdapter;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Category;
 import buildnlive.com.buildlive.elements.IndentItem;
+import buildnlive.com.buildlive.elements.LabourInfo;
+import buildnlive.com.buildlive.elements.LabourVendor;
 import buildnlive.com.buildlive.utils.Config;
 
-public class SendIndentFragment extends Fragment{
-    private static List<IndentItem> siteIndentItem = new ArrayList<>();
+public class RequestLabourFragment extends Fragment {
+    private static List<LabourInfo> labourList = new ArrayList<>();
     private RecyclerView items;
     private Button next, submit;
     private ProgressBar progress;
-    private TextView hider, checkout_text,search_textview;
-    private boolean LOADING;
+    private TextView hider, checkout_text,search_textview,avail;
     private ImageButton close;
-    private IndentItemAdapter adapter;
+    private RequestLabourAdapter adapter;
     public static String category="";
     private Spinner categorySpinner;
-    private CategorySpinAdapter categoryAdapter;
-    private ArrayList<Category> categoryList = new ArrayList<>();
+    private LabourSpinAdapter categoryAdapter;
+    private ArrayList<LabourVendor> categoryList = new ArrayList<>();
     private android.support.v7.widget.SearchView searchView;
     AlertDialog.Builder builder;
+    private static String a;
 
-
-    public IndentItemAdapter.OnItemSelectedListener listener = new IndentItemAdapter.OnItemSelectedListener() {
+    public RequestLabourAdapter.OnItemSelectedListener listener = new RequestLabourAdapter.OnItemSelectedListener() {
         @Override
         public void onItemCheck(boolean checked) {
             if (checked) {
@@ -75,21 +73,21 @@ public class SendIndentFragment extends Fragment{
         }
     };
 
-    public static SendIndentFragment newInstance() {
+    public static RequestLabourFragment newInstance() {
 //        siteIndentItem = u;
-        return new SendIndentFragment();
+        return new RequestLabourFragment();
     }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         categoryList.clear();
-        IndentItemAdapter.ViewHolder.CHECKOUT=false;
+        RequestLabourAdapter.ViewHolder.CHECKOUT=false;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.fragment_indent_item, container, false);
+        View view= inflater.inflate(R.layout.fragment_request_labour, container, false);
 
         return view;
     }
@@ -103,22 +101,25 @@ public class SendIndentFragment extends Fragment{
         items.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         builder= new AlertDialog.Builder(getContext());
         searchView = view.findViewById(R.id.search_view);
+        avail=view.findViewById(R.id.avail_text);
 
+        progress = view.findViewById(R.id.progress);
+        hider = view.findViewById(R.id.hider);
         submit = view.findViewById(R.id.submit);
         next = view.findViewById(R.id.next);
         close = view.findViewById(R.id.close_checkout);
         setCategorySpinner();
-        categorySpinner=view.findViewById(R.id.category);
+        categorySpinner=view.findViewById(R.id.contractor);
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String a = categoryAdapter.getID(i);
-                    if(!a.equals("0")){
-                        refresh(a);
-                        searchView.setVisibility(View.VISIBLE);
-                        search_textview.setVisibility(View.VISIBLE);
+                a = categoryAdapter.getID(i);
+                if(!a.equals("0")){
+                    refresh(a);
+                    searchView.setVisibility(View.VISIBLE);
+                    search_textview.setVisibility(View.VISIBLE);
 
-                    }
+                }
 
             }
 
@@ -128,7 +129,7 @@ public class SendIndentFragment extends Fragment{
             }
         });
 
-        categoryAdapter=new CategorySpinAdapter(getContext(), R.layout.custom_spinner,categoryList);
+        categoryAdapter=new LabourSpinAdapter(getContext(), R.layout.custom_spinner,categoryList);
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(categoryAdapter);
 
@@ -139,12 +140,12 @@ public class SendIndentFragment extends Fragment{
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IndentItemAdapter.ViewHolder.CHECKOUT = false;
+                refresh(a);
+                RequestLabourAdapter.ViewHolder.CHECKOUT = false;
                 checkout_text.setVisibility(View.GONE);
                 close.setVisibility(View.GONE);
                 categorySpinner.setVisibility(View.VISIBLE);
-                IndentItemAdapter.ViewHolder.CHECKOUT = false;
-                adapter = new IndentItemAdapter(getContext(), siteIndentItem, listener);
+                adapter = new RequestLabourAdapter(getContext(), labourList, listener);
                 items.setAdapter(adapter);
                 submit.setVisibility(View.GONE);
                 next.setVisibility(View.GONE);
@@ -154,20 +155,21 @@ public class SendIndentFragment extends Fragment{
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                avail.setVisibility(View.GONE);
                 search_textview.setVisibility(View.GONE);
                 searchView.setVisibility(View.GONE);
                 checkout_text.setVisibility(View.VISIBLE);
                 close.setVisibility(View.VISIBLE);
                 categorySpinner.setVisibility(View.GONE);
-                IndentItemAdapter.ViewHolder.CHECKOUT = true;
-                final List<IndentItem> newItems = new ArrayList<>();
-                for (int i = 0; i < siteIndentItem.size(); i++) {
-                    if (siteIndentItem.get(i).isUpdated()) {
-                        newItems.add(siteIndentItem.get(i));
+                RequestLabourAdapter.ViewHolder.CHECKOUT = true;
+                final List<LabourInfo> newItems = new ArrayList<>();
+                for (int i = 0; i < labourList.size(); i++) {
+                    if (labourList.get(i).isUpdated()) {
+                        newItems.add(labourList.get(i));
                     }
                 }
 
-                adapter = new IndentItemAdapter(getContext(), newItems, new IndentItemAdapter.OnItemSelectedListener() {
+                adapter = new RequestLabourAdapter(getContext(), newItems, new RequestLabourAdapter.OnItemSelectedListener() {
                     @Override
                     public void onItemCheck(boolean checked) {
 
@@ -220,18 +222,9 @@ public class SendIndentFragment extends Fragment{
                 });
             }
         });
-        progress = view.findViewById(R.id.progress);
-        hider = view.findViewById(R.id.hider);
-//        adapter = new IndentItemAdapter(getContext(), siteIndentItem, listener);
+//        adapter = new RequestLabourAdapter(getContext(), labourList, listener);
 //        items.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 //        items.setAdapter(adapter);
-        if (LOADING) {
-            progress.setVisibility(View.VISIBLE);
-            hider.setVisibility(View.VISIBLE);
-        } else {
-            progress.setVisibility(View.GONE);
-            hider.setVisibility(View.GONE);
-        }
 
 
         search_textview=view.findViewById(R.id.search_textview);
@@ -271,21 +264,22 @@ public class SendIndentFragment extends Fragment{
     @Override
     public void onDestroy() {
         super.onDestroy();
-        siteIndentItem.clear();
+        labourList.clear();
 //        adapter.notifyItemRangeChanged(0,siteIndentItem.size());
     }
 
-    private void sendRequest(List<IndentItem> items) throws JSONException {
+    private void sendRequest(List<LabourInfo> items) throws JSONException {
         App app= ((App)getActivity().getApplication());
         HashMap<String, String> params = new HashMap<>();
         params.put("user_id", App.userId);
+        params.put("project_id",App.projectId);
         JSONArray array = new JSONArray();
-        for (IndentItem i : items) {
-            array.put(new JSONObject().put("stock_id", i.getId()).put("required_qty", i.getQuantity()));
+        for (LabourInfo i : items) {
+            array.put(new JSONObject().put("daily_labour_id", i.getId()).put("qty", i.getQuantity()));
         }
-        params.put("request_list", array.toString());
+        params.put("labour_transfer", array.toString());
         console.log("Res:" + params);
-        app.sendNetworkRequest(Config.SEND_REQUEST_SITE_LIST, 1, params, new Interfaces.NetworkInterfaceListener() {
+        app.sendNetworkRequest(Config.SEND_LABOUR_LIST, 1, params, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
@@ -301,11 +295,12 @@ public class SendIndentFragment extends Fragment{
 
             @Override
             public void onNetworkRequestComplete(String response) {
+                console.log(response);
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
-                if (response.equals("Success")) {
+                if (response.equals("1")) {
                     Toast.makeText(getContext(), "Request Generated", Toast.LENGTH_SHORT).show();
-                    IndentItemAdapter.ViewHolder.CHECKOUT=false;
+                    RequestLabourAdapter.ViewHolder.CHECKOUT=false;
                     getActivity().finish();
                 }
             }
@@ -315,18 +310,22 @@ public class SendIndentFragment extends Fragment{
 
     private void setCategorySpinner() {
         App app= ((App)getActivity().getApplication());
-        String requestURl= Config.REQ_SENT_CATEGORIES ;
+        String requestURl= Config.GET_LABOUR_VENDOR_LIST ;
         requestURl = requestURl.replace("[0]", App.userId);
+        requestURl = requestURl.replace("[1]", App.projectId);
         categoryList.clear();
+        console.log(requestURl);
         app.sendNetworkRequest(requestURl, Request.Method.GET, null, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
-
+                progress.setVisibility(View.VISIBLE);
+                hider.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onNetworkRequestError(String error) {
-
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
                 console.error("Network request failed with error :" + error);
                 Toast.makeText(getContext(), "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
 
@@ -335,12 +334,13 @@ public class SendIndentFragment extends Fragment{
             @Override
             public void onNetworkRequestComplete(String response) {
                 console.log(response);
-
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
                 try {
                     JSONArray array = new JSONArray(response);
                     for (int i = 0; i < array.length(); i++) {
 //                        categoryList.add(array.getJSONObject(i).getString("name"));
-                        categoryList.add(new Category().parseFromJSON(array.getJSONObject(i)));
+                        categoryList.add(new LabourVendor().parseFromJSON(array.getJSONObject(i)));
                     }
                     categoryAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
@@ -353,10 +353,11 @@ public class SendIndentFragment extends Fragment{
 
     private void refresh(String a) {
         App app= ((App)getActivity().getApplication());
-        siteIndentItem.clear();
-        String requestUrl = Config.GET_SITE_LIST;
-        requestUrl = requestUrl.replace("[1]", App.userId);
-        requestUrl = requestUrl.replace("[0]", a);
+        labourList.clear();
+        String requestUrl = Config.GET_LABOUR_LIST;
+        requestUrl = requestUrl.replace("[0]", App.userId);
+        requestUrl = requestUrl.replace("[1]", App.projectId);
+        requestUrl = requestUrl.replace("[2]", a);
         console.log(requestUrl);
         app.sendNetworkRequest(requestUrl, Request.Method.GET, null, new Interfaces.NetworkInterfaceListener() {
             @Override
@@ -367,7 +368,8 @@ public class SendIndentFragment extends Fragment{
 
             @Override
             public void onNetworkRequestError(String error) {
-
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
                 console.error("Network request failed with error :" + error);
                 Toast.makeText(getContext(), "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
             }
@@ -379,11 +381,11 @@ public class SendIndentFragment extends Fragment{
                 hider.setVisibility(View.GONE);
                 try {
                     JSONArray array = new JSONArray(response);
-                  for (int i = 0; i < array.length(); i++) {
-                        siteIndentItem.add(new IndentItem().parseFromJSON(array.getJSONObject(i)));
+                    for (int i = 0; i < array.length(); i++) {
+                        labourList.add(new LabourInfo().parseFromJSON(array.getJSONObject(i)));
                     }
                     console.log("data set changed");
-                    adapter = new IndentItemAdapter(getContext(), siteIndentItem, listener);
+                    adapter = new RequestLabourAdapter(getContext(), labourList, listener);
                     items.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                     console.log(""+adapter.getItemCount());

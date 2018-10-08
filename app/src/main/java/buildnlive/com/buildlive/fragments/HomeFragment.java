@@ -27,6 +27,7 @@ import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.activities.AddItem;
 import buildnlive.com.buildlive.activities.IndentItems;
 import buildnlive.com.buildlive.activities.IssuedItems;
+import buildnlive.com.buildlive.activities.LabourActivity;
 import buildnlive.com.buildlive.activities.LocalPurchase;
 import buildnlive.com.buildlive.activities.MarkAttendance;
 import buildnlive.com.buildlive.activities.PurchaseOrder;
@@ -43,7 +44,7 @@ import static buildnlive.com.buildlive.utils.Config.PREF_NAME;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
     private TextView title;
-    private LinearLayout markAttendance, manageInventory, issuedItems, requestItems, workProgress, purchaseOrder,siteRequest,localPurchase;
+    private LinearLayout markAttendance, manageInventory, issuedItems, requestItems, workProgress, purchaseOrder,siteRequest,localPurchase,labour;
     private SharedPreferences pref;
     private Spinner projects;
     private static App app;
@@ -74,6 +75,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         projects = view.findViewById(R.id.projects);
         siteRequest=view.findViewById(R.id.request_list);
         localPurchase=view.findViewById(R.id.local_purchase);
+        labour=view.findViewById(R.id.labour);
 
 
         Realm realm = Realm.getDefaultInstance();
@@ -109,9 +111,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         purchaseOrder.setOnClickListener(this);
         siteRequest.setOnClickListener(this);
         localPurchase.setOnClickListener(this);
+        labour.setOnClickListener(this);
 
         switch (App.permissions) {
             case "Storekeeper":
+                labour.setVisibility(View.GONE);
                 siteRequest.setVisibility(View.GONE);
                 workProgress.setVisibility(View.GONE);
                 break;
@@ -129,11 +133,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 purchaseOrder.setVisibility(View.GONE);
                 manageInventory.setVisibility(View.GONE);
                 workProgress.setVisibility(View.GONE);
-
+                labour.setVisibility(View.GONE);
 
                 break;
             case "Siteincharge":
                 siteRequest.setVisibility(View.GONE);
+                labour.setVisibility(View.GONE);
 
         }
 
@@ -205,6 +210,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.local_purchase:
                 startActivity(new Intent(getContext(),LocalPurchase.class));
+                break;
+            case R.id.labour:
+                startActivity(new Intent(getContext(),LabourActivity.class));
                 break;
         }
     }

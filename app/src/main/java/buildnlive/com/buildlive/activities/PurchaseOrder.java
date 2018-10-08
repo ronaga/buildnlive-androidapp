@@ -37,15 +37,15 @@ public class PurchaseOrder extends AppCompatActivity {
         fragment = ViewPurchaseOrderFragment.newInstance(app);
         changeScreen();
         edit = findViewById(R.id.edit);
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enableEdit();
-                disableView();
-                fragment = ViewPurchaseOrderFragment.newInstance(app);
-                changeScreen();
-            }
-        });
+//        edit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                enableEdit();
+//                disableView();
+//                fragment = ViewPurchaseOrderFragment.newInstance(app);
+//                changeScreen();
+//            }
+//        });
 //        view = findViewById(R.id.view);
     }
 

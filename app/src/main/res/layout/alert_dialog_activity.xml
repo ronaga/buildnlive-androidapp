@@ -87,7 +87,7 @@
                     android:layout_margin="5dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:text="Max: 50 ft"
+                    android:text="Total: 50 ft"
                     android:textAlignment="center"
                     android:textColor="@color/color2"
                     android:textSize="16dp" />

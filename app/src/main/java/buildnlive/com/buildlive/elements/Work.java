@@ -19,14 +19,13 @@ public class Work extends RealmObject {
     private String workCode;
     private String duration;
     private String quantity;
+    private String qty_completed;
     private String start;
     private String end;
     private String status;
     private String belongsTo;
-    private String completed;
-    private String total;
 
-    public Work(String id, String workId, String workListId, String workName, String units, String workCode, String duration, String quantity, String start, String end, String status) {
+    public Work(String id, String workId, String workListId, String workName, String units, String workCode, String duration, String quantity, String start, String end, String status,String qty_completed) {
         this.id = id;
         this.workId = workId;
         this.workListId = workListId;
@@ -38,44 +37,52 @@ public class Work extends RealmObject {
         this.start = start;
         this.end = end;
         this.status = status;
+        this.qty_completed=qty_completed;
     }
 
     public Work() {
     }
 
-    public Work parseFromJSON(JSONObject obj, String workListId, String duration, String quantity, String start, String end, String status, String completed, String total) throws JSONException {
+    public Work parseFromJSON(JSONObject obj, String workListId, String duration, String quantity, String start, String end, String status,String qty_completed) throws JSONException {
         setWorkListId(workListId);
         setDuration(duration);
         setQuantity(quantity);
         setStart(start);
         setEnd(end);
         setStatus(status);
-        setWorkId(obj.getString("work_id"));
-        setWorkName(obj.getString("work_name"));
-        setUnits(obj.getString("work_units"));
-        setWorkCode(obj.getString("work_code"));
-        setTotal(total);
-        setCompleted(completed);
+        setWorkId(obj.getString("work_activity_id"));
+        setWorkName(obj.getString("work_activity_name"));
+        setUnits(obj.getString("work_activity_units"));
+        setWorkCode(obj.getString("work_activity_code"));
         setId(getWorkId() + App.belongsTo);
         setBelongsTo(App.belongsTo);
+        setCompletedQty(qty_completed);
         return this;
     }
 
-    public String getCompleted() {
-        return completed;
+    private void setCompletedQty(String qty_completed) {
+        this.qty_completed=qty_completed;
     }
 
-    public void setCompleted(String completed) {
-        this.completed = completed;
+    public String getQty_completed() {
+        return qty_completed;
     }
 
-    public String getTotal() {
-        return total;
-    }
-
-    public void setTotal(String total) {
-        this.total = total;
-    }
+//    public String getCompleted() {
+//        return completed;
+//    }
+//
+//    public void setCompleted(String completed) {
+//        this.completed = completed;
+//    }
+//
+//    public String getTotal() {
+//        return total;
+//    }
+//
+//    public void setTotal(String total) {
+//        this.total = total;
+//    }
 
     public String getId() {
         return id;

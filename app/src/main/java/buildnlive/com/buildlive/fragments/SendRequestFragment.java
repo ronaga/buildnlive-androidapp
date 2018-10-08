@@ -196,17 +196,21 @@ public class SendRequestFragment extends Fragment {
                     app.sendNetworkRequest(url, Request.Method.POST, null, new Interfaces.NetworkInterfaceListener() {
                         @Override
                         public void onNetworkRequestStart() {
-
+                            progress.setVisibility(View.VISIBLE);
+                            hider.setVisibility(View.VISIBLE);
                         }
 
                         @Override
                         public void onNetworkRequestError(String error) {
-
+                            progress.setVisibility(View.GONE);
+                            hider.setVisibility(View.GONE);
                         }
 
                         @Override
                         public void onNetworkRequestComplete(String response) {
                             console.log("res:" + response);
+                            progress.setVisibility(View.GONE);
+                            hider.setVisibility(View.GONE);
                             try {
                                 isSelected = false;
                                 handleMaterial(response, type_data.get(position));
