@@ -58,7 +58,7 @@ public class PaymentFragment extends Fragment {
     private boolean val = true;
     private TextView hider;
     private EditText amount_edit, overheads_edit, to_edit,reason_edit, details_edit;
-    private String amount, to, reason, overheads, details, payment_type, payment_mode,type_of_payment,purpose;
+    private String amount, to, reason, overheads, details, payment_type, payment_mode,type_of_payment="Public",purpose;
     private boolean LOADING;
     private Spinner purposeSpinner,paymentTypeSpinner,paymentModeSpinner;
     private AlertDialog.Builder builder;

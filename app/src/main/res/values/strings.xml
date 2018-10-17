@@ -33,6 +33,19 @@
         <item>Labour</item>
         <item>Misc</item>
     </string-array>
+    <string-array name="status">
+        <item>Select Status</item>
+        <item>Completed</item>
+        <item>Removed</item>
+        <item>Ongoing</item>
+        <item>Upcoming</item>
+    </string-array>
+
+    <string-array name="category_filter">
+        <item>Select Category</item>
+        <item>Civil</item>
+        <item>Structure</item>
+    </string-array>
 
 
 

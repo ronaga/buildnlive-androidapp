@@ -39,5 +39,8 @@ public class Config {
     public static final String SEND_LABOUR_LIST="http://buildnlive.com/app/mobileapp/index.php?r=site/SaveLabourTransfer";
     public static final String VIEW_LABOUR_LIST="http://buildnlive.com/app/mobileapp/index.php?r=site/SendTransferDetails&user_id=[0]&project_id=[1]";
     public static final String SEND_COMMENTS="http://buildnlive.com/app/mobileapp/index.php?r=site/UpdateLabourTransfer";
+    public static final String FORGOT_PASSWORD="http://buildnlive.com/app/mobileapp/index.php?r=site/ForgotPassword";
+    public static final String RESET_PASSWORD="http://buildnlive.com/app/mobileapp/index.php?r=site/ChangePassword";
+    public static final String WORK_FILTERS="http://buildnlive.com/app/mobileapp/index.php?r=site/WorkActivityFilters";
     public static final String PREF_NAME = "OGIL";
 }

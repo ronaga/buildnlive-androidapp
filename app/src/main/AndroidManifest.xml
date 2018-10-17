@@ -36,6 +36,7 @@
         <activity android:name=".activities.IndentItems"/>
         <activity android:name=".activities.LocalPurchase"/>
         <activity android:name=".activities.LabourActivity"/>
+        <activity android:name=".activities.ResetActivity"/>
 
 
         <activity

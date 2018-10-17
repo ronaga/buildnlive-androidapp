@@ -4,13 +4,85 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
+    <LinearLayout
+        android:id="@+id/top"
+        android:background="@color/light_grey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true">
+
+        <ImageButton
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/transparent"
+            android:src="@drawable/ic_back_black" />
+
+        <RelativeLayout
+            android:id="@+id/action"
+            android:layout_weight="5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/round"
+                android:gravity="center"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="Daily Works"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="20dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:orientation="horizontal"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp">
+                <TextView
+                    android:id="@+id/filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:text="Filter" />
+                <TextView
+                    android:id="@+id/reset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:text="Reset" />
+            </LinearLayout>
+
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/items"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/submit"
-        android:layout_below="@+id/separator2"
-        android:layout_marginTop="30dp" />
+        android:layout_below="@+id/top" />
 
     <TextView
         android:id="@+id/no_content"

@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:background="@color/color3"
             android:padding="10dp"
-            android:text="Title"
+            android:text="Filters"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="25dp" />
@@ -32,46 +32,150 @@
     android:background="@color/white"
     android:layout_height="wrap_content">
 
-    <Switch
-        android:id="@+id/alert_message"
-        android:layout_width="wrap_content"
+    <Spinner
+        android:id="@+id/status"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:switchPadding="30dp"
-        android:padding="10dp"
-        android:text="Civil"
-        android:layout_gravity="center"
-        android:textColor="@color/color4"
-        android:textSize="18dp" />
-    <Switch
-        android:id="@+id/alert_message"
-        android:layout_width="wrap_content"
+        android:entries="@array/status"
+        android:layout_margin="10dp"
+        />
+
+    <Spinner
+        android:id="@+id/category_filter"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:switchPadding="30dp"
-        android:padding="10dp"
-        android:text="Civil"
-        android:layout_gravity="center"
-        android:textColor="@color/color4"
-        android:textSize="18dp" />
-    <Switch
-        android:id="@+id/alert_message"
-        android:layout_width="wrap_content"
+        android:entries="@array/category_filter"
+        android:layout_margin="10dp"
+        />
+    <!--<RadioGroup-->
+        <!--android:id="@+id/status"-->
+        <!--android:layout_margin="5dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal">-->
+        <!--<RadioButton-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="Active"/>-->
+        <!--<RadioButton-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="Completed"/>-->
+        <!--<RadioButton-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="Pending"/>-->
+    <!--</RadioGroup>-->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:switchPadding="30dp"
-        android:padding="10dp"
-        android:text="Civil"
-        android:layout_gravity="center"
-        android:textColor="@color/color4"
-        android:textSize="18dp" />
-    <Switch
-        android:id="@+id/alert_message"
-        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="10dp">
+        <TextView
+            android:layout_width="0dp"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:textColor="#000000"
+            android:text="Start Date"/>
+        <TextView
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:textColor="#000000"
+            android:text="End Date"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:switchPadding="30dp"
-        android:padding="10dp"
-        android:text="Civil"
-        android:layout_gravity="center"
-        android:textColor="@color/color4"
-        android:textSize="18dp" />
+        android:layout_margin="5dp"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_margin="5dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <EditText
+                android:id="@+id/start_date_dd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="DD"
+                android:maxLength="2"
+                android:inputType="number"/>
+            <EditText
+                android:id="@+id/start_date_mm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLength="2"
+                android:hint="MM"
+                android:inputType="number"/>
+            <EditText
+                android:id="@+id/start_date_yyyy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLength="4"
+                android:hint="YYYY"
+                android:inputType="number"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_margin="5dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <EditText
+                android:id="@+id/end_date_dd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="DD"
+                android:maxLength="2"
+                android:maxEms="2"
+                android:inputType="number"/>
+            <EditText
+                android:id="@+id/end_date_mm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="MM"
+                android:maxLength="2"
+                android:maxEms="2"
+                android:inputType="number"/>
+            <EditText
+                android:id="@+id/end_date_yyyy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="YYYY"
+                android:maxLength="4"
+                android:maxEms="4"
+                android:inputType="number"/>
+        </LinearLayout>
+        <!--<EditText-->
+            <!--android:id="@+id/start_date"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:hint="Start Date"-->
+            <!--android:inputType="date"/>-->
+        <!--<EditText-->
+            <!--android:id="@+id/end_date"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:hint="End Date"-->
+            <!--android:inputType="date"/>-->
+    </LinearLayout>
 </LinearLayout>
 
 
@@ -110,7 +214,7 @@
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_normal_enable"
-                android:text="Yes"
+                android:text="Apply"
                 android:textColor="@color/white"
                 android:textSize="16dp" />
 

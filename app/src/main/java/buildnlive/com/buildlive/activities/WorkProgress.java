@@ -21,7 +21,7 @@ public class WorkProgress extends AppCompatActivity {
     private App app;
     private TextView edit, filter,view;
     private Fragment fragment;
-    private ImageButton back;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +31,6 @@ public class WorkProgress extends AppCompatActivity {
         edit = findViewById(R.id.edit);
         view = findViewById(R.id.view);
 //        filter = findViewById(R.id.filter);
-        back =findViewById(R.id.back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
         fragment = DailyWorkProgressFragment.newInstance(app);
         changeScreen();
 //        filter.setOnClickListener(new View.OnClickListener() {

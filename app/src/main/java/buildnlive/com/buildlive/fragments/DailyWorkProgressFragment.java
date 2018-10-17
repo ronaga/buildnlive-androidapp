@@ -1,5 +1,6 @@
 package buildnlive.com.buildlive.fragments;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,7 +20,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,7 +66,7 @@ import io.realm.annotations.Index;
 public class DailyWorkProgressFragment extends Fragment {
     private RecyclerView items;
     private ProgressBar progress;
-    private TextView hider,filter,no_content;
+    private TextView hider,filter,reset,no_content;
     private static RealmResults<Work> works;
     private static  ArrayList<Work> workslist=new ArrayList<>();
     private static App app;
@@ -71,6 +74,8 @@ public class DailyWorkProgressFragment extends Fragment {
     private Realm realm;
     private boolean LOADING = true;
     public static final int QUALITY = 10;
+    private ImageButton back;
+    private String status_text,category_text;
 
     public static DailyWorkProgressFragment newInstance(App a) {
         app = a;
@@ -91,13 +96,78 @@ public class DailyWorkProgressFragment extends Fragment {
         progress = view.findViewById(R.id.progress);
         hider = view.findViewById(R.id.hider);
         no_content = view.findViewById(R.id.no_content);
-//        filter = view.findViewById(R.id.filter);
-//        filter.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                console.log("Clicked");
-//            }
-//        });
+        back =view.findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().finish();
+            }
+        });
+        reset =view.findViewById(R.id.reset);
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadWorks();
+            }
+        });
+        filter = view.findViewById(R.id.filter);
+        filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LayoutInflater inflater = getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.alert_filter, null);
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext(), R.style.PinDialog);
+                final AlertDialog alertDialog = dialogBuilder.setCancelable(false).setView(dialogView).create();
+                alertDialog.show();
+                final Spinner status= dialogView.findViewById(R.id.status);
+                final Spinner catfilt= dialogView.findViewById(R.id.category_filter);
+                final EditText startDateDD= dialogView.findViewById(R.id.start_date_dd);
+                final EditText startDateMM= dialogView.findViewById(R.id.start_date_mm);
+                final EditText startDateYYYY= dialogView.findViewById(R.id.start_date_yyyy);
+                final EditText endDateDD= dialogView.findViewById(R.id.end_date_dd);
+                final EditText endDateMM= dialogView.findViewById(R.id.end_date_mm);
+                final EditText endDateYYYY= dialogView.findViewById(R.id.end_date_yyyy);
+
+                Button positive = dialogView.findViewById(R.id.positive);
+                positive.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                           if(!(status.getSelectedItem().toString().equals("Select Status")))
+                           {
+                               status_text = status.getSelectedItem().toString();
+                               console.log(status_text);
+                           }
+                           else
+                           {
+                               status_text="";
+                           }
+                           if(!(catfilt.getSelectedItem().toString().equals("Select Category")))
+                           {
+                               category_text = catfilt.getSelectedItem().toString();
+                               console.log(category_text);
+                           }
+                           else
+                           {
+                               category_text="";
+                           }
+                           String start_date=startDateDD.getText()+"/"+startDateMM.getText()+"/"+startDateYYYY.getText();
+                           String end_date=endDateDD.getText()+"/"+endDateMM.getText()+"/"+endDateYYYY.getText();
+                           console.log(start_date+" "+end_date);
+                            filter(status_text,category_text,start_date,end_date);
+                            alertDialog.dismiss();
+
+                    }
+                });
+                Button negative = dialogView.findViewById(R.id.negative);
+                negative.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+            }
+        });
 //        realm = Realm.getDefaultInstance();
 //        works = realm.where(Work.class).equalTo("belongsTo", App.belongsTo).findAllAsync();
 
@@ -110,7 +180,81 @@ public class DailyWorkProgressFragment extends Fragment {
         }
     }
 
+    private void filter(String status,String category,String startdate,String enddate) {
+        workslist.clear();
+        progress.setVisibility(View.VISIBLE);
+        hider.setVisibility(View.VISIBLE);
+        String filterURL = Config.WORK_FILTERS;
+        HashMap<String, String> params = new HashMap<>();
+        params.put("status", status);
+        params.put("category_filter",category);
+        params.put("start_date",startdate);
+        params.put("end_date",enddate);
+        console.log("Params: "+params);
+        app.sendNetworkRequest(filterURL, Request.Method.POST, params, new Interfaces.NetworkInterfaceListener() {
+            @Override
+            public void onNetworkRequestStart() {
+
+            }
+
+            @Override
+            public void onNetworkRequestError(String error) {
+                progress.setVisibility(View.VISIBLE);
+                hider.setVisibility(View.VISIBLE);
+                Toast.makeText(getContext(), "Check Internet Connection", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNetworkRequestComplete(String response) {
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
+                console.log("Response:" + response);
+                try{
+                    JSONArray array = new JSONArray(response);
+                    for (int i=0; i<array.length(); i++){
+                        JSONObject par = array.getJSONObject(i);
+                        JSONObject sch = par.getJSONObject("work_schedule");
+                        final Work work = new Work().parseFromJSON(sch.getJSONObject("work_details"), par.getString("work_list_id"),
+                                sch.getString("work_duration"), sch.getString("qty"), sch.getString("schedule_start_date"), sch.getString("schedule_finish_date")
+                                , sch.getString("current_status"),sch.getString("qty_completed"));
+                        workslist.add(work);
+//                        , par.getString("completed_activities"), par.getString("total_activities")
+                        //                        realm.executeTransaction(new Realm.Transaction() {
+//                            @Override
+//                            public void execute(Realm realm) {
+//                                realm.copyToRealmOrUpdate(work);
+//                            }
+//                        });
+                        console.log("Worklist"+workslist.get(i));
+                    }
+                    if(workslist.isEmpty()){
+                        no_content.setVisibility(View.VISIBLE);
+                    }
+                    adapter = new DailyWorkAdapter(getContext(), workslist, new DailyWorkAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(int pos, View view) {
+                            Intent intent = new Intent(getContext(), DailyWorkProgressActivities.class);
+                            intent.putExtra("id", workslist.get(pos).getWorkListId());
+                            startActivity(intent);
+                        }
+                    }, new DailyWorkAdapter.OnButtonClickListener() {
+                        @Override
+                        public void onButtonClick(int pos,View view) {
+                            menuUpdate(workslist.get(pos));
+                        }
+                    });
+                    items.setLayoutManager(new LinearLayoutManager(getContext()));
+                    items.setAdapter(adapter);
+
+                } catch (JSONException e){
+
+                }
+            }
+        });
+    }
+
     private void loadWorks(){
+        workslist.clear();
         String url = Config.REQ_DAILY_WORK;
         url = url.replace("[0]", App.userId);
         url = url.replace("[1]", App.projectId);

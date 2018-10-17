@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mobile, pass;
     private Button login;
     private ProgressBar progress;
-    private TextView hider;
+    private TextView hider,unable_to_login;
     private SharedPreferences pref;
     public static final String PREF_KEY_EMAIL = "user_email";
     public static final String PREF_KEY_NAME = "user_name";
@@ -52,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         mobile = findViewById(R.id.mobile);
         pass = findViewById(R.id.pass);
         login = findViewById(R.id.login);
+        unable_to_login = findViewById(R.id.unable_login);
         app = (App) getApplication();
         pref = app.getPref();
         progress = findViewById(R.id.progress);
@@ -66,6 +67,13 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(getApplicationContext(), "Please enter valid details", Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+        unable_to_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this,ResetActivity.class));
+
             }
         });
     }

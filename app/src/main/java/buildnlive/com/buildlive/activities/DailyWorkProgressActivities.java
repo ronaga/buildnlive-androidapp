@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +62,7 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
     private String id;
     public static final int QUALITY = 10;
     private TextView no_content;
+    private ImageButton back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,13 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
         id = bundle.getString("id");
         items = findViewById(R.id.items);
         no_content=findViewById(R.id.no_content);
+        back = findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         activities = new ArrayList<>();
         adapter = new DailyWorkActivityAdapter(getApplicationContext(), activities, new DailyWorkActivityAdapter.OnItemClickListener() {
             @Override

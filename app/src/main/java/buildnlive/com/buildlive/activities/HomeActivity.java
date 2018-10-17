@@ -37,6 +37,7 @@ import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.fragments.AboutUsFragment;
 import buildnlive.com.buildlive.fragments.HomeFragment;
 import buildnlive.com.buildlive.fragments.PlansFragment;
+import buildnlive.com.buildlive.fragments.ProfileFragment;
 import buildnlive.com.buildlive.utils.Config;
 import io.realm.Realm;
 
@@ -148,6 +149,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 logout();
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 finish();
+                break;
+            case R.id.nav_profile:
+                fragment= ProfileFragment.newInstance(app);
                 break;
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
