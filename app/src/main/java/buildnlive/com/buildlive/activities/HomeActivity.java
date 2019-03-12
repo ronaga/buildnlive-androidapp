@@ -21,10 +21,13 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.android.volley.Request;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,6 +37,7 @@ import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.console;
+import buildnlive.com.buildlive.elements.Item;
 import buildnlive.com.buildlive.fragments.AboutUsFragment;
 import buildnlive.com.buildlive.fragments.HomeFragment;
 import buildnlive.com.buildlive.fragments.PlansFragment;
@@ -57,7 +61,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         super.onStart();
-
+//
         try {
             sendRequest();
         } catch (JSONException e) {
@@ -147,8 +151,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_logout:
                 logout();
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                finish();
                 break;
             case R.id.nav_profile:
                 fragment= ProfileFragment.newInstance(app);
@@ -160,15 +162,47 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void logout() {
-        pref.edit().clear().commit();
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
+        App app= ((App) getApplication());
+        String requestUrl = Config.LOGOOUT;
+        requestUrl = requestUrl.replace("[0]", App.userId);
+        console.log(requestUrl);
+        app.sendNetworkRequest(requestUrl, Request.Method.POST, null, new Interfaces.NetworkInterfaceListener() {
             @Override
-            public void execute(Realm realm) {
-                realm.deleteAll();
+            public void onNetworkRequestStart() {
+
+            }
+
+            @Override
+            public void onNetworkRequestError(String error) {
+
+                console.error("Network request failed with error :" + error);
+                Toast.makeText(getApplicationContext(), "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onNetworkRequestComplete(String response) {
+
+                pref.edit().clear().commit();
+                Realm realm = Realm.getDefaultInstance();
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        realm.deleteAll();
+                    }
+                });
+
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                    finish();
+
             }
         });
+
     }
+
+
+
+
 
     private DrawerLayout.DrawerListener listener = new DrawerLayout.DrawerListener() {
         @Override

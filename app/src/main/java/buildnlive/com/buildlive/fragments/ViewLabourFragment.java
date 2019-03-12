@@ -40,7 +40,7 @@ public class ViewLabourFragment extends Fragment{
     private RecyclerView items;
     private static App app;
     private ProgressBar progress;
-    private TextView hider;
+    private TextView hider,no_content;
     private ViewLabourAdapter adapter;
 
     public ViewLabourAdapter.OnItemClickListener listener= new ViewLabourAdapter.OnItemClickListener() {
@@ -96,6 +96,7 @@ public class ViewLabourFragment extends Fragment{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        no_content=view.findViewById(R.id.no_content);
         items = view.findViewById(R.id.items);
         progress = view.findViewById(R.id.progress);
         hider = view.findViewById(R.id.hider);
@@ -136,6 +137,10 @@ public class ViewLabourFragment extends Fragment{
                         console.log("OBject"+obj.toString());
                         viewLabourList.add(new ViewLabour().parseFromJSON(obj));
                         console.log("List:"+viewLabourList);
+                        if(viewLabourList.isEmpty()){
+                            no_content.setVisibility(View.VISIBLE);
+                        }
+                        else no_content.setVisibility(View.GONE);
 //                        realm.executeTransaction(new Realm.Transaction() {
 //                            @Override
 //                            public void execute(Realm realm) {

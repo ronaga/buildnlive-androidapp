@@ -1,7 +1,9 @@
 package buildnlive.com.buildlive.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,6 +29,7 @@ import java.util.List;
 import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
+import buildnlive.com.buildlive.activities.CreateLabour;
 import buildnlive.com.buildlive.adapters.AttendanceAdapter;
 import buildnlive.com.buildlive.adapters.ListAdapter;
 import buildnlive.com.buildlive.console;
@@ -47,6 +50,7 @@ public class MarkAttendanceFragment extends Fragment implements Interfaces.SyncL
     private static RealmResults<Worker> workers;
     private static App app;
     private AttendanceAdapter adapter;
+    private FloatingActionButton fab;
 
 
     public static MarkAttendanceFragment newInstance(App a, RealmResults<Worker> u) {
@@ -68,6 +72,14 @@ public class MarkAttendanceFragment extends Fragment implements Interfaces.SyncL
         submit = view.findViewById(R.id.submit);
         progress = view.findViewById(R.id.progress);
         hider = view.findViewById(R.id.hider);
+        fab = view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), CreateLabour.class));
+            }
+        });
+
         adapter = new AttendanceAdapter(getContext(), workers, new AttendanceAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Worker worker, int pos, View view) {
@@ -217,8 +229,8 @@ public class MarkAttendanceFragment extends Fragment implements Interfaces.SyncL
         alertDialog.show();
         final TextView disable = dialogView.findViewById(R.id.disableView);
         final ProgressBar progress = dialogView.findViewById(R.id.progress);
-        final AdvancedRecyclerView list = dialogView.findViewById(R.id.list);
-        list.setmMaxHeight(400);
+        final RecyclerView list = dialogView.findViewById(R.id.list);
+//        list.setmMaxHeight(400);
         TextView title = dialogView.findViewById(R.id.alert_title);
         title.setText("Worker Details");
         TextView message = dialogView.findViewById(R.id.alert_message);

@@ -3,6 +3,7 @@ package buildnlive.com.buildlive.elements;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import buildnlive.com.buildlive.App;
@@ -10,7 +11,7 @@ import io.realm.RealmObject;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 
-public class ViewIssue extends RealmObject {
+public class ViewIssue extends RealmObject implements Serializable {
 
     @Index
     @PrimaryKey
@@ -22,8 +23,12 @@ public class ViewIssue extends RealmObject {
     private String reciever;
     private String checkout_Date;
     private String status;
+    private String button;
+    private String item_record_id;
 
-    public ViewIssue(String item_name, String issue_id, String quantity, String units, String reciever, String checkout_Date,String status) {
+
+
+    public ViewIssue(String item_name, String issue_id, String quantity, String units, String reciever, String checkout_Date,String status,String button,String item_record_id) {
 //        this.id = id;
         this.item_name= item_name;
         this.issue_id = issue_id;
@@ -32,6 +37,8 @@ public class ViewIssue extends RealmObject {
         this.reciever = reciever;
         this.checkout_Date = checkout_Date;
         this.status= status;
+        this.button=button;
+        this.item_record_id=item_record_id;
     }
 
     public ViewIssue() {
@@ -46,7 +53,34 @@ public class ViewIssue extends RealmObject {
         setReciever(obj.getString("receiver"));
         setCheckOutDate(obj.getString("check_out_date"));
         setStatus(obj.getString("status"));
+        setButtonStatus(obj.getString("button"));
+        setItemRecordId(obj.getString("item_record_id"));
         return this;
+    }
+        /*
+     {"issue_id":"0",
+     "item_record_id":"8",
+     "comments":"Damaged",
+     "item_name":"Safety Helmets",
+     "qty":"2",
+     "units":"nos",
+     "check_out_date":"2019-01-16 14:05:22",
+     "status":"Yes",
+     "button":"0"}
+     */
+
+    private void setItemRecordId(String item_rent_id) {this.item_record_id=item_record_id;
+    }
+
+    public String getItem_record_id() {
+        return item_record_id;
+    }
+
+    public String getButtonStatus() {
+        return button;
+    }
+
+    private void setButtonStatus(String button) {this.button=button;
     }
 
     public String getQuantity() {

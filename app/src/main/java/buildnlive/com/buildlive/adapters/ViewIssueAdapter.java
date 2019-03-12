@@ -15,15 +15,23 @@ import java.util.List;
 
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.elements.Issue;
+import buildnlive.com.buildlive.elements.LabourModel;
 import buildnlive.com.buildlive.elements.ViewIssue;
 
 public class ViewIssueAdapter extends RecyclerView.Adapter<ViewIssueAdapter.ViewHolder> {
+
+    public interface OnItemClickListener {
+        void onItemClick(ViewIssue items, int pos, View view);
+    }
+
     private final List<ViewIssue> items;
     private Context context;
+    private final OnItemClickListener listener;
 
-    public ViewIssueAdapter(Context context, List<ViewIssue> users) {
+    public ViewIssueAdapter(Context context, List<ViewIssue> users,OnItemClickListener listener) {
         this.items = users;
         this.context = context;
+        this.listener=listener;
     }
 
     @Override
@@ -31,10 +39,18 @@ public class ViewIssueAdapter extends RecyclerView.Adapter<ViewIssueAdapter.View
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_view_issue, parent, false);
         return new ViewHolder(v);
     }
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
     @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+    @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(context, items.get(position), position);
+        holder.bind(context, items.get(position), position,listener);
     }
 
     @Override
@@ -44,7 +60,7 @@ public class ViewIssueAdapter extends RecyclerView.Adapter<ViewIssueAdapter.View
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView name, worker, quantity,status;
+        private TextView name, worker, quantity,status,return_item;
 
         public ViewHolder(View view) {
             super(view);
@@ -52,9 +68,10 @@ public class ViewIssueAdapter extends RecyclerView.Adapter<ViewIssueAdapter.View
             worker = view.findViewById(R.id.worker);
             quantity = view.findViewById(R.id.quantity);
             status= view.findViewById(R.id.status);
+            return_item= view.findViewById(R.id.return_item);
         }
 
-        public void bind(final Context context, final ViewIssue item, final int pos) {
+        public void bind(final Context context, final ViewIssue item, final int pos,final OnItemClickListener listener) {
             name.setText(item.getItemName());
             worker.setText(item.getReciever());
             quantity.setText(item.getQuantity() + " " + item.getUnit());
@@ -62,6 +79,19 @@ public class ViewIssueAdapter extends RecyclerView.Adapter<ViewIssueAdapter.View
                 status.setText("Received");
             }
             else status.setText("Not Received");
+
+            if(item.getButtonStatus().equals("1")){
+                return_item.setVisibility(View.VISIBLE);
+            }
+            else {
+                return_item.setVisibility(View.GONE);
+            }
+            return_item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                        listener.onItemClick(item,pos,return_item);
+                }
+            });
         }
     }
 }

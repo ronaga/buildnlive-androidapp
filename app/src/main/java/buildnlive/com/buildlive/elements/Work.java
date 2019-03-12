@@ -14,6 +14,7 @@ public class Work extends RealmObject {
     private String id;
     private String workId;
     private String workListId;
+    private String masterWorkId;
     private String workName;
     private String units;
     private String workCode;
@@ -24,8 +25,32 @@ public class Work extends RealmObject {
     private String end;
     private String status;
     private String belongsTo;
+    private String percent_compl;
+    private String assign_qty;
+    private String planned_detail_id;
+    private String planned_id;
+    private String type;
 
-    public Work(String id, String workId, String workListId, String workName, String units, String workCode, String duration, String quantity, String start, String end, String status,String qty_completed) {
+    public Work(String id, String workId, String workListId,String masterWorkId, String workName, String units, String workCode, String duration, String quantity, String start, String end, String status,String qty_completed, String percent_compl,String type) {
+        this.id = id;
+        this.workId = workId;
+        this.workListId = workListId;
+        this.masterWorkId=masterWorkId;
+        this.workName = workName;
+        this.units = units;
+        this.workCode = workCode;
+        this.duration = duration;
+        this.quantity = quantity;
+        this.start = start;
+        this.end = end;
+        this.status = status;
+        this.qty_completed=qty_completed;
+        this.percent_compl=percent_compl;
+        this.type=type;
+    }
+    public Work(String planned_id,String planned_detail_id,String id, String workId, String workListId, String workName, String units, String workCode, String duration, String quantity, String start, String end, String status,String qty_completed, String percent_compl,String type) {
+        this.planned_id=planned_id;
+        this.planned_detail_id=planned_detail_id;
         this.id = id;
         this.workId = workId;
         this.workListId = workListId;
@@ -38,13 +63,16 @@ public class Work extends RealmObject {
         this.end = end;
         this.status = status;
         this.qty_completed=qty_completed;
+        this.percent_compl=percent_compl;
+        this.type=type;
     }
 
     public Work() {
     }
 
-    public Work parseFromJSON(JSONObject obj, String workListId, String duration, String quantity, String start, String end, String status,String qty_completed) throws JSONException {
+    public Work parseFromJSON(JSONObject obj, String workListId,String masterWorkId, String duration, String quantity, String start, String end, String status,String qty_completed,String percent_compl,String type) throws JSONException {
         setWorkListId(workListId);
+        setMasterWorkId(masterWorkId);
         setDuration(duration);
         setQuantity(quantity);
         setStart(start);
@@ -57,7 +85,74 @@ public class Work extends RealmObject {
         setId(getWorkId() + App.belongsTo);
         setBelongsTo(App.belongsTo);
         setCompletedQty(qty_completed);
+        setPercentCompleted(percent_compl);
+        setType(type);
         return this;
+    }
+
+    private void setMasterWorkId(String masterWorkId) {
+        this.masterWorkId=masterWorkId;
+    }
+
+    public String getMasterWorkId() {
+        return masterWorkId;
+    }
+
+    public Work parseFromJSON(JSONObject obj, String planned_id, String planned_detail_id, String duration, String quantity, String start, String end, String status, String qty_completed, String percent_compl, String assign_qty, String type) throws JSONException {
+        setPlannedId(planned_id);
+        setPlannedDetailid(planned_detail_id);
+        setAssignedQuantity(assign_qty);
+        setDuration(duration);
+        setQuantity(quantity);
+        setStart(start);
+        setEnd(end);
+        setStatus(status);
+        setWorkId(obj.getString("work_activity_id"));
+        setWorkName(obj.getString("work_activity_name"));
+//        setUnits(obj.getString("work_activity_units"));
+//        setWorkCode(obj.getString("work_activity_code"));
+        setId(getWorkId() + App.belongsTo);
+        setBelongsTo(App.belongsTo);
+        setCompletedQty(qty_completed);
+        setPercentCompleted(percent_compl);
+        setType(type);
+        return this;
+    }
+
+
+    private void setType(String type) {this.type=type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    private void setAssignedQuantity(String assign_qty) {this.assign_qty=assign_qty;
+    }
+
+    public String getAssign_qty() {
+        return assign_qty;
+    }
+
+    private void setPlannedDetailid(String planned_detail_id) {this.planned_detail_id=planned_detail_id;
+    }
+
+    public String getPlanned_detail_id() {
+        return planned_detail_id;
+    }
+
+    private void setPlannedId(String planned_id) { this.planned_id=planned_id;
+    }
+
+    public String getPlanned_id() {
+        return planned_id;
+    }
+
+    private void setPercentCompleted(String percent_compl) {this.percent_compl=percent_compl;
+    }
+
+    public String getPercent_compl() {
+        return percent_compl;
     }
 
     private void setCompletedQty(String qty_completed) {

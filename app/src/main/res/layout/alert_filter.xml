@@ -17,22 +17,34 @@
             android:id="@+id/alert_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/color3"
-            android:padding="10dp"
+            android:background="@color/white"
+            android:padding="5dp"
             android:text="Filters"
             android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="25dp" />
-<LinearLayout
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="25sp" />
+        <View
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/alert_title"
+            android:background="#e8e8e8"/>
+
+        <LinearLayout
     android:id="@+id/alert_message_container"
     android:layout_width="match_parent"
     android:layout_centerInParent="true"
-    android:layout_below="@+id/alert_title"
+    android:layout_below="@+id/separator"
     android:orientation="vertical"
     android:background="@color/white"
     android:layout_height="wrap_content">
 
     <Spinner
+        android:spinnerMode="dialog"
+        android:background="@drawable/border"
+        android:padding="10dp"
+        android:prompt="@string/select_status"
         android:id="@+id/status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,6 +57,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:entries="@array/category_filter"
+        android:spinnerMode="dialog"
+        android:background="@drawable/border"
+        android:padding="10dp"
+        android:prompt="@string/select_category"
         android:layout_margin="10dp"
         />
     <!--<RadioGroup-->
@@ -94,6 +110,7 @@
             android:text="End Date"/>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -180,21 +197,22 @@
 
 
 
-        <buildnlive.com.buildlive.utils.AdvancedRecyclerView
-            android:id="@+id/list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/alert_message_container"
-            android:scrollbars="vertical"
-            android:visibility="gone" />
+        <!--<buildnlive.com.arch.utils.AdvancedRecyclerView-->
+            <!--android:id="@+id/list"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/alert_message_container"-->
+            <!--android:scrollbars="vertical"-->
+            <!--android:visibility="gone" />-->
 
         <LinearLayout
             android:id="@+id/action"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/list"
+            android:layout_below="@+id/alert_message_container"
             android:orientation="horizontal"
             android:paddingTop="10dp">
+
 
             <Button
                 android:id="@+id/negative"
@@ -202,7 +220,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/button_normal_disable"
+                android:background="@color/transparent"
                 android:text="Close"
                 android:textColor="@color/black"
                 android:textSize="16dp" />
@@ -213,8 +231,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/button_normal_enable"
-                android:text="Apply"
+                android:background="#5089e3"
+                android:text="Submit"
                 android:textColor="@color/white"
                 android:textSize="16dp" />
 

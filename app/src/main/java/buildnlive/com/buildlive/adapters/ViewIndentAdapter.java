@@ -28,7 +28,15 @@ public class ViewIndentAdapter extends RecyclerView.Adapter<ViewIndentAdapter.Vi
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_view_site_request, parent, false);
         return new ViewHolder(v);
     }
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.bind(context, items.get(position), position);

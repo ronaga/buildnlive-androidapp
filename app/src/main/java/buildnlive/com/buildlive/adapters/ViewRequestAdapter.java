@@ -23,7 +23,15 @@ public class ViewRequestAdapter extends RealmRecyclerViewAdapter<Request, ViewRe
         this.items = users;
         this.context = context;
     }
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_view_request, parent, false);

@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -35,7 +37,15 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         this.context = context;
         this.listener = listener;
     }
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
     @Override
     public NotificationsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.content_notification, parent, false);
@@ -57,7 +67,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         private TextView title,quantity,label,details,date;
         private ImageView imageView;
         private LinearLayout buttons,reply;
-        private Button approve,reject,review,receive,notReceive,read;
+        private Button approve,reject,review,receive,notReceive,read,image;
         private AlertDialog.Builder builder;
 
         public ViewHolder(View view) {
@@ -70,6 +80,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 //            quantity = view.findViewById(R.id.quantity);
             buttons = view.findViewById(R.id.buttons);
             approve = view.findViewById(R.id.approve);
+            image = view.findViewById(R.id.image);
             reject = view.findViewById(R.id.reject);
             review = view.findViewById(R.id.review);
             receive = view.findViewById(R.id.receive);
@@ -82,6 +93,15 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             if(item.getLevel().equals("urgent"))
             {
                 imageView.setVisibility(View.VISIBLE);
+            }
+            if(!item.getImage().isEmpty()){
+                image.setVisibility(View.VISIBLE);
+                image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        listener.onItemClick(item,pos,view);
+                    }
+                });
             }
             switch (item.getType()){
                 case "update":

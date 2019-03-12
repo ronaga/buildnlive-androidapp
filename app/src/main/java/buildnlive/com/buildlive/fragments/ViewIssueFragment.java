@@ -1,5 +1,6 @@
 package buildnlive.com.buildlive.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,7 @@ import java.util.List;
 import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
+import buildnlive.com.buildlive.activities.ReturnIssuedItem;
 import buildnlive.com.buildlive.adapters.ViewIssueAdapter;
 import buildnlive.com.buildlive.adapters.ViewItemAdapter;
 import buildnlive.com.buildlive.console;
@@ -43,6 +45,18 @@ public class ViewIssueFragment extends Fragment {
         return new ViewIssueFragment();
     }
 
+    private ViewIssueAdapter.OnItemClickListener listner=new ViewIssueAdapter.OnItemClickListener() {
+
+        @Override
+        public void onItemClick(ViewIssue items, int pos, View view) {
+            Bundle bundle= new Bundle();
+            bundle.putSerializable("Item",items);
+            Intent intent= new Intent(getActivity(),ReturnIssuedItem.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
+    };
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,7 +71,7 @@ public class ViewIssueFragment extends Fragment {
         items = view.findViewById(R.id.items);
         progress=view.findViewById(R.id.progress);
         hider=view.findViewById(R.id.hider);
-        ViewIssueAdapter adapter = new ViewIssueAdapter(getContext(), itemsList);
+        ViewIssueAdapter adapter = new ViewIssueAdapter(getContext(), itemsList,listner);
         items.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         items.setAdapter(adapter);
         refresh();
@@ -109,7 +123,7 @@ public class ViewIssueFragment extends Fragment {
 
                 } catch (JSONException e) {
                 }
-                ViewIssueAdapter adapter = new ViewIssueAdapter(getContext(), itemsList);
+                ViewIssueAdapter adapter = new ViewIssueAdapter(getContext(), itemsList,listner);
                 items.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
                 items.setAdapter(adapter);
                 adapter.notifyDataSetChanged();

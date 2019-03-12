@@ -50,12 +50,37 @@
             android:gravity="end"/>
 
     </LinearLayout>
+    <TextView
+        android:visibility="gone"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_below="@+id/container"
+        android:id="@+id/return_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp"
+        android:gravity="center"
+        android:background="@drawable/inactive_button"
+        android:layout_alignParentEnd="true"
+        android:clickable="true"
+        android:textColor="@color/white"
+        android:focusable="true"
+        android:textSize="15sp"
+        android:text="Return"
+        android:layout_alignParentRight="true" />
+
 
     <View
         android:id="@+id/separator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/container"
-        android:background="#e8e8e8"></View>
+        android:layout_below="@+id/return_item"
+        android:background="#e8e8e8"/>
 
 </RelativeLayout>

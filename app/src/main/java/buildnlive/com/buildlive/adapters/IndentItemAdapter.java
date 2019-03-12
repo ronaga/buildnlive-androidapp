@@ -42,7 +42,15 @@ public class IndentItemAdapter extends RecyclerView.Adapter<IndentItemAdapter.Vi
         this.context = context;
         this.listener = listener;
     }
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

@@ -6,6 +6,7 @@ import android.support.v4.content.res.ResourcesCompat;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -35,19 +36,23 @@ public class MarkAttendance extends AppCompatActivity {
     private Fragment fragment;
     private Interfaces.SyncListener listener;
     private RealmResults<Worker> workers;
-    private ImageButton back;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        refresh();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mark_attendance);
-        back =findViewById(R.id.back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        TextView toolbar_title=findViewById(R.id.toolbar_title);
+        toolbar_title.setText("Attendance");
         app = (App) getApplication();
         realm = Realm.getDefaultInstance();
         workers = realm.where(Worker.class).equalTo("belongsTo", App.belongsTo).findAllAsync();
@@ -76,8 +81,40 @@ public class MarkAttendance extends AppCompatActivity {
                 changeScreen();
             }
         });
-        refresh();
     }
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.attendance_menu, menu);
+//        return super.onCreateOptionsMenu(menu);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//        switch (id){
+//            case R.id.nav_home:
+//                Toast.makeText(getApplicationContext(),"Item 1 Selected",Toast.LENGTH_LONG).show();
+//                return true;
+//            case R.id.nav_profile:
+//                Toast.makeText(getApplicationContext(),"Item 2 Selected",Toast.LENGTH_LONG).show();
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
+
 
     private void disableView() {
         int sdk = android.os.Build.VERSION.SDK_INT;

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/name"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:breakStrategy="high_quality"
+            android:padding="10dp"
+            android:text="lorem ipsum" />
+
+
+
+        <TextView
+            android:id="@+id/login_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:padding="5dp"
+            android:text="105A"
+            android:textAlignment="center"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/logout_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:padding="5dp"
+            android:text="105A"
+            android:textAlignment="center"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/service_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="4"
+            android:padding="3dp"
+            android:gravity="center"
+            android:textAlignment="center" />
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/description"
+        android:layout_below="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/border"
+        android:padding="10dp"
+        android:text="Dummy"
+        android:gravity="start"
+        android:textAlignment="textStart" />
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/description"
+        android:background="#e8e8e8"/>
+
+</RelativeLayout>

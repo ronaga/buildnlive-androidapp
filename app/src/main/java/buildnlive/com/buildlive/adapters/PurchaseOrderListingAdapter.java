@@ -32,6 +32,15 @@ public class PurchaseOrderListingAdapter extends RecyclerView.Adapter<PurchaseOr
         this.context = context;
         this.listener = listener;
     }
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

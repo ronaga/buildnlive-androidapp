@@ -11,6 +11,7 @@
         android:required="true" />
 
     <application
+        android:usesCleartextTraffic="true"
         android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_buildnlive_logo"
@@ -18,33 +19,36 @@
         android:roundIcon="@mipmap/ic_buildnlive_logo_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.HomeActivity">
+        <activity android:name=".activities.HomeActivity"  android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW"/>
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MarkAttendance" />
-        <activity android:name=".activities.AddItem" />
-        <activity android:name=".activities.IssuedItems" />
-        <activity android:name=".activities.RequestItems" />
-        <activity android:name=".activities.WorkProgress" />
-        <activity android:name=".activities.DailyWorkProgressActivities" />
-        <activity android:name=".activities.PurchaseOrder" />
-        <activity android:name=".activities.NotificationActivity"/>
-        <activity android:name=".activities.IndentItems"/>
-        <activity android:name=".activities.LocalPurchase"/>
-        <activity android:name=".activities.LabourActivity"/>
-        <activity android:name=".activities.ResetActivity"/>
+        <activity android:name=".activities.MarkAttendance" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait" />
+        <activity android:name=".activities.AddItem" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.IssuedItems" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.RequestItems" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.WorkProgress" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait" />
+        <activity android:name=".activities.DailyWorkProgressActivities" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.PurchaseOrder" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.NotificationActivity" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.IndentItems" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.LocalPurchase" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.LabourActivity" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.ResetActivity" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
 
 
         <activity
             android:name=".activities.MainActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait" />
         <activity android:name=".activities.PreviewImage" />
-        <activity android:name=".activities.LoginActivity" />
-        <activity android:name=".activities.PurchaseOrderListing" />
+        <activity android:name=".activities.LoginActivity" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.PurchaseOrderListing" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -57,6 +61,19 @@
         </provider>
 
         <activity android:name=".activities.Main2Activity"></activity>
+        <activity android:name=".activities.LabourReportActivity" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.ManageLabour"  android:screenOrientation="portrait" />
+        <activity android:name=".activities.ManageLabourReport" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.Planning" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.BillImageView" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait" />
+        <activity android:name=".activities.ReturnIssuedItem" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.Inventory"  android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.IssuedItemsForm"  android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.CreateLabour" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait" />
+        <activity android:name=".activities.CreateActivity" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait" />
+        <activity android:name=".activities.LocalPurchaseForm" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait" />
+        <activity android:name=".activities.MachineList"  android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.MachineListForm" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait" />
     </application>
 
 </manifest>

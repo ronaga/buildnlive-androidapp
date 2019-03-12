@@ -36,7 +36,15 @@ public class AttendanceAdapter extends RealmRecyclerViewAdapter<Worker, Attendan
         this.context = context;
         this.listener = listener;
     }
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_attendance, parent, false);
@@ -122,6 +130,16 @@ public class AttendanceAdapter extends RealmRecyclerViewAdapter<Worker, Attendan
                         changedUsers.remove(item.getId());
                 }
             });
+
+            if(item.getLabour_present().equals("1"))
+            {
+                check_in.setChecked(true);
+            }
+
+            if(item.getLabour_present().equals("0"))
+            {
+                check_in.setChecked(false);
+            }
         }
     }
 }

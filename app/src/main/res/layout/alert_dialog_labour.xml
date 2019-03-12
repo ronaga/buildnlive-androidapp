@@ -13,28 +13,36 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <TextView
             android:id="@+id/alert_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/color3"
-            android:padding="10dp"
+            android:background="@color/white"
+            android:padding="5dp"
             android:text="Return Labour"
             android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="25dp" />
-
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="25sp" />
+        <View
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/alert_title"
+            android:background="#e8e8e8"/>
         <EditText
             android:id="@+id/alert_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/alert_title"
-            android:background="@color/white"
+            android:layout_below="@+id/separator"
+            android:background="@drawable/border"
+            android:layout_margin="10dp"
             android:padding="10dp"
             android:hint="Comments"
             android:textAlignment="center"
-            android:textColor="@color/color4"
-            android:textSize="18dp" />
+            android:textColor="@color/light_black"
+            android:textSize="16dp" />
 
 
         <LinearLayout
@@ -51,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/button_normal_disable"
+                android:background="@color/transparent"
                 android:text="Close"
                 android:textColor="@color/black"
                 android:textSize="16dp" />
@@ -62,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/button_normal_enable"
+                android:background="#5089e3"
                 android:text="Return"
                 android:textColor="@color/white"
                 android:textSize="16dp" />

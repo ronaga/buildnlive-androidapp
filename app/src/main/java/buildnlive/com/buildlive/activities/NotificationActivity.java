@@ -2,14 +2,17 @@ package buildnlive.com.buildlive.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -43,87 +46,98 @@ public class NotificationActivity extends AppCompatActivity {
     public NotificationsAdapter.OnItemClickListener listener = new NotificationsAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(final Notification notification, final int pos, final View view) {
-            builder.setMessage("Do you want to Submit?")
-                    .setCancelable(false)
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            switch (view.getId()){
-                                case R.id.receive:
-                                    try {
-                                        sendRequest(notification.getId(),"Received");
-                                        notificationList.remove(pos);
-                                        adapter.notifyItemRemoved(pos);
-                                        adapter.notifyItemRangeChanged(pos,notificationList.size());
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                    break;
-                                case R.id.not_receive:
-                                    try {
-                                        sendRequest(notification.getId(),"Not Received");
-                                        notificationList.remove(pos);
-                                        adapter.notifyItemRemoved(pos);
-                                        adapter.notifyItemRangeChanged(pos,notificationList.size());
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                    break;
-                                case R.id.approve:
-                                    try {
-                                        sendRequest(notification.getId(),"Approved");
-                                        notificationList.remove(pos);
-                                        adapter.notifyItemRemoved(pos);
-                                        adapter.notifyItemRangeChanged(pos,notificationList.size());
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                    break;
-                                case R.id.reject:
-                                    try {
-                                        sendRequest(notification.getId(),"Rejected");
-                                        notificationList.remove(pos);
-                                        adapter.notifyItemRemoved(pos);
-                                        adapter.notifyItemRangeChanged(pos,notificationList.size());
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                    break;
-                                case R.id.review:
-                                    try {
-                                        sendRequest(notification.getId(),"Revision");
-                                        notificationList.remove(pos);
-                                        adapter.notifyItemRemoved(pos);
-                                        adapter.notifyItemRangeChanged(pos,notificationList.size());
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                    break;
-                                case R.id.read_notification:
-                                    try {
-                                        sendRequest(notification.getId(),"Read");
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                    notificationList.remove(pos);
-                                    adapter.notifyItemRemoved(pos);
-                                    adapter.notifyItemRangeChanged(pos,notificationList.size());
-                                    break;
 
-                            }
-                        }
-                    })
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            //  Action for 'NO' Button
-                            dialog.cancel();
+           if(view.getId()==R.id.image){
+                   Intent intent=new Intent(NotificationActivity.this,BillImageView.class);
+                   Bundle bundle= new Bundle();
+                   bundle.putString("Link",notification.getImage());
+                   intent.putExtras(bundle);
+                   startActivity(intent);
+           }
+           else {
+               builder.setMessage("Do you want to Submit?")
+                       .setCancelable(false)
+                       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                           public void onClick(DialogInterface dialog, int id) {
+                               switch (view.getId()){
+                                   case R.id.receive:
+                                       try {
+                                           sendRequest(notification.getId(),"Received");
+                                           notificationList.remove(pos);
+                                           adapter.notifyItemRemoved(pos);
+                                           adapter.notifyItemRangeChanged(pos,notificationList.size());
+                                       } catch (JSONException e) {
+                                           e.printStackTrace();
+                                       }
+                                       break;
+                                   case R.id.not_receive:
+                                       try {
+                                           sendRequest(notification.getId(),"Not Received");
+                                           notificationList.remove(pos);
+                                           adapter.notifyItemRemoved(pos);
+                                           adapter.notifyItemRangeChanged(pos,notificationList.size());
+                                       } catch (JSONException e) {
+                                           e.printStackTrace();
+                                       }
+                                       break;
+                                   case R.id.approve:
+                                       try {
+                                           sendRequest(notification.getId(),"Approved");
+                                           notificationList.remove(pos);
+                                           adapter.notifyItemRemoved(pos);
+                                           adapter.notifyItemRangeChanged(pos,notificationList.size());
+                                       } catch (JSONException e) {
+                                           e.printStackTrace();
+                                       }
+                                       break;
+                                   case R.id.reject:
+                                       try {
+                                           sendRequest(notification.getId(),"Rejected");
+                                           notificationList.remove(pos);
+                                           adapter.notifyItemRemoved(pos);
+                                           adapter.notifyItemRangeChanged(pos,notificationList.size());
+                                       } catch (JSONException e) {
+                                           e.printStackTrace();
+                                       }
+                                       break;
+                                   case R.id.review:
+                                       try {
+                                           sendRequest(notification.getId(),"Revision");
+                                           notificationList.remove(pos);
+                                           adapter.notifyItemRemoved(pos);
+                                           adapter.notifyItemRangeChanged(pos,notificationList.size());
+                                       } catch (JSONException e) {
+                                           e.printStackTrace();
+                                       }
+                                       break;
+                                   case R.id.read_notification:
+                                       try {
+                                           sendRequest(notification.getId(),"Read");
+                                       } catch (JSONException e) {
+                                           e.printStackTrace();
+                                       }
+                                       notificationList.remove(pos);
+                                       adapter.notifyItemRemoved(pos);
+                                       adapter.notifyItemRangeChanged(pos,notificationList.size());
+                                       break;
+                               }
+                           }
+                       })
+                       .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                           public void onClick(DialogInterface dialog, int id) {
+                               //  Action for 'NO' Button
+                               dialog.cancel();
 
-                        }
-                    });
-            //Creating dialog box
-            AlertDialog alert = builder.create();
-            //Setting the title manually
-            alert.setTitle("Submit");
-            alert.show();
+                           }
+                       });
+               //Creating dialog box
+               AlertDialog alert = builder.create();
+               //Setting the title manually
+               alert.setTitle("Submit");
+               alert.show();
+
+           }
+
 
 
         }
@@ -132,13 +146,12 @@ public class NotificationActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
-        back= findViewById(R.id.back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        TextView textView=findViewById(R.id.toolbar_title);
+        textView.setText("Notifications");
         app = (App) getApplication();
         progressBar= findViewById(R.id.progress);
         realm = Realm.getDefaultInstance();
@@ -149,6 +162,18 @@ public class NotificationActivity extends AppCompatActivity {
 
 //        final String adapter=new ArrayAdapter<String>(this,mobileArray);
         }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 
 
     private void refresh() {
@@ -180,7 +205,6 @@ public class NotificationActivity extends AppCompatActivity {
                     for (int i = 0; i < array.length(); i++) {
                         final JSONObject obj = array.getJSONObject(i);
                         notificationList.add(new Notification().parseFromJSON(obj));
-
                     }
                     adapter = new NotificationsAdapter(getApplicationContext(), notificationList,listener);
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());

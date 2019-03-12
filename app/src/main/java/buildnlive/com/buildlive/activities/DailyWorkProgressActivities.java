@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -15,6 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +51,6 @@ import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Activity;
 import buildnlive.com.buildlive.elements.Packet;
 import buildnlive.com.buildlive.elements.Work;
-import buildnlive.com.buildlive.fragments.DailyWorkProgressFragment;
 import buildnlive.com.buildlive.utils.AdvancedRecyclerView;
 import buildnlive.com.buildlive.utils.Config;
 import io.realm.Realm;
@@ -62,24 +63,54 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
     private String id;
     public static final int QUALITY = 10;
     private TextView no_content;
-    private ImageButton back;
+    private FloatingActionButton fab;
+    private String masterWorkId;
 
     @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_work_activities);
         app = (App) getApplication();
-        Bundle bundle = getIntent().getExtras();
+
+            final Toolbar toolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            TextView textView= findViewById(R.id.toolbar_title);
+            textView.setText("Activites");
+
+
+            Bundle bundle = getIntent().getExtras();
+
         id = bundle.getString("id");
+        masterWorkId = bundle.getString("masterWorkId");
+
         items = findViewById(R.id.items);
         no_content=findViewById(R.id.no_content);
-        back = findViewById(R.id.back);
-        back.setOnClickListener(new View.OnClickListener() {
+        fab=findViewById(R.id.fab);
+
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                finish();
+            public void onClick(View v) {
+                Intent intent= new Intent(DailyWorkProgressActivities.this,CreateActivity.class);
+                intent.putExtra("workListId",id);
+                intent.putExtra("masterWorkId",masterWorkId);
+                startActivity(intent);
             }
         });
+
         activities = new ArrayList<>();
         adapter = new DailyWorkActivityAdapter(getApplicationContext(), activities, new DailyWorkActivityAdapter.OnItemClickListener() {
             @Override

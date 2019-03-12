@@ -24,6 +24,7 @@ public class Worker extends RealmObject {
     private boolean checkedIn;
     private boolean checkedOut;
     private String attendanceId;
+    private String labour_present;
     @Index
     private String belongsTo;
 
@@ -45,8 +46,16 @@ public class Worker extends RealmObject {
         setExtra(obj.getString("labour_contact"));
         setRoleAssigned(obj.getString("labour_role"));
         setType(obj.getString("labour_type"));
+        setPresent(obj.getString("labour_present"));
         setBelongsTo(App.belongsTo);
         return this;
+    }
+
+    private void setPresent(String labour_present) {this.labour_present=labour_present;
+    }
+
+    public String getLabour_present() {
+        return labour_present;
     }
 
     public String getType() {

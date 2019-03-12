@@ -35,6 +35,15 @@ public class ViewItemAdapter extends RecyclerView.Adapter<ViewItemAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.bind(context, items.get(position), position);
     }
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 
     @Override
     public int getItemCount() {

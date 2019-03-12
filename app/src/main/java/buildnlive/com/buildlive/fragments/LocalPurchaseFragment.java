@@ -1,8 +1,10 @@
 package buildnlive.com.buildlive.fragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -63,8 +65,9 @@ public class LocalPurchaseFragment extends Fragment {
     private ProgressBar progress;
     private boolean val=true;
     private TextView hider, checkout_text;
-    private EditText name_edit,quantity_edit,total_edit,overheads_edit,vendor_details_edit,ship_no_edit,details_edit;
-    private static String name,quantity,total,overheads,unit,vendor_details,ship_no,details,category,item;
+    private EditText quantity_edit,total_edit,overheads_edit,vendor_details_edit,ship_no_edit,details_edit;
+//    name_edit name,
+    private static String quantity,total,overheads,unit,vendor_details,ship_no,details,category,item,results;
     private boolean LOADING;
     private Spinner categorySpinner,itemSpinner,unitspinner;
     private ItemSpinAdapter itemAdapter;
@@ -76,7 +79,8 @@ public class LocalPurchaseFragment extends Fragment {
     private String imagePath;
     private ArrayList<Packet> images;
     private SingleImageAdapter imagesAdapter;
-
+    private Context context;
+    public static final int REQUEST_GALLERY_IMAGE = 7191;
 
 
 
@@ -105,7 +109,8 @@ public class LocalPurchaseFragment extends Fragment {
 
         progress=view.findViewById(R.id.progress);
         submit = view.findViewById(R.id.submit);
-        name_edit = view.findViewById(R.id.name);
+        context=getContext();
+//        name_edit = view.findViewById(R.id.name);
         quantity_edit = view.findViewById(R.id.quantity);
         total_edit = view.findViewById(R.id.total);
         overheads_edit = view.findViewById(R.id.overheads);
@@ -180,25 +185,64 @@ public class LocalPurchaseFragment extends Fragment {
         final AdvancedRecyclerView list = view.findViewById(R.id.images);
         images = new ArrayList<>();
         images.add(new Packet());
-        imagesAdapter = new SingleImageAdapter(getContext(), images, new SingleImageAdapter.OnItemClickListener() {
+        imagesAdapter = new SingleImageAdapter(context, images, new SingleImageAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Packet packet, int pos, View view) {
                 if (pos == 0) {
-                    Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    if (pictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
 
-                        File photoFile = null;
-                        try {
-                            photoFile = createImageFile();
-                        } catch (IOException ex) {
+                    LayoutInflater inflater = getLayoutInflater();
+                    View dialogView = inflater.inflate(R.layout.image_chooser, null);
+                    android.support.v7.app.AlertDialog.Builder dialogBuilder = new android.support.v7.app.AlertDialog.Builder(context, R.style.PinDialog);
+                    final android.support.v7.app.AlertDialog alertDialog = dialogBuilder.setCancelable(false).setView(dialogView).create();
+                    alertDialog.show();
+                    final TextView gallery= dialogView.findViewById(R.id.gallery);
+                    final TextView camera= dialogView.findViewById(R.id.camera);
+
+                    gallery.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            alertDialog.dismiss();
+                            Intent pictureIntent = new Intent(Intent.ACTION_PICK,
+                                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(pictureIntent, REQUEST_GALLERY_IMAGE);
+
                         }
-                        if (photoFile != null) {
-                            Uri photoURI = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", photoFile);
-                            pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                            imagePath = photoFile.getAbsolutePath();
-                            startActivityForResult(pictureIntent, REQUEST_CAPTURE_IMAGE);
+                    });
+
+                    camera.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            alertDialog.dismiss();
+                            Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            if (pictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+
+                                File photoFile = null;
+                                try {
+                                    photoFile = createImageFile();
+                                } catch (IOException ex) {
+                                }
+                                if (photoFile != null) {
+                                    Uri photoURI = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", photoFile);
+                                    pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                                    imagePath = photoFile.getAbsolutePath();
+                                    startActivityForResult(pictureIntent, REQUEST_CAPTURE_IMAGE);
+                                }
+                            }
                         }
-                    }
+                    });
+
+                    Button negative = dialogView.findViewById(R.id.negative);
+                    negative.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                } else{
+                    images.remove(pos);
+                    imagesAdapter.notifyItemRemoved(pos);
+                    imagesAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -211,7 +255,7 @@ public class LocalPurchaseFragment extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                name=name_edit.getText().toString();
+//                name=name_edit.getText().toString();
                 quantity=quantity_edit.getText().toString();
                 total=total_edit.getText().toString();
                 overheads=overheads_edit.getText().toString();
@@ -226,10 +270,10 @@ public class LocalPurchaseFragment extends Fragment {
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                if(validate(category,item,name,quantity,total,vendor_details,unit))
+                                if(validate(category,item,quantity,total,vendor_details,unit))
                                 { console.log("From Validate");
                                     try {
-                                        sendRequest(stockid,name,quantity,unit,total,overheads,vendor_details,ship_no,details,images);
+                                        sendRequest(stockid,quantity,unit,total,overheads,vendor_details,ship_no,details,images);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -257,7 +301,7 @@ public class LocalPurchaseFragment extends Fragment {
 
     }
 
-    private boolean validate(String category,String item,String name,String quantity,String total,String vendor_details,String unit)
+    private boolean validate(String category,String item,String quantity,String total,String vendor_details,String unit)
     {
 
         if(TextUtils.equals(category,"Select Category")){
@@ -265,20 +309,20 @@ public class LocalPurchaseFragment extends Fragment {
             val=false;
         }
 
-        if((!TextUtils.isEmpty(name))&&(!TextUtils.equals(item,"Select Item"))){
+//        if((!TextUtils.isEmpty(name))&&(!TextUtils.equals(item,"Select Item"))){
+//
+//            Toast.makeText(getContext(),"Either Choose Item from the list or Enter name",Toast.LENGTH_LONG).show();
+//            val=false;
+//
+//        }
+        if(TextUtils.equals(item,"Select Item")){
 
-            Toast.makeText(getContext(),"Either Choose Item from the list or Enter name",Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(),"Choose Item from the list",Toast.LENGTH_LONG).show();
             val=false;
 
         }
-        if(TextUtils.isEmpty(name)&&TextUtils.equals(item,"Select Item")){
 
-            Toast.makeText(getContext(),"Either Choose Item from the list or Enter name",Toast.LENGTH_LONG).show();
-            val=false;
-
-        }
-
-        if(TextUtils.equals(unit,"Unit")&&(!TextUtils.isEmpty(name))){
+        if(TextUtils.equals(unit,"Unit")){
 
             Toast.makeText(getContext(),"Select Unit",Toast.LENGTH_LONG).show();
             val=false;
@@ -301,14 +345,14 @@ public class LocalPurchaseFragment extends Fragment {
         return val;
     }
 
-    private void sendRequest(String stockid,String name,String quantity,String units,String total,
+    private void sendRequest(String stockid,String quantity,String units,String total,
                              String overheads,String vendor_details,String ship_no,String details,ArrayList<Packet> images) throws JSONException {
         App app= ((App)getActivity().getApplication());
         HashMap<String, String> params = new HashMap<>();
         params.put("local_purchase", App.userId);
 //        JSONArray array = new JSONArray();
         JSONObject jsonObject=new JSONObject();
-        jsonObject.put("stock_id", stockid).put("project_id", App.projectId).put("user_id", App.userId).put("item_name",name)
+        jsonObject.put("stock_id", stockid).put("project_id", App.projectId).put("user_id", App.userId)
                 .put("quantity",quantity).put("units",units).put("total_amount",total)
                 .put("overheads",overheads).put("vendor_details",vendor_details).put("slip_no",ship_no)
                 .put("details",details);
@@ -457,6 +501,9 @@ public class LocalPurchaseFragment extends Fragment {
             if (resultCode == android.app.Activity.RESULT_OK) {
                 Packet packet = images.remove(0);
                 packet.setName(imagePath);
+//                Uri uri=data.getData();
+//                packet.setName(getRealPathFromURI(uri));
+                console.log("Image Path "+packet.getName()+"EXTRAS "+packet.getExtra());
                 images.add(0, new Packet());
                 images.add(packet);
                 imagesAdapter.notifyDataSetChanged();
@@ -464,7 +511,39 @@ public class LocalPurchaseFragment extends Fragment {
                 console.log("Canceled");
             }
         }
+        else if(requestCode == REQUEST_GALLERY_IMAGE){
+            Packet packet = images.remove(0);
+//            packet.setName(imagePath);
+            Uri uri=data.getData();
+            packet.setName(getRealPathFromURI(uri));
+            console.log("Image Path "+packet.getName()+"EXTRAS "+packet.getExtra());
+            images.add(0, new Packet());
+            images.add(packet);
+            imagesAdapter.notifyDataSetChanged();
+        }
     }
+    // And to convert the image URI to the direct file system path of the image file
+    public String getRealPathFromURI(Uri contentUri) {
+
+        // can post image
+        String [] proj={MediaStore.Images.Media.DATA};
+        Cursor cursor =context.getContentResolver().query(contentUri,
+                proj, // Which columns to return
+                null,       // WHERE clause; which rows to return (all rows)
+                null,       // WHERE clause selection arguments (none)
+                null); // Order-by clause (ascending by name)
+        if(cursor.moveToFirst()){
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            results = cursor.getString(column_index);
+        }
+//                managedQuery( );
+        cursor.moveToFirst();
+        cursor.close();
+        return results;
+    }
+
+
+
 
 
 }

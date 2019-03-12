@@ -42,7 +42,15 @@ public class PlansAdapter extends RealmRecyclerViewAdapter<Plans, PlansAdapter.V
         this.context = context;
         this.listener = listener;
     }
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_plan, parent, false);

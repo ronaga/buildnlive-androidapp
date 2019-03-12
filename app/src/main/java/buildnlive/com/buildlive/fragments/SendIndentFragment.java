@@ -279,6 +279,7 @@ public class SendIndentFragment extends Fragment{
         App app= ((App)getActivity().getApplication());
         HashMap<String, String> params = new HashMap<>();
         params.put("user_id", App.userId);
+        params.put("detail_id", App.projectId);
         JSONArray array = new JSONArray();
         for (IndentItem i : items) {
             array.put(new JSONObject().put("stock_id", i.getId()).put("required_qty", i.getQuantity()));
@@ -357,6 +358,7 @@ public class SendIndentFragment extends Fragment{
         String requestUrl = Config.GET_SITE_LIST;
         requestUrl = requestUrl.replace("[1]", App.userId);
         requestUrl = requestUrl.replace("[0]", a);
+        requestUrl = requestUrl.replace("[2]", App.projectId);
         console.log(requestUrl);
         app.sendNetworkRequest(requestUrl, Request.Method.GET, null, new Interfaces.NetworkInterfaceListener() {
             @Override

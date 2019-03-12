@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".activities.PurchaseOrderListing">
+
+    <!--tools:showIn="@layout/activity_purchase_order_listing"-->
+    <TextView
+        android:id="@+id/no_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="30sp"
+        android:gravity="center_horizontal"
+        android:paddingTop="150dp"
+        android:text="No Content"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/items"
+            android:layout_weight="1.2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:weightSum="3"
+            android:layout_weight="0.8"
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:background="@drawable/border"
+            android:id="@+id/bill">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="5dp"
+                android:layout_weight="0.6"
+                android:text="Attach Images"
+                android:textAlignment="center"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_weight="0.01"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/color1" />
+
+            <buildnlive.com.buildlive.utils.AdvancedRecyclerView
+                android:id="@+id/images"
+                android:layout_weight="2.39"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="5dp"
+                android:scrollbars="horizontal" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:weightSum="2"
+            android:layout_weight="0.1"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_height="wrap_content">
+            <EditText
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:id="@+id/challan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border"
+                android:padding="10dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginStart="10dp"
+                android:hint="Challan Number"/>
+            <EditText
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:id="@+id/invoice"
+                android:layout_width="wrap_content"
+                android:background="@drawable/border"
+                android:padding="10dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginStart="5dp"
+                android:hint="Invoice Number"/>
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/submit"
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/color3"
+            android:gravity="center"
+            android:padding="10dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center"
+            android:text="Submit"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </LinearLayout>
+    </ScrollView>
+
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:indeterminate="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/hider"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.6"
+        android:background="#ffffff"
+        android:visibility="gone" />
+
+</RelativeLayout>

@@ -45,6 +45,15 @@ public class RequestLabourAdapter extends RecyclerView.Adapter<RequestLabourAdap
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_add_labour_item, parent, false);
         return new RequestLabourAdapter.ViewHolder(v);
     }
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {

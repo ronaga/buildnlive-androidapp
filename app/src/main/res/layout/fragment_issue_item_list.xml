@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/search_view"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:weightSum="1"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/search"
+            android:layout_weight="0.2"
+            android:background="@color/transparent"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_search"/>
+        <EditText
+            android:id="@+id/search_text"
+            android:visibility="invisible"
+            android:layout_weight="0.6"
+            android:layout_width="0dp"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:layout_height="wrap_content" />
+        <ImageButton
+            android:id="@+id/search_close"
+            android:visibility="invisible"
+            android:layout_weight="0.2"
+            android:background="@color/transparent"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_close"/>
+
+    </LinearLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/search_view"
+    android:id="@+id/items"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:indeterminate="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/hider"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.6"
+        android:background="#ffffff"
+        android:visibility="gone" />
+</RelativeLayout>

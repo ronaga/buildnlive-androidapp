@@ -1,8 +1,10 @@
 package buildnlive.com.buildlive.fragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -58,7 +60,9 @@ public class PaymentFragment extends Fragment {
     private boolean val = true;
     private TextView hider;
     private EditText amount_edit, overheads_edit, to_edit,reason_edit, details_edit;
-    private String amount, to, reason, overheads, details, payment_type, payment_mode,type_of_payment="Public",purpose;
+    private String amount, details, payment_type, payment_mode,type_of_payment="Public",purpose,to, reason;
+//     overheads,
+    private static String results;
     private boolean LOADING;
     private Spinner purposeSpinner,paymentTypeSpinner,paymentModeSpinner;
     private AlertDialog.Builder builder;
@@ -68,6 +72,8 @@ public class PaymentFragment extends Fragment {
     private String imagePath;
     private ArrayList<Packet> images;
     private SingleImageAdapter imagesAdapter;
+    public static final int REQUEST_GALLERY_IMAGE = 7191;
+    private Context context;
 
 
     public static PaymentFragment newInstance() {
@@ -91,11 +97,11 @@ public class PaymentFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         submit = view.findViewById(R.id.submit);
-
+        context=getContext();
         details_edit = view.findViewById(R.id.payment_details);
         to_edit = view.findViewById(R.id.receiver);
         reason_edit = view.findViewById(R.id.reason);
-        overheads_edit = view.findViewById(R.id.overheads);
+//        overheads_edit = view.findViewById(R.id.overheads);
         amount_edit = view.findViewById(R.id.amount);
 
         payPrivate = view.findViewById(R.id.payPrivate);
@@ -174,25 +180,64 @@ public class PaymentFragment extends Fragment {
         final AdvancedRecyclerView list = view.findViewById(R.id.images);
         images = new ArrayList<>();
         images.add(new Packet());
-        imagesAdapter = new SingleImageAdapter(getContext(), images, new SingleImageAdapter.OnItemClickListener() {
+        imagesAdapter = new SingleImageAdapter(context, images, new SingleImageAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Packet packet, int pos, View view) {
                 if (pos == 0) {
-                    Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    if (pictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
 
-                        File photoFile = null;
-                        try {
-                            photoFile = createImageFile();
-                        } catch (IOException ex) {
+                    LayoutInflater inflater = getLayoutInflater();
+                    View dialogView = inflater.inflate(R.layout.image_chooser, null);
+                    android.support.v7.app.AlertDialog.Builder dialogBuilder = new android.support.v7.app.AlertDialog.Builder(context, R.style.PinDialog);
+                    final android.support.v7.app.AlertDialog alertDialog = dialogBuilder.setCancelable(false).setView(dialogView).create();
+                    alertDialog.show();
+                    final TextView gallery= dialogView.findViewById(R.id.gallery);
+                    final TextView camera= dialogView.findViewById(R.id.camera);
+
+                    gallery.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            alertDialog.dismiss();
+                            Intent pictureIntent = new Intent(Intent.ACTION_PICK,
+                                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(pictureIntent, REQUEST_GALLERY_IMAGE);
+
                         }
-                        if (photoFile != null) {
-                            Uri photoURI = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", photoFile);
-                            pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                            imagePath = photoFile.getAbsolutePath();
-                            startActivityForResult(pictureIntent, REQUEST_CAPTURE_IMAGE);
+                    });
+
+                    camera.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            alertDialog.dismiss();
+                            Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            if (pictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+
+                                File photoFile = null;
+                                try {
+                                    photoFile = createImageFile();
+                                } catch (IOException ex) {
+                                }
+                                if (photoFile != null) {
+                                    Uri photoURI = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", photoFile);
+                                    pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                                    imagePath = photoFile.getAbsolutePath();
+                                    startActivityForResult(pictureIntent, REQUEST_CAPTURE_IMAGE);
+                                }
+                            }
                         }
-                    }
+                    });
+
+                    Button negative = dialogView.findViewById(R.id.negative);
+                    negative.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                } else{
+                    images.remove(pos);
+                    imagesAdapter.notifyItemRemoved(pos);
+                    imagesAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -207,7 +252,7 @@ public class PaymentFragment extends Fragment {
                 to=to_edit.getText().toString();
                 reason=reason_edit.getText().toString();
                 amount=amount_edit.getText().toString();
-                overheads=overheads_edit.getText().toString();
+//                overheads=overheads_edit.getText().toString();
                 details=details_edit.getText().toString();
                 builder.setMessage("Are you sure?") .setTitle("Payment");
 
@@ -216,10 +261,10 @@ public class PaymentFragment extends Fragment {
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                if(validate(purpose,details,amount,to,payment_mode,payment_type,type_of_payment))
+                                if(validate(purpose,details,reason,amount,to,payment_mode,payment_type,type_of_payment))
                                 {
                                     try {
-                                        sendRequest(purpose,details,amount,to,reason,overheads,payment_mode,payment_type,type_of_payment,images);
+                                        sendRequest(purpose,details,amount,to,reason,payment_mode,payment_type,type_of_payment,images);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -248,7 +293,7 @@ public class PaymentFragment extends Fragment {
     }
 
 
-    private boolean validate(String purpose,String details,String amount,String to,String payment_mode,String payment_type,String type_of_payment)
+    private boolean validate(String purpose,String details,String reason,String amount,String to,String payment_mode,String payment_type,String type_of_payment)
     {
 
         if(TextUtils.equals(payment_mode,"Select Payment Mode")){
@@ -266,6 +311,10 @@ public class PaymentFragment extends Fragment {
             details_edit.setError("Enter Details");
             val=false;
         }
+        if(TextUtils.isEmpty(reason)){
+            reason_edit.setError("Enter Reason");
+            val=false;
+        }
 
         if(TextUtils.isEmpty(amount)){
             amount_edit.setError("Enter Amount");
@@ -278,13 +327,12 @@ public class PaymentFragment extends Fragment {
         return val;
     }
 
-    private void sendRequest(String purpose, String details, String amount, String to, final String reason, String overheads, String payment_mode, String payment_type, String type_of_payment,ArrayList<Packet> images) throws JSONException {
+    private void sendRequest(String purpose, String details, String amount,String payee,String reason, String payment_mode, String payment_type, String type_of_payment,ArrayList<Packet> images) throws JSONException {
         App app= ((App)getActivity().getApplication());
         HashMap<String, String> params = new HashMap<>();
         JSONObject jsonObject=new JSONObject();
         jsonObject.put("project_id", App.projectId).put("user_id", App.userId).put("purpose",purpose).put("details",details)
-                .put("amount",amount).put("payee",to).put("reason",reason)
-                .put("overheads",overheads).put("payment_mode",payment_mode).put("payment_type",payment_type)
+                .put("amount",amount).put("payee",payee).put("reason",reason).put("payment_mode",payment_mode).put("payment_type",payment_type)
                 .put("type_of_payment",type_of_payment);
         params.put("site_payments", jsonObject.toString());
         console.log("Res:" + params);
@@ -341,6 +389,9 @@ public class PaymentFragment extends Fragment {
             if (resultCode == android.app.Activity.RESULT_OK) {
                 Packet packet = images.remove(0);
                 packet.setName(imagePath);
+//                Uri uri=data.getData();
+//                packet.setName(getRealPathFromURI(uri));
+                console.log("Image Path "+packet.getName()+"EXTRAS "+packet.getExtra());
                 images.add(0, new Packet());
                 images.add(packet);
                 imagesAdapter.notifyDataSetChanged();
@@ -348,6 +399,38 @@ public class PaymentFragment extends Fragment {
                 console.log("Canceled");
             }
         }
+        else if(requestCode == REQUEST_GALLERY_IMAGE){
+            Packet packet = images.remove(0);
+//            packet.setName(imagePath);
+            Uri uri=data.getData();
+            packet.setName(getRealPathFromURI(uri));
+            console.log("Image Path "+packet.getName()+"EXTRAS "+packet.getExtra());
+            images.add(0, new Packet());
+            images.add(packet);
+            imagesAdapter.notifyDataSetChanged();
+        }
     }
+    // And to convert the image URI to the direct file system path of the image file
+    public String getRealPathFromURI(Uri contentUri) {
+
+        // can post image
+        String [] proj={MediaStore.Images.Media.DATA};
+        Cursor cursor =context.getContentResolver().query(contentUri,
+                proj, // Which columns to return
+                null,       // WHERE clause; which rows to return (all rows)
+                null,       // WHERE clause selection arguments (none)
+                null); // Order-by clause (ascending by name)
+        if(cursor.moveToFirst()){
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            results = cursor.getString(column_index);
+        }
+//                managedQuery( );
+        cursor.moveToFirst();
+        cursor.close();
+        return results;
+    }
+
+
+
 
 }

@@ -13,11 +13,13 @@
         android:padding="5dp">
 
         <TextView
+            android:textColor="#6bb4dd"
             android:id="@+id/name"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="5"
             android:textStyle="bold"
+            android:textSize="18sp"
             android:breakStrategy="high_quality"
             android:padding="10dp"
             android:text="lorem ipsum" />
@@ -52,9 +54,10 @@
             android:layout_weight="1"
         android:layout_width="0dp"
             android:text="Return"
+            android:textColor="@color/white"
         android:layout_height="wrap_content"
         android:layout_marginRight="5dp"
-        android:theme="@style/PrimaryRejectButton"
+        android:background="@drawable/inactive_button"
         android:layout_marginEnd="5dp" />
     </LinearLayout>
 

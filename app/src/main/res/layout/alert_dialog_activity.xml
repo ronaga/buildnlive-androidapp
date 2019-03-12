@@ -17,24 +17,31 @@
             android:id="@+id/alert_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/color3"
+            android:background="@color/white"
             android:padding="5dp"
             android:text="Title"
             android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="25dp" />
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="25sp" />
+        <View
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/alert_title"
+            android:background="#e8e8e8"/>
 
         <TextView
             android:id="@+id/alert_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/alert_title"
+            android:layout_below="@+id/separator"
             android:background="@color/white"
             android:padding="10dp"
             android:text="Message"
             android:textAlignment="center"
-            android:textColor="@color/color4"
-            android:textSize="18dp" />
+            android:textColor="@color/light_black"
+            android:textSize="16dp" />
 
         <LinearLayout
             android:id="@+id/input"
@@ -95,6 +102,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/attache_images"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -104,6 +112,7 @@
                 android:textStyle="bold" />
 
             <View
+                android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="50dp"
@@ -144,7 +153,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/button_normal_disable"
+                android:background="@color/transparent"
                 android:text="Close"
                 android:textColor="@color/black"
                 android:textSize="16dp" />
@@ -155,7 +164,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/button_normal_enable"
+                android:background="#5089e3"
                 android:text="Submit"
                 android:textColor="@color/white"
                 android:textSize="16dp" />

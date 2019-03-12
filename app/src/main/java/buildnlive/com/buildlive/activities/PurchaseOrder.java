@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -27,13 +28,13 @@ public class PurchaseOrder extends AppCompatActivity {
         app = (App) getApplication();
         edit = findViewById(R.id.edit);
         view = findViewById(R.id.view);
-        back =findViewById(R.id.back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        TextView toolbar_title=findViewById(R.id.toolbar_title);
+        toolbar_title.setText("Purchase Order");
         fragment = ViewPurchaseOrderFragment.newInstance(app);
         changeScreen();
         edit = findViewById(R.id.edit);
@@ -48,6 +49,39 @@ public class PurchaseOrder extends AppCompatActivity {
 //        });
 //        view = findViewById(R.id.view);
     }
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.attendance_menu, menu);
+//        return super.onCreateOptionsMenu(menu);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//        switch (id){
+//            case R.id.nav_home:
+//                Toast.makeText(getApplicationContext(),"Item 1 Selected",Toast.LENGTH_LONG).show();
+//                return true;
+//            case R.id.nav_profile:
+//                Toast.makeText(getApplicationContext(),"Item 2 Selected",Toast.LENGTH_LONG).show();
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
+
 
     private void changeScreen() {
         getSupportFragmentManager()

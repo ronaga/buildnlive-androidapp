@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/status"
+            android:layout_toStartOf="@+id/status"
+            android:text="Title"
+            android:textSize="18dp"
+            android:gravity="start"
+            android:textColor="#5089e3"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/color1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/name"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_gravity="start"
+                    android:layout_weight="1"
+                    android:id="@+id/duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:drawableLeft="@drawable/ic_access_alarm_black_24dp"
+                    android:text="50 days" />
+
+                <TextView
+                    android:layout_gravity="start"
+                    android:layout_weight="1"
+                    android:id="@+id/quantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:drawableLeft="@drawable/ic_equalizer_black_24dp"
+                    android:text="50 days" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <TextView
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:id="@+id/start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:drawableLeft="@drawable/ic_date_range_black_24dp"
+                android:text="50 days" />
+
+            <TextView
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:id="@+id/end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:drawableTint="@color/color3"
+                android:drawableLeft="@drawable/ic_date_range_black_24dp"
+                android:text="50 days" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <TextView
+                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Progress:"/>
+            <ProgressBar
+                android:layout_gravity="center"
+                android:id="@+id/progressBarHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="20dp"
+                style="?android:attr/progressBarStyleHorizontal"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <TextView
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:id="@+id/update_progress_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/inactive_button"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:clickable="true"
+                android:text="Update" />
+
+                <TextView
+                    android:layout_margin="10dp"
+                    android:background="@drawable/active_button"
+                    android:layout_weight="1"
+                    android:id="@+id/update_activity_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/light_black"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:text="Activities" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/role"
+        android:background="#e8e8e8"></View>
+
+</LinearLayout>
+
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@color/white"-->
+    <!--android:orientation="vertical">-->
+
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginBottom="5dp"-->
+    <!--android:layout_marginLeft="10dp"-->
+    <!--android:layout_marginRight="10dp"-->
+    <!--android:layout_marginTop="5dp">-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/name"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_toLeftOf="@+id/status"-->
+    <!--android:layout_toStartOf="@+id/status"-->
+    <!--android:text="Title"-->
+    <!--android:textSize="18dp"-->
+    <!--android:textStyle="bold" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/status"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:textColor="@color/color1" />-->
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/name"-->
+    <!--android:orientation="horizontal">-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+
+    <!--android:orientation="vertical"-->
+    <!--android:padding="10dp">-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/completed"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_margin="5dp"-->
+    <!--android:drawableLeft="@drawable/ic_done_all_black_24dp"-->
+    <!--android:drawableTint="@color/color3"-->
+    <!--android:text="50 days" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/total"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_margin="5dp"-->
+    <!--android:drawableLeft="@drawable/ic_equalizer_black_24dp"-->
+    <!--android:text="50 days" />-->
+
+
+    <!--</LinearLayout>-->
+
+    <!--<Button-->
+    <!--android:id="@+id/update_progress_button"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_marginRight="0dp"-->
+    <!--android:text="Update"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_marginEnd="0dp" />-->
+    <!--</RelativeLayout>-->
+    <!--</RelativeLayout>-->
+
+    <!--<View-->
+    <!--android:id="@+id/separator"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="1dp"-->
+    <!--android:layout_below="@+id/role"-->
+    <!--android:background="#e8e8e8"></View>-->
+
+    <!--</LinearLayout>-->

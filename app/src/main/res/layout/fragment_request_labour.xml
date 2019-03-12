@@ -8,6 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/action"
+        android:spinnerMode="dialog"
+        android:prompt="@string/Contractor"
         />
     <View
         android:id="@+id/separator5"

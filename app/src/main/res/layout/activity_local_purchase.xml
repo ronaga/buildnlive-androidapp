@@ -1,87 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_grey"
-    android:orientation="vertical"
-    tools:context=".activities.MarkAttendance">
+    android:background="@color/white"
+    tools:context=".activities.LocalPurchase">
 
-    <LinearLayout
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-        >
-
-
-
-            <ImageButton
-                android:id="@+id/back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_back_black"
-                android:background="@color/transparent"/>
-
-
-            <LinearLayout
-            android:id="@+id/action"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="10dp">
+            android:layout_height="?actionBarSize"
+            android:background="@color/color1"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/edit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/round_right_selected"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="Local Purchase"
-                android:singleLine="true"
-                android:ellipsize="marquee"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="20dp" />
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_toLeftOf="@+id/notification"
+                    android:layout_toStartOf="@+id/notification"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:textSize="20sp"
+                    android:scaleType="centerCrop"
+                    android:text="Buildo Site App"
+                    />
 
-            <TextView
-                android:id="@+id/view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/round_left"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="Payment"
-                android:textAlignment="center"
-                android:singleLine="true"
-                android:ellipsize="marquee"
-                android:textColor="@color/color2"
-                android:textSize="20dp" />
+                <ImageButton
+                    android:id="@+id/notification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/transparent"
+                    android:padding="10dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_notifications_none_black_24dp"
+                    android:tint="@color/white"
+                    android:visibility="gone"/>
+                <TextView
+                    android:id="@+id/badge_notification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@id/notification"
+                    android:background="@drawable/badge_item_count"
+                    android:text="27"
+                    android:visibility="gone"
+                    android:textColor="#FFF"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
 
-        </LinearLayout>
-    </LinearLayout>
+            </RelativeLayout>
 
-    <!--<Spinner-->
-    <!--android:id="@+id/category"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_below="@id/action"-->
-    <!--/>-->
+        </android.support.v7.widget.Toolbar>
 
+    </android.support.design.widget.AppBarLayout>
 
-    <!--<include layout="@layout/fragment_indent_item"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_below="@+id/category"-->
-    <!--/>-->
+    <include layout="@layout/content_local_purchase" />
 
-    <FrameLayout
-        android:id="@+id/site_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/action" />
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

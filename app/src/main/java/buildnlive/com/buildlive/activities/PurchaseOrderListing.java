@@ -1,7 +1,9 @@
 package buildnlive.com.buildlive.activities;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -13,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,12 +71,23 @@ public class PurchaseOrderListing extends AppCompatActivity {
     private EditText challan,invoice;
     private ProgressBar progress;
     private TextView hider;
+    public static final int REQUEST_GALLERY_IMAGE = 7191;
+    private static String results;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context=this;
         setContentView(R.layout.activity_purchase_order_listing);
         list = findViewById(R.id.items);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        TextView toolbar_title=findViewById(R.id.toolbar_title);
+        toolbar_title.setText("Purchase Order");
+
         challan= findViewById(R.id.challan);
         invoice =findViewById(R.id.invoice);
         progress=findViewById(R.id.progress);
@@ -101,21 +115,60 @@ public class PurchaseOrderListing extends AppCompatActivity {
             @Override
             public void onItemClick(Packet packet, int pos, View view) {
                 if (pos == 0) {
-                    Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    if (pictureIntent.resolveActivity(getPackageManager()) != null) {
 
-                        File photoFile = null;
-                        try {
-                            photoFile = createImageFile();
-                        } catch (IOException ex) {
+                    LayoutInflater inflater = getLayoutInflater();
+                    View dialogView = inflater.inflate(R.layout.image_chooser, null);
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context, R.style.PinDialog);
+                    final AlertDialog alertDialog = dialogBuilder.setCancelable(false).setView(dialogView).create();
+                    alertDialog.show();
+                    final TextView gallery= dialogView.findViewById(R.id.gallery);
+                    final TextView camera= dialogView.findViewById(R.id.camera);
+
+                    gallery.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            alertDialog.dismiss();
+                            Intent pictureIntent = new Intent(Intent.ACTION_PICK,
+                                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(pictureIntent, REQUEST_GALLERY_IMAGE);
+
                         }
-                        if (photoFile != null) {
-                            Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", photoFile);
-                            pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                            imagePath = photoFile.getAbsolutePath();
-                            startActivityForResult(pictureIntent, REQUEST_CAPTURE_IMAGE);
+                    });
+
+                    camera.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            alertDialog.dismiss();
+                            Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            if (pictureIntent.resolveActivity(getPackageManager()) != null) {
+
+                                File photoFile = null;
+                                try {
+                                    photoFile = createImageFile();
+                                } catch (IOException ex) {
+                                }
+                                if (photoFile != null) {
+                                    Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", photoFile);
+                                    pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                                    imagePath = photoFile.getAbsolutePath();
+                                    startActivityForResult(pictureIntent, REQUEST_CAPTURE_IMAGE);
+                                }
+                            }
                         }
-                    }
+                    });
+
+                    Button negative = dialogView.findViewById(R.id.negative);
+                    negative.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                } else{
+                    images.remove(pos);
+                    imagesAdapter.notifyItemRemoved(pos);
+                    imagesAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -158,10 +211,24 @@ public class PurchaseOrderListing extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+
     private void pushOrders(ArrayList<Packet> images) throws JSONException{
         String url = Config.REQ_PURCHASE_ORDER_UPDATE;
         HashMap<String, String> params = new HashMap<>();
         params.put("user_id", App.userId);
+        params.put("purchase_order_id", id);
         JSONArray array = new JSONArray();
         for(int i=0; i<itemList.size(); i++){
             if(itemList.get(i).isIncluded()) {
@@ -262,6 +329,9 @@ public class PurchaseOrderListing extends AppCompatActivity {
             if (resultCode == android.app.Activity.RESULT_OK) {
                 Packet packet = images.remove(0);
                 packet.setName(imagePath);
+//                Uri uri=data.getData();
+//                packet.setName(getRealPathFromURI(uri));
+                console.log("Image Path "+packet.getName()+"EXTRAS "+packet.getExtra());
                 images.add(0, new Packet());
                 images.add(packet);
                 imagesAdapter.notifyDataSetChanged();
@@ -269,6 +339,36 @@ public class PurchaseOrderListing extends AppCompatActivity {
                 console.log("Canceled");
             }
         }
+        else if(requestCode == REQUEST_GALLERY_IMAGE){
+            Packet packet = images.remove(0);
+//            packet.setName(imagePath);
+            Uri uri=data.getData();
+            packet.setName(getRealPathFromURI(uri));
+            console.log("Image Path "+packet.getName()+"EXTRAS "+packet.getExtra());
+            images.add(0, new Packet());
+            images.add(packet);
+            imagesAdapter.notifyDataSetChanged();
+        }
+    }
+    // And to convert the image URI to the direct file system path of the image file
+    public String getRealPathFromURI(Uri contentUri) {
+
+        // can post image
+        String [] proj={MediaStore.Images.Media.DATA};
+        Cursor cursor =context.getContentResolver().query(contentUri,
+                proj, // Which columns to return
+                null,       // WHERE clause; which rows to return (all rows)
+                null,       // WHERE clause selection arguments (none)
+                null); // Order-by clause (ascending by name)
+//        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        if(cursor.moveToFirst()){
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            results = cursor.getString(column_index);
+        }
+//                managedQuery( );
+        cursor.moveToFirst();
+        cursor.close();
+        return results;
     }
 
 }

@@ -11,11 +11,11 @@ public class Notification extends RealmObject {
     @Index
     @PrimaryKey
     String id;
-    private String label,type,user,date,level,text;
+    private String label,type,user,date,level,text,image;
     public Notification() {
     }
 
-    public Notification(String id, String label,String type,String level,String user,String date,String text) {
+    public Notification(String id, String label,String type,String level,String user,String date,String text,String image) {
         this.id = id;
         this.label = label;
         this.date = date;
@@ -23,6 +23,7 @@ public class Notification extends RealmObject {
         this.level = level;
         this.user = user;
         this.text = text;
+        this.image=image;
     }
     public Notification parseFromJSON(JSONObject obj) throws JSONException {
         setId(obj.getString("id"));
@@ -32,7 +33,15 @@ public class Notification extends RealmObject {
         setUser(obj.getString("user"));
         setDate(obj.getString("date"));
         setText(obj.getString("text"));
+        setImage(obj.getString("images"));
         return this;
+    }
+
+    public void setImage(String images) {this.image=images;
+    }
+
+    public String getImage() {
+        return image;
     }
 
     public String getId() {

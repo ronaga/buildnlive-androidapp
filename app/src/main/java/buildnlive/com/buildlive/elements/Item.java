@@ -3,42 +3,54 @@ package buildnlive.com.buildlive.elements;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 import buildnlive.com.buildlive.App;
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 
-public class Item extends RealmObject {
+public class Item extends RealmObject implements Serializable {
     @Index
     @PrimaryKey
     String id;
     private String name;
     private String unit;
     private String bigUnit;
-    private String type;
+    private String code;
     private String quantity;
+    private String item_type;
     private boolean isUpdated;
     private String belongsTo;
 
     public Item() {
     }
 
-    public Item(String id, String name, String unit, String bigUnit, String type) {
+    public Item(String id, String name, String unit, String bigUnit, String code,String item_type) {
         this.id = id;
         this.name = name;
         this.unit = unit;
         this.bigUnit = bigUnit;
-        this.type = type;
+        this.code = code;
+        this.item_type=item_type;
     }
 
     public Item parseFromJSON(JSONObject obj) throws JSONException {
         setId(obj.getString("stock_id"));
         setName(obj.getString("name"));
-        setType(obj.getString("item_code"));
+        setCode(obj.getString("item_code"));
         setQuantity(obj.getString("qty_left"));
         setUnit(obj.getString("units"));
+        setItemType(obj.getString("type"));
         setBelongsTo(App.belongsTo);
         return this;
+    }
+
+    private void setItemType(String item_type) {this.item_type=item_type;
+    }
+
+    public String getItem_type() {
+        return item_type;
     }
 
     public String getId() {
@@ -97,11 +109,11 @@ public class Item extends RealmObject {
         this.bigUnit = bigUnit;
     }
 
-    public String getType() {
-        return type;
+    public String getCode() {
+        return code;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setCode(String type) {
+        this.code = type;
     }
 }

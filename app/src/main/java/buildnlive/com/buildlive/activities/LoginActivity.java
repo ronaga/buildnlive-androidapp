@@ -93,8 +93,9 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onNetworkRequestError(String error) {
-                progress.setVisibility(View.VISIBLE);
-                hider.setVisibility(View.VISIBLE);
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
+                console.log("Response:" + error);
                 Toast.makeText(getApplicationContext(), "Check Internet Connection", Toast.LENGTH_LONG).show();
             }
 
@@ -103,7 +104,11 @@ public class LoginActivity extends AppCompatActivity {
                 console.log("Response:" + response);
                 if (response.equals("Fail")) {
                     Toast.makeText(getApplicationContext(), "Wrong mobile or password", Toast.LENGTH_LONG).show();
-                } else {
+                }
+                else if(response.equals("-1")){
+                    Toast.makeText(getApplicationContext(), "User Already Logged In Some Other Device", Toast.LENGTH_LONG).show();
+                }
+                else {
                     try {
                         JSONObject obj = new JSONObject(response);
                         String id = obj.getString("id");

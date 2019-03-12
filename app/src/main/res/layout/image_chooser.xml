@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="#00ffffff"
+    android:elevation="7dp"
+    card_view:cardCornerRadius="3dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/alert_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="5dp"
+            android:text="Select an action"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="25sp" />
+        <View
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/alert_title"
+            android:background="#e8e8e8"/>
+
+                <TextView
+                    android:layout_below="@id/separator"
+                    android:id="@+id/gallery"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:padding="15dp"
+                    android:clickable="true"
+                    android:text="Choose From Gallery"
+                    android:textAlignment="center"
+                    android:textColor="@color/color2"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:layout_below="@+id/gallery"
+                    android:id="@+id/camera"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:clickable="true"
+                    android:padding="15dp"
+                    android:text="Click Image"
+                    android:textAlignment="center"
+                    android:textColor="@color/color2"
+                    android:textSize="16dp" />
+
+
+        <Button
+            android:layout_below="@+id/camera"
+            android:id="@+id/negative"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_weight="1"
+            android:background="@color/transparent"
+            android:text="Close"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

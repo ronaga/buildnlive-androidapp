@@ -34,6 +34,8 @@ public class AddItemAdapter extends RecyclerView.Adapter<AddItemAdapter.ViewHold
         void onItemCheck(boolean checked);
 
         void onItemInteract(int pos, int flag);
+
+//        void onItemReturn(Item item,int pos);
     }
 
     private List<Item> items,filteredItems;
@@ -52,7 +54,15 @@ public class AddItemAdapter extends RecyclerView.Adapter<AddItemAdapter.ViewHold
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_add_item, parent, false);
         return new ViewHolder(v);
     }
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
@@ -109,7 +119,7 @@ public class AddItemAdapter extends RecyclerView.Adapter<AddItemAdapter.ViewHold
             } else {
                 check.setVisibility(View.VISIBLE);
                 close.setVisibility(View.GONE);
-                check.setChecked(false);
+//                check.setChecked(false);
                 check.setEnabled(true);
                 quantity.setEnabled(true);
                 check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -121,6 +131,8 @@ public class AddItemAdapter extends RecyclerView.Adapter<AddItemAdapter.ViewHold
                                 listener.onItemCheck(true);
                                 item.setUpdated(true);
                                 item.setQuantity(quantity.getText().toString());
+//                                listener.onItemReturn(item,pos);
+
                             } else {
                                 Toast.makeText(context, "Please enter quantity", Toast.LENGTH_SHORT).show();
                                 buttonView.setChecked(false);

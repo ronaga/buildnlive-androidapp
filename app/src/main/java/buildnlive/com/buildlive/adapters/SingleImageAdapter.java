@@ -78,6 +78,12 @@ public class SingleImageAdapter extends RecyclerView.Adapter<SingleImageAdapter.
         @Override
         public void bind(final Context context, final Packet item, final int pos, final OnItemClickListener listener) {
             Glide.with(context).load(item.getName()).into(imageView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(item, pos, itemView);
+                }
+            });
         }
     }
 

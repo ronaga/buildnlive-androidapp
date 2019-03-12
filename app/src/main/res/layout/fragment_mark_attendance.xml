@@ -79,4 +79,15 @@
         android:textColor="@color/white"
         android:textSize="20dp" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_margin="15dp"
+        android:src="@drawable/ic_add_black_24dp"
+        android:tint="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/submit"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true" />
+
 </RelativeLayout>

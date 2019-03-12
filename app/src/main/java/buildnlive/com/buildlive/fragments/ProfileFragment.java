@@ -32,7 +32,7 @@ public class ProfileFragment extends Fragment {
         app=a;
         return new ProfileFragment();
     }
-    private EditText mob,old_pass,new_pass;
+    private EditText mob,old_pass,new_pass,name,last_name;
     private Button change_password;
     private ProgressBar progress;
     private TextView hider;
@@ -48,6 +48,8 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mob= view.findViewById(R.id.mobile);
+        name=view.findViewById(R.id.name);
+        last_name=view.findViewById(R.id.last_name);
         old_pass= view.findViewById(R.id.old_password);
         new_pass= view.findViewById(R.id.new_password);
         builder = new AlertDialog.Builder(getContext());
@@ -67,11 +69,14 @@ public class ProfileFragment extends Fragment {
                                 String m = mob.getText().toString();
                                 String o = old_pass.getText().toString();
                                 String n = new_pass.getText().toString();
-                                if (m.length() > 3 && o.length()>3 && n.length()>3) {
-                                    resetPassword(m,o,n);
-                                } else {
-                                    Toast.makeText(getContext(), "Please enter valid details", Toast.LENGTH_LONG).show();
-                                }
+                                String nameS= name.getText().toString();
+                                String Lastname= last_name.getText().toString();
+//                                if (m.length() > 3 && o.length()>3 && n.length()>3) {
+                                    resetPassword(m,o,n,nameS,Lastname);
+//                                }
+//                                else {
+//                                    Toast.makeText(getContext(), "Please enter valid details", Toast.LENGTH_LONG).show();
+//                                }
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -92,7 +97,7 @@ public class ProfileFragment extends Fragment {
         });
 
     }
-    private void resetPassword(String m,String o,String n) {
+    private void resetPassword(String m,String o,String n,String name,String lastname) {
         progress.setVisibility(View.VISIBLE);
         hider.setVisibility(View.VISIBLE);
         String resetPass = Config.RESET_PASSWORD;
@@ -100,6 +105,8 @@ public class ProfileFragment extends Fragment {
         params.put("mobile_no", m);
         params.put("password",o);
         params.put("new_password",n);
+        params.put("first_name",name);
+        params.put("last_name",lastname);
         app.sendNetworkRequest(resetPass, Request.Method.POST, params, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {

@@ -5,10 +5,32 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    <ImageView
+        android:id="@+id/header"
+        android:layout_width="120dp"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:src="@drawable/buildo" />
     <TextView
+        android:id="@+id/header_text"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text=""/>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header"
+        android:text="Easy Construction App"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:gravity="center"/>
+  <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/about_us"
+      android:layout_centerInParent="true"
+      android:layout_margin="10dp"
+      android:padding="10dp"
+        android:textSize="18sp"
+        android:gravity="center"/>
+
 
 
 </RelativeLayout>

@@ -20,19 +20,25 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.activities.AddItem;
 import buildnlive.com.buildlive.activities.IndentItems;
+import buildnlive.com.buildlive.activities.Inventory;
 import buildnlive.com.buildlive.activities.IssuedItems;
 import buildnlive.com.buildlive.activities.LabourActivity;
+import buildnlive.com.buildlive.activities.LabourReportActivity;
 import buildnlive.com.buildlive.activities.LocalPurchase;
+import buildnlive.com.buildlive.activities.MachineList;
 import buildnlive.com.buildlive.activities.MarkAttendance;
+import buildnlive.com.buildlive.activities.Planning;
 import buildnlive.com.buildlive.activities.PurchaseOrder;
 import buildnlive.com.buildlive.activities.RequestItems;
 import buildnlive.com.buildlive.activities.WorkProgress;
+import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Project;
 import buildnlive.com.buildlive.elements.ProjectMember;
 import buildnlive.com.buildlive.utils.Config;
@@ -43,11 +49,12 @@ import static buildnlive.com.buildlive.activities.LoginActivity.PREF_KEY_NAME;
 import static buildnlive.com.buildlive.utils.Config.PREF_NAME;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
-    private TextView title;
-    private LinearLayout markAttendance, manageInventory, issuedItems, requestItems, workProgress, purchaseOrder,siteRequest,localPurchase,labour;
+//    private TextView title;
+    private LinearLayout markAttendance, manageInventory, issuedItems, requestItems, workProgress, purchaseOrder,siteRequest,localPurchase,labour,labourReport,planning,machine;
     private SharedPreferences pref;
     private Spinner projects;
     private static App app;
+    private TextView badge;
 
     public static HomeFragment newInstance(App a) {
         app = a;
@@ -66,7 +73,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Home");
+
         pref = getActivity().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         markAttendance = view.findViewById(R.id.mark_attendance);
         manageInventory = view.findViewById(R.id.manage_inventory);
@@ -76,7 +83,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         siteRequest=view.findViewById(R.id.request_list);
         localPurchase=view.findViewById(R.id.local_purchase);
         labour=view.findViewById(R.id.labour);
+        labourReport=view.findViewById(R.id.manage_labour);
+        planning=view.findViewById(R.id.planning);
+        machine=view.findViewById(R.id.machine);
 
+        badge=getActivity().findViewById(R.id.badge_notification);
 
         Realm realm = Realm.getDefaultInstance();
         final RealmResults<Project> projects = realm.where(Project.class).findAll();
@@ -100,9 +111,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        title = view.findViewById(R.id.title);
+//        title = view.findViewById(R.id.title);
         workProgress = view.findViewById(R.id.work_progress);
         purchaseOrder = view.findViewById(R.id.purchase);
+
         markAttendance.setOnClickListener(this);
         manageInventory.setOnClickListener(this);
         issuedItems.setOnClickListener(this);
@@ -112,6 +124,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         siteRequest.setOnClickListener(this);
         localPurchase.setOnClickListener(this);
         labour.setOnClickListener(this);
+        labourReport.setOnClickListener(this);
+        planning.setOnClickListener(this);
+        machine.setOnClickListener(this);
 
         switch (App.permissions) {
             case "Storekeeper":
@@ -139,10 +154,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case "Siteincharge":
                 siteRequest.setVisibility(View.GONE);
                 labour.setVisibility(View.GONE);
+                break;
+            case "labourmanager":
+                workProgress.setVisibility(View.GONE);
+                purchaseOrder.setVisibility(View.GONE);
+                markAttendance.setVisibility(View.GONE);
+                manageInventory.setVisibility(View.GONE);
+                issuedItems.setVisibility(View.GONE);
+                requestItems.setVisibility(View.GONE);
+                workProgress.setVisibility(View.GONE);
+                purchaseOrder.setVisibility(View.GONE);
+                siteRequest.setVisibility(View.GONE);
+                localPurchase.setVisibility(View.GONE);
+                labour.setVisibility(View.GONE);
+                break;
 
         }
 
-            title.setText("Welcome " + pref.getString(PREF_KEY_NAME, "Dummy").split(" ")[0]);
+//            title.setText("Welcome " + pref.getString(PREF_KEY_NAME, "Dummy").split(" ")[0]);
 
 
     }
@@ -214,6 +243,48 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case R.id.labour:
                 startActivity(new Intent(getContext(),LabourActivity.class));
                 break;
+            case R.id.manage_labour:
+                startActivity(new Intent(getContext(),LabourReportActivity.class));
+                break;
+            case R.id.planning:
+                startActivity(new Intent(getContext(),Planning.class));
+                break;
+            case R.id.machine:
+                startActivity(new Intent(getContext(), MachineList.class));
+                break;
+
         }
+    }
+
+    private void sendRequest() throws JSONException {
+        App app= ((App)getActivity().getApplication());
+        HashMap<String, String> params = new HashMap<>();
+        JSONObject jsonObject=new JSONObject();
+        jsonObject.put("project_id", App.projectId).put("user_id", App.userId);
+        params.put("notification_count", jsonObject.toString());
+        console.log("Res:" + params);
+        app.sendNetworkRequest(Config.GET_NOTIFICATIONS_COUNT, 1, params, new Interfaces.NetworkInterfaceListener() {
+            @Override
+            public void onNetworkRequestStart() {
+
+            }
+
+            @Override
+            public void onNetworkRequestError(String error) {
+
+            }
+
+            @Override
+            public void onNetworkRequestComplete(String response) {
+                console.log(response);
+                if (response.equals("0")) {
+                    badge.setVisibility(View.GONE);
+                }
+                else{
+                    badge.setVisibility(View.VISIBLE);
+                    badge.setText(response);
+                }
+            }
+        });
     }
 }
