@@ -6,25 +6,42 @@
 
     <LinearLayout
         android:id="@+id/top_bar"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:weightSum="3"
         android:layout_marginTop="15dp">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="1.4"
             android:paddingLeft="5dp"
             android:text="Employee"
             android:textSize="15dp" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="Attendance"
+            android:layout_weight="0.8"
+            android:text="CheckIn"
             android:textAlignment="center"
             android:textSize="15dp" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:text="CheckOut"
+            android:textAlignment="center"
+            android:textSize="15dp" />
+
+        <!--<TextView-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="Attendance"-->
+            <!--android:textAlignment="center"-->
+            <!--android:textSize="15dp" />-->
 
     </LinearLayout>
 
@@ -34,7 +51,7 @@
         android:layout_height="1dp"
         android:layout_below="@+id/top_bar"
         android:layout_marginTop="5dp"
-        android:background="@color/grey"></View>
+        android:background="@color/grey"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/attendees"

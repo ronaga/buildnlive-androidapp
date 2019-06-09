@@ -1,8 +1,11 @@
 package buildnlive.com.buildlive.fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,6 +28,7 @@ import buildnlive.com.buildlive.adapters.ViewIndentAdapter;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.RequestList;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -34,6 +38,23 @@ public class ViewIndentFragment extends Fragment {
     private ProgressBar progress;
     private TextView hider;
     private static List<RequestList> requestList =new ArrayList<>();
+    private Context context;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity;
+
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.appCompatActivity = (AppCompatActivity) activity;
+    }
 
     public static ViewIndentFragment newInstance(App a) {
         app = a;
@@ -49,6 +70,7 @@ public class ViewIndentFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        utilityofActivity=new UtilityofActivity(appCompatActivity);
         items = view.findViewById(R.id.requests);
         progress = view.findViewById(R.id.progress);
         hider = view.findViewById(R.id.hider);
@@ -65,12 +87,14 @@ public class ViewIndentFragment extends Fragment {
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
             }
 
             @Override
@@ -78,6 +102,7 @@ public class ViewIndentFragment extends Fragment {
                 console.log("Response:" + response);
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 try {
                     JSONArray array = new JSONArray(response);
                     for (int i = 0; i < array.length(); i++) {

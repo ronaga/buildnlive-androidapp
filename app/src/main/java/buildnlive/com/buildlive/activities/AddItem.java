@@ -28,8 +28,11 @@ import buildnlive.com.buildlive.fragments.AddItemFragment;
 import buildnlive.com.buildlive.fragments.IssueItemFragment;
 import buildnlive.com.buildlive.fragments.ViewItemFragment;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class AddItem extends AppCompatActivity {
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity=this;
     private List<Item> itemsList = new ArrayList<>();
     private App app;
     private TextView edit, view;
@@ -43,12 +46,19 @@ public class AddItem extends AppCompatActivity {
         edit = findViewById(R.id.edit);
         view = findViewById(R.id.view);
 
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        final Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        utilityofActivity=new UtilityofActivity(appCompatActivity);
+        utilityofActivity.configureToolbar(appCompatActivity);
+
         TextView toolbar_title=findViewById(R.id.toolbar_title);
+        TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
         toolbar_title.setText("Inventory");
+        toolbar_subtitle.setText(App.projectName);
+
 
         fragment = ViewItemFragment.newInstance(app);
         changeScreen();

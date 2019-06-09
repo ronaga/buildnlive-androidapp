@@ -512,7 +512,7 @@
         android:layout_alignParentBottom="true"
         android:background="@color/color3"
         android:text="Submit"
-        android:visibility="invisible"
+        android:visibility="gone"
         android:textColor="@color/white"
         android:textSize="20sp" />
     <ProgressBar

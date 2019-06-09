@@ -1,5 +1,6 @@
 package buildnlive.com.buildlive.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -33,6 +34,7 @@ import buildnlive.com.buildlive.adapters.ViewIssueAdapter;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.ViewIssue;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class ReturnIssuedItem extends AppCompatActivity {
     private ViewIssue viewIssue;
@@ -43,9 +45,12 @@ public class ReturnIssuedItem extends AppCompatActivity {
     private static App app;
     private ProgressBar progress;
     private TextView hider;
-    private String issue_id="0",item_record_id="0",qty="0",type="0";
+    private String issue_id="0",item_record_id="0",qty="0",type="default";
     private Button submit;
     AlertDialog.Builder builder;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity=this;
+
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -65,17 +70,14 @@ public class ReturnIssuedItem extends AppCompatActivity {
         setContentView(R.layout.activity_return_item);
 
         context=this;
+        utilityofActivity=new UtilityofActivity(this);
         app = (App) getApplication();
 
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar supportActionBar = getSupportActionBar();
+        utilityofActivity.configureToolbar(appCompatActivity);
 
-        if(supportActionBar!=null) {
-            supportActionBar.setDisplayHomeAsUpEnabled(true);
-            supportActionBar.setDisplayShowHomeEnabled(true);
-        }
         TextView toolbar_title=findViewById(R.id.toolbar_title);
+        TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
+        toolbar_subtitle.setText(App.projectName);
         toolbar_title.setText("Return");
 
         builder= new AlertDialog.Builder(this);
@@ -117,9 +119,7 @@ public class ReturnIssuedItem extends AppCompatActivity {
         reason.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i>0) {
                     type = reason.getSelectedItem().toString();
-                }
             }
 
             @Override
@@ -190,12 +190,14 @@ public class ReturnIssuedItem extends AppCompatActivity {
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
             }
 
             @Override
@@ -203,6 +205,7 @@ public class ReturnIssuedItem extends AppCompatActivity {
                 console.log("Response:" + response);
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 if(response.equals("1")){
                     Toast.makeText(getApplicationContext(), "Request Generated", Toast.LENGTH_LONG).show();
                     finish();

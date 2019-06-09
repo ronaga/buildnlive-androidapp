@@ -48,7 +48,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".activities.PreviewImage" />
         <activity android:name=".activities.LoginActivity" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
-        <activity android:name=".activities.PurchaseOrderListing" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait" />
+        <activity android:name=".activities.PurchaseOrderListing" android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" android:screenOrientation="portrait" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -60,9 +60,9 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".activities.Main2Activity"></activity>
+        <activity android:name=".activities.Main2Activity"/>
         <activity android:name=".activities.LabourReportActivity" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
-        <activity android:name=".activities.ManageLabour"  android:screenOrientation="portrait" />
+        <activity android:name=".activities.ManageLabour"  android:screenOrientation="portrait" android:windowSoftInputMode="stateHidden" />
         <activity android:name=".activities.ManageLabourReport" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
         <activity android:name=".activities.Planning" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
         <activity android:name=".activities.BillImageView" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait" />
@@ -74,6 +74,34 @@
         <activity android:name=".activities.LocalPurchaseForm" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait" />
         <activity android:name=".activities.MachineList"  android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
         <activity android:name=".activities.MachineListForm" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait" />
+        <activity android:name=".activities.TransferRequest" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait" />
+        <activity android:name=".activities.CreateTransfer" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait" />
+        <activity android:name=".activities.TransferForm" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.RepairRequestForm" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.RepairRequest" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.ReturnRepairItem" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.FcmNotificationActivity" android:windowSoftInputMode="stateHidden" android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="NOTIFICATION_BUILDO" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+
+        <service android:name=".Notifications.FirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/ic_launcher_foreground" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
     </application>
 
 </manifest>

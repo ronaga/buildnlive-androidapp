@@ -22,13 +22,14 @@ public class ViewIssue extends RealmObject implements Serializable {
     private String units;
     private String reciever;
     private String checkout_Date;
+    private String date;
     private String status;
     private String button;
     private String item_record_id;
 
 
 
-    public ViewIssue(String item_name, String issue_id, String quantity, String units, String reciever, String checkout_Date,String status,String button,String item_record_id) {
+    public ViewIssue(String item_name, String issue_id, String quantity, String units, String reciever, String checkout_Date,String status,String button,String item_record_id,String date) {
 //        this.id = id;
         this.item_name= item_name;
         this.issue_id = issue_id;
@@ -39,6 +40,7 @@ public class ViewIssue extends RealmObject implements Serializable {
         this.status= status;
         this.button=button;
         this.item_record_id=item_record_id;
+        this.date=date;
     }
 
     public ViewIssue() {
@@ -55,6 +57,7 @@ public class ViewIssue extends RealmObject implements Serializable {
         setStatus(obj.getString("status"));
         setButtonStatus(obj.getString("button"));
         setItemRecordId(obj.getString("item_record_id"));
+        setDate(obj.getString("date"));
         return this;
     }
         /*
@@ -69,7 +72,15 @@ public class ViewIssue extends RealmObject implements Serializable {
      "button":"0"}
      */
 
-    private void setItemRecordId(String item_rent_id) {this.item_record_id=item_record_id;
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    private void setItemRecordId(String item_record_id) {this.item_record_id=item_record_id;
     }
 
     public String getItem_record_id() {

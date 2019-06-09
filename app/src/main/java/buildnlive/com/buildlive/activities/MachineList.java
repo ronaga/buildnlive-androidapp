@@ -17,13 +17,17 @@ import buildnlive.com.buildlive.fragments.IssueItemListFragment;
 import buildnlive.com.buildlive.fragments.MachineListFragment;
 import buildnlive.com.buildlive.fragments.ViewIssueFragment;
 import buildnlive.com.buildlive.fragments.ViewMachineFragment;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class MachineList extends AppCompatActivity {
 
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity=this;
     private App app;
     private TextView edit, view;
     private Fragment fragment;
     private ImageButton back;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,11 +37,14 @@ public class MachineList extends AppCompatActivity {
         edit = findViewById(R.id.edit);
         view = findViewById(R.id.view);
 
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        utilityofActivity=new UtilityofActivity(appCompatActivity);
+        utilityofActivity.configureToolbar(appCompatActivity);
+
         TextView toolbar_title=findViewById(R.id.toolbar_title);
+        TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
+
+        toolbar_subtitle.setText(App.projectName);
+
         toolbar_title.setText("Job Sheet");
         fragment = MachineListFragment.newInstance(app);
         changeScreen();

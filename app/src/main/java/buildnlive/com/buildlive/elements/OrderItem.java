@@ -6,6 +6,7 @@ import org.json.JSONObject;
 public class OrderItem {
     private String name;
     private String quantity;
+    private String max_qty;
     private String unit;
     private String orderId;
     private String comments;
@@ -28,6 +29,14 @@ public class OrderItem {
         setQuantity(obj.getString("item_qty"));
         setUnit(obj.getString("item_units"));
         return this;
+    }
+
+    public String getMax_qty() {
+        return max_qty;
+    }
+
+    public void setMax_qty(String max_qty) {
+        this.max_qty = max_qty;
     }
 
     public boolean isIncluded() {

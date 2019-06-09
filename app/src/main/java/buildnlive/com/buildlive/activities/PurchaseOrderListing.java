@@ -1,5 +1,6 @@
 package buildnlive.com.buildlive.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -48,12 +49,12 @@ import buildnlive.com.buildlive.adapters.DailyWorkActivityAdapter;
 import buildnlive.com.buildlive.adapters.PurchaseOrderListingAdapter;
 import buildnlive.com.buildlive.adapters.SingleImageAdapter;
 import buildnlive.com.buildlive.console;
-import buildnlive.com.buildlive.elements.Activity;
 import buildnlive.com.buildlive.elements.Order;
 import buildnlive.com.buildlive.elements.OrderItem;
 import buildnlive.com.buildlive.elements.Packet;
 import buildnlive.com.buildlive.utils.AdvancedRecyclerView;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class PurchaseOrderListing extends AppCompatActivity {
     private App app;
@@ -68,30 +69,36 @@ public class PurchaseOrderListing extends AppCompatActivity {
     private String imagePath;
     private ArrayList<Packet> images;
     private SingleImageAdapter imagesAdapter;
-    private EditText challan,invoice;
+    private EditText challan, invoice, inward_no;
     private ProgressBar progress;
     private TextView hider;
     public static final int REQUEST_GALLERY_IMAGE = 7191;
     private static String results;
     private Context context;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity = this;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context=this;
+        context = this;
         setContentView(R.layout.activity_purchase_order_listing);
         list = findViewById(R.id.items);
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        TextView toolbar_title=findViewById(R.id.toolbar_title);
-        toolbar_title.setText("Purchase Order");
 
-        challan= findViewById(R.id.challan);
-        invoice =findViewById(R.id.invoice);
-        progress=findViewById(R.id.progress);
-        hider=findViewById(R.id.hider);
+        utilityofActivity = new UtilityofActivity(appCompatActivity);
+        utilityofActivity.configureToolbar(appCompatActivity);
+
+        TextView toolbar_title = findViewById(R.id.toolbar_title);
+        TextView toolbar_subtitle = findViewById(R.id.toolbar_subtitle);
+        toolbar_title.setText("Receive Items");
+        toolbar_subtitle.setText(App.projectName);
+
+        challan = findViewById(R.id.challan);
+        invoice = findViewById(R.id.invoice);
+        inward_no = findViewById(R.id.inward_no);
+        progress = findViewById(R.id.progress);
+        hider = findViewById(R.id.hider);
         itemList = new ArrayList<>();
         submit = findViewById(R.id.submit);
         adapter = new PurchaseOrderListingAdapter(getApplicationContext(), itemList, new PurchaseOrderListingAdapter.OnItemClickListener() {
@@ -102,7 +109,7 @@ public class PurchaseOrderListing extends AppCompatActivity {
         });
         list.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         list.setAdapter(adapter);
-        builder=new AlertDialog.Builder(this);
+        builder = new AlertDialog.Builder(this);
         app = (App) getApplication();
         Bundle bundle = getIntent().getExtras();
         id = bundle.getString("id");
@@ -121,8 +128,8 @@ public class PurchaseOrderListing extends AppCompatActivity {
                     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context, R.style.PinDialog);
                     final AlertDialog alertDialog = dialogBuilder.setCancelable(false).setView(dialogView).create();
                     alertDialog.show();
-                    final TextView gallery= dialogView.findViewById(R.id.gallery);
-                    final TextView camera= dialogView.findViewById(R.id.camera);
+                    final TextView gallery = dialogView.findViewById(R.id.gallery);
+                    final TextView camera = dialogView.findViewById(R.id.camera);
 
                     gallery.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -165,7 +172,7 @@ public class PurchaseOrderListing extends AppCompatActivity {
                         }
                     });
 
-                } else{
+                } else {
                     images.remove(pos);
                     imagesAdapter.notifyItemRemoved(pos);
                     imagesAdapter.notifyDataSetChanged();
@@ -176,6 +183,7 @@ public class PurchaseOrderListing extends AppCompatActivity {
         list.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
         list.setmMaxHeight(350);
 
+        final boolean[] flag = {false};
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,7 +194,24 @@ public class PurchaseOrderListing extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 try {
-                                    pushOrders(images);
+                                    /*for (int i = 0; i < itemList.size(); i++) {
+                                        if (itemList.get(i).isIncluded()) {
+                                            if (Float.parseFloat(itemList.get(i).getQuantity()) <= Float.parseFloat(itemList.get(i).getMax_qty())) {
+                                                flag[0] = true;
+                                            } else {
+                                                flag[0] = false;
+                                            }
+
+                                        }
+                                    }*/
+
+//                                    if (flag[0]) {
+                                        pushOrders(images);
+//                                    } else {
+//                                        Toast.makeText(context, "Enter Proper Quantity", Toast.LENGTH_LONG).show();
+//                                    }
+
+//                                    pushOrders(images);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -206,7 +231,6 @@ public class PurchaseOrderListing extends AppCompatActivity {
                 alert.show();
 
 
-
             }
         });
     }
@@ -224,14 +248,14 @@ public class PurchaseOrderListing extends AppCompatActivity {
     }
 
 
-    private void pushOrders(ArrayList<Packet> images) throws JSONException{
+    private void pushOrders(ArrayList<Packet> images) throws JSONException {
         String url = Config.REQ_PURCHASE_ORDER_UPDATE;
         HashMap<String, String> params = new HashMap<>();
         params.put("user_id", App.userId);
         params.put("purchase_order_id", id);
         JSONArray array = new JSONArray();
-        for(int i=0; i<itemList.size(); i++){
-            if(itemList.get(i).isIncluded()) {
+        for (int i = 0; i < itemList.size(); i++) {
+            if (itemList.get(i).isIncluded()) {
                 JSONObject obj = new JSONObject();
                 obj.put("qty_received", itemList.get(i).getQuantity());
                 obj.put("comments", "Done");
@@ -240,9 +264,10 @@ public class PurchaseOrderListing extends AppCompatActivity {
             }
         }
         params.put("purchase_order_list", array.toString());
-        params.put("challan",challan.getText().toString());
-        params.put("invoice",invoice.getText().toString());
-        JSONArray imageArray =new JSONArray();
+        params.put("challan", challan.getText().toString());
+        params.put("invoice", invoice.getText().toString());
+        params.put("inward_no", inward_no.getText().toString());
+        JSONArray imageArray = new JSONArray();
         for (Packet p : images) {
             if (p.getName() != null) {
                 Bitmap bm = BitmapFactory.decodeFile(p.getName());
@@ -254,19 +279,21 @@ public class PurchaseOrderListing extends AppCompatActivity {
             }
         }
         console.log("Params" + params);
-        params.put("images",imageArray.toString());
-        console.log("Image"+params);
+        params.put("images", imageArray.toString());
+        console.log("Image" + params);
         app.sendNetworkRequest(url, 1, params, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
             }
 
             @Override
@@ -274,8 +301,9 @@ public class PurchaseOrderListing extends AppCompatActivity {
                 console.log(response);
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
-                if(response.equals("1")){
-                    Toast.makeText(getApplicationContext(),"Request generated",Toast.LENGTH_LONG).show();
+                utilityofActivity.dismissProgressDialog();
+                if (response.equals("1")) {
+                    Toast.makeText(getApplicationContext(), "Request generated", Toast.LENGTH_LONG).show();
                     finish();
                 }
             }
@@ -290,12 +318,14 @@ public class PurchaseOrderListing extends AppCompatActivity {
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
             }
 
             @Override
@@ -303,8 +333,10 @@ public class PurchaseOrderListing extends AppCompatActivity {
                 console.log(response);
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
+
                 try {
-                   itemList.clear();
+                    itemList.clear();
                     JSONArray array = new JSONArray(response);
                     for (int i = 0; i < array.length(); i++) {
                         itemList.add(new OrderItem().parseFromJSON(array.getJSONObject(i)));
@@ -316,6 +348,7 @@ public class PurchaseOrderListing extends AppCompatActivity {
             }
         });
     }
+
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "IMG_" + timeStamp + "_";
@@ -323,6 +356,7 @@ public class PurchaseOrderListing extends AppCompatActivity {
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         return image;
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CAPTURE_IMAGE) {
@@ -331,37 +365,37 @@ public class PurchaseOrderListing extends AppCompatActivity {
                 packet.setName(imagePath);
 //                Uri uri=data.getData();
 //                packet.setName(getRealPathFromURI(uri));
-                console.log("Image Path "+packet.getName()+"EXTRAS "+packet.getExtra());
+                console.log("Image Path " + packet.getName() + "EXTRAS " + packet.getExtra());
                 images.add(0, new Packet());
                 images.add(packet);
                 imagesAdapter.notifyDataSetChanged();
             } else if (resultCode == android.app.Activity.RESULT_CANCELED) {
                 console.log("Canceled");
             }
-        }
-        else if(requestCode == REQUEST_GALLERY_IMAGE){
+        } else if (requestCode == REQUEST_GALLERY_IMAGE) {
             Packet packet = images.remove(0);
 //            packet.setName(imagePath);
-            Uri uri=data.getData();
+            Uri uri = data.getData();
             packet.setName(getRealPathFromURI(uri));
-            console.log("Image Path "+packet.getName()+"EXTRAS "+packet.getExtra());
+            console.log("Image Path " + packet.getName() + "EXTRAS " + packet.getExtra());
             images.add(0, new Packet());
             images.add(packet);
             imagesAdapter.notifyDataSetChanged();
         }
     }
+
     // And to convert the image URI to the direct file system path of the image file
     public String getRealPathFromURI(Uri contentUri) {
 
         // can post image
-        String [] proj={MediaStore.Images.Media.DATA};
-        Cursor cursor =context.getContentResolver().query(contentUri,
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = context.getContentResolver().query(contentUri,
                 proj, // Which columns to return
                 null,       // WHERE clause; which rows to return (all rows)
                 null,       // WHERE clause selection arguments (none)
                 null); // Order-by clause (ascending by name)
 //        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             results = cursor.getString(column_index);
         }

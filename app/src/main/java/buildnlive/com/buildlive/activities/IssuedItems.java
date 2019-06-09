@@ -15,9 +15,12 @@ import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.fragments.IssueItemFragment;
 import buildnlive.com.buildlive.fragments.IssueItemListFragment;
 import buildnlive.com.buildlive.fragments.ViewIssueFragment;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class IssuedItems extends AppCompatActivity {
     private App app;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity=this;
     private TextView edit, view;
     private Fragment fragment;
     private ImageButton back;
@@ -29,12 +32,14 @@ public class IssuedItems extends AppCompatActivity {
         edit = findViewById(R.id.edit);
         view = findViewById(R.id.view);
 
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        utilityofActivity=new UtilityofActivity(appCompatActivity);
+        utilityofActivity.configureToolbar(appCompatActivity);
+
         TextView toolbar_title=findViewById(R.id.toolbar_title);
+        TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
         toolbar_title.setText("Issue Item");
+        toolbar_subtitle.setText(App.projectName);
+
         fragment = IssueItemListFragment.newInstance(app);
         changeScreen();
         edit = findViewById(R.id.edit);

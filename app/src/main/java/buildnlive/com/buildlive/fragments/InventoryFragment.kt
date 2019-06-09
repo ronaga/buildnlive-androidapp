@@ -98,6 +98,9 @@ class InventoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        utilityofActivity= UtilityofActivity(appCompatActivity!!)
+
         builder = AlertDialog.Builder(context)
         items = view.findViewById(R.id.items)
         submit = view.findViewById(R.id.submit)
@@ -242,17 +245,20 @@ class InventoryFragment : Fragment() {
             override fun onNetworkRequestStart() {
                 progress!!.visibility = View.VISIBLE
                 hider!!.visibility = View.VISIBLE
+                utilityofActivity!!.showProgressDialog()
             }
 
             override fun onNetworkRequestError(error: String) {
                 progress!!.visibility = View.GONE
                 hider!!.visibility = View.GONE
+                utilityofActivity!!.dismissProgressDialog()
                 Toast.makeText(context, "Error:$error", Toast.LENGTH_LONG).show()
             }
 
             override fun onNetworkRequestComplete(response: String) {
                 progress!!.visibility = View.GONE
                 hider!!.visibility = View.GONE
+                utilityofActivity!!.dismissProgressDialog()
                 if (response == "1") {
                     Toast.makeText(context, "Request Generated", Toast.LENGTH_SHORT).show()
                     AddItemAdapter.ViewHolder.CHECKOUT = false
@@ -273,11 +279,13 @@ class InventoryFragment : Fragment() {
             override fun onNetworkRequestStart() {
                 progress!!.visibility = View.VISIBLE
                 hider!!.visibility = View.VISIBLE
+                utilityofActivity!!.showProgressDialog()
             }
 
             override fun onNetworkRequestError(error: String) {
                 progress!!.visibility = View.GONE
                 hider!!.visibility = View.GONE
+                utilityofActivity!!.dismissProgressDialog()
                 console.error("Network request failed with error :$error")
                 Toast.makeText(context, "Check Network, Something went wrong", Toast.LENGTH_LONG).show()
             }
@@ -286,6 +294,7 @@ class InventoryFragment : Fragment() {
                 //                console.log(response);
                 progress!!.visibility = View.GONE
                 hider!!.visibility = View.GONE
+                utilityofActivity!!.dismissProgressDialog()
                 try {
                     val array = JSONArray(response)
                     for (i in 0 until array.length()) {
@@ -318,11 +327,13 @@ class InventoryFragment : Fragment() {
             override fun onNetworkRequestStart() {
                 progress!!.visibility = View.VISIBLE
                 hider!!.visibility = View.VISIBLE
+                utilityofActivity!!.showProgressDialog()
             }
 
             override fun onNetworkRequestError(error: String) {
                 progress!!.visibility = View.GONE
                 hider!!.visibility = View.GONE
+                utilityofActivity!!.dismissProgressDialog()
                 console.error("Network request failed with error :$error")
                 Toast.makeText(context, "Check Network, Something went wrong", Toast.LENGTH_LONG).show()
             }
@@ -331,6 +342,7 @@ class InventoryFragment : Fragment() {
                 //                console.log(response);
                 progress!!.visibility = View.GONE
                 hider!!.visibility = View.GONE
+                utilityofActivity!!.dismissProgressDialog()
                 try {
                     val array = JSONArray(response)
                     for (i in 0 until array.length()) {

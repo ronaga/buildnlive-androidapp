@@ -1,5 +1,6 @@
 package buildnlive.com.buildlive.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,6 +8,7 @@ import android.hardware.input.InputManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -41,6 +43,7 @@ import buildnlive.com.buildlive.adapters.AddItemAdapter;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Item;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class AddItemFragment extends Fragment{
     private static List<Item> itemsList=new ArrayList<>();
@@ -56,7 +59,23 @@ public class AddItemFragment extends Fragment{
     private EditText search_text;
     AlertDialog.Builder builder;
     final List<Item> newItems = new ArrayList<>();
+    private Context context;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity;
 
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.appCompatActivity = (AppCompatActivity) activity;
+    }
 
 
     public AddItemAdapter.OnItemSelectedListener listener = new AddItemAdapter.OnItemSelectedListener() {
@@ -98,6 +117,7 @@ public class AddItemFragment extends Fragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);;
 
+        utilityofActivity = new UtilityofActivity(appCompatActivity);
         builder= new AlertDialog.Builder(getContext());
         items = view.findViewById(R.id.items);
                 submit = view.findViewById(R.id.submit);
@@ -303,12 +323,14 @@ public class AddItemFragment extends Fragment{
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 Toast.makeText(getContext(),"Error:"+error,Toast.LENGTH_LONG).show();
             }
 
@@ -316,6 +338,7 @@ public class AddItemFragment extends Fragment{
             public void onNetworkRequestComplete(String response) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 if (response.equals("1")) {
                     Toast.makeText(getContext(), "Request Generated", Toast.LENGTH_SHORT).show();
                     AddItemAdapter.ViewHolder.CHECKOUT=false;
@@ -336,12 +359,14 @@ public class AddItemFragment extends Fragment{
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 console.error("Network request failed with error :" + error);
                 Toast.makeText(getContext(), "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
             }
@@ -351,6 +376,7 @@ public class AddItemFragment extends Fragment{
 //                console.log(response);
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 try {
                     JSONArray array = new JSONArray(response);
                     for (int i = 0; i < array.length(); i++) {
@@ -383,12 +409,14 @@ public class AddItemFragment extends Fragment{
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 console.error("Network request failed with error :" + error);
                 Toast.makeText(getContext(), "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
             }
@@ -398,6 +426,7 @@ public class AddItemFragment extends Fragment{
 //                console.log(response);
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 try {
                     JSONArray array = new JSONArray(response);
                     for (int i = 0; i < array.length(); i++) {

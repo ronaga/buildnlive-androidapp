@@ -3,6 +3,7 @@ package buildnlive.com.buildlive.adapters;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,7 +61,7 @@ public class ViewIssueAdapter extends RecyclerView.Adapter<ViewIssueAdapter.View
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView name, worker, quantity,status,return_item;
+        private TextView name, worker, quantity,status,return_item,date;
 
         public ViewHolder(View view) {
             super(view);
@@ -69,12 +70,16 @@ public class ViewIssueAdapter extends RecyclerView.Adapter<ViewIssueAdapter.View
             quantity = view.findViewById(R.id.quantity);
             status= view.findViewById(R.id.status);
             return_item= view.findViewById(R.id.return_item);
+            date= view.findViewById(R.id.date);
         }
 
         public void bind(final Context context, final ViewIssue item, final int pos,final OnItemClickListener listener) {
             name.setText(item.getItemName());
             worker.setText(item.getReciever());
             quantity.setText(item.getQuantity() + " " + item.getUnit());
+
+            date.setText(Html.fromHtml("<b>Date: </b>"+item.getDate()));
+
             if(item.getStatus().equals("Yes")){
                 status.setText("Received");
             }

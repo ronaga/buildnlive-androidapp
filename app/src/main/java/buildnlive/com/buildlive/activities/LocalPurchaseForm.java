@@ -1,5 +1,6 @@
 package buildnlive.com.buildlive.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -60,6 +61,7 @@ import buildnlive.com.buildlive.elements.Item;
 import buildnlive.com.buildlive.elements.Packet;
 import buildnlive.com.buildlive.utils.AdvancedRecyclerView;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class LocalPurchaseForm extends AppCompatActivity {
 
@@ -82,6 +84,9 @@ public class LocalPurchaseForm extends AppCompatActivity {
     public static final int REQUEST_GALLERY_IMAGE = 7191;
     private Item selectedItem;
 
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity=this;
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
@@ -99,12 +104,14 @@ public class LocalPurchaseForm extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_local_purchase_form);
 
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        TextView textView=findViewById(R.id.toolbar_title);
-        textView.setText("Local Purchase");
+        utilityofActivity=new UtilityofActivity(appCompatActivity);
+        utilityofActivity.configureToolbar(appCompatActivity);
+
+        TextView toolbar_title=findViewById(R.id.toolbar_title);
+        TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
+        toolbar_subtitle.setText(App.projectName);
+        toolbar_title.setText("Local Purchase");
+
         Bundle bundle=getIntent().getExtras();
 
         if(bundle!=null){
@@ -349,13 +356,15 @@ public class LocalPurchaseForm extends AppCompatActivity {
             @Override
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
-                hider.setVisibility(View.VISIBLE);;
+                hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 Toast.makeText(context,"Error"+error,Toast.LENGTH_LONG).show();
             }
 
@@ -364,6 +373,7 @@ public class LocalPurchaseForm extends AppCompatActivity {
                 console.log(response);
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 if(response.equals("1")) {
                     Toast.makeText(context, "Request Generated", Toast.LENGTH_SHORT).show();
                     finish();

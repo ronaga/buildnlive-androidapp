@@ -1,5 +1,7 @@
 package buildnlive.com.buildlive.fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +10,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +36,7 @@ import buildnlive.com.buildlive.adapters.ViewLabourReportAdapter;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.LabourReport;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 import io.realm.Realm;
 
 public class ViewLabourReportFragment extends Fragment {
@@ -47,7 +51,23 @@ public class ViewLabourReportFragment extends Fragment {
     private ProgressBar progress;
     private TextView hider,no_content;
     private CoordinatorLayout coordinatorLayout;
+    private Context context;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity;
 
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.appCompatActivity = (AppCompatActivity) activity;
+    }
 
     public static ViewLabourReportFragment newInstance() {
         return new ViewLabourReportFragment();
@@ -76,6 +96,7 @@ public class ViewLabourReportFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 //        refresh();
+        utilityofActivity= new UtilityofActivity(appCompatActivity);
         Realm realm =Realm.getDefaultInstance();
         recyclerView=view.findViewById(R.id.items);
         no_content=view.findViewById(R.id.no_content);
@@ -115,12 +136,14 @@ public class ViewLabourReportFragment extends Fragment {
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 console.error("Network request failed with error :" + error);
 //                Toast.makeText(getContext(), "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
                 Snackbar snackbar = Snackbar.make(coordinatorLayout, "Something went wrong, Try again later", Snackbar.LENGTH_LONG);
@@ -132,6 +155,7 @@ public class ViewLabourReportFragment extends Fragment {
                 console.log(response);
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 try {
                     JSONArray array = new JSONArray(response);
                     for (int i = 0; i < array.length(); i++) {

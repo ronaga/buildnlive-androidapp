@@ -1,5 +1,7 @@
 package buildnlive.com.buildlive.fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +10,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,6 +35,7 @@ import buildnlive.com.buildlive.adapters.ContractorAdapter;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Contractor;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 import io.realm.Realm;
 
 public class ManageLabourFragment extends Fragment {
@@ -46,6 +50,23 @@ public class ManageLabourFragment extends Fragment {
     private ProgressBar progress;
     private TextView hider;
     private CoordinatorLayout coordinatorLayout;
+    private Context context;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity;
+
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.appCompatActivity = (AppCompatActivity) activity;
+    }
 
     public static ManageLabourFragment newInstance() {
         return new ManageLabourFragment();
@@ -71,6 +92,7 @@ public class ManageLabourFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Realm realm =Realm.getDefaultInstance();
+        utilityofActivity=new UtilityofActivity(appCompatActivity);
         recyclerView=view.findViewById(R.id.items);
         app=(App) getActivity().getApplication();
         builder = new android.app.AlertDialog.Builder(getContext());
@@ -106,12 +128,14 @@ public class ManageLabourFragment extends Fragment {
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 console.error("Network request failed with error :" + error);
 //                Toast.makeText(getContext(), "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
                 Snackbar snackbar = Snackbar.make(coordinatorLayout, "Something went wrong, Try again later", Snackbar.LENGTH_LONG);
@@ -123,6 +147,7 @@ public class ManageLabourFragment extends Fragment {
                 console.log(response);
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 try {
                     JSONArray array = new JSONArray(response);
                     for (int i = 0; i < array.length(); i++) {

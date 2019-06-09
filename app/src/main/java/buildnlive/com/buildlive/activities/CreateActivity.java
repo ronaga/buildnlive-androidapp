@@ -1,6 +1,8 @@
 package buildnlive.com.buildlive.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,6 +27,7 @@ import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class CreateActivity extends AppCompatActivity {
     private EditText name,duration,quantity;
@@ -36,6 +39,10 @@ public class CreateActivity extends AppCompatActivity {
     private Boolean val=true;
     private String masterWorkId;
     private String workListId;
+
+    private Context context;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity;
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -56,6 +63,7 @@ public class CreateActivity extends AppCompatActivity {
 
         Bundle bundle=getIntent().getExtras();
 
+        utilityofActivity=new UtilityofActivity(this);
         if (bundle != null) {
             workListId= bundle.getString("workListId");
             masterWorkId=  bundle.getString("masterWorkId");
@@ -66,7 +74,7 @@ public class CreateActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         TextView toolbar_title=findViewById(R.id.toolbar_title);
-        toolbar_title.setText("Create Labour");
+        toolbar_title.setText("Create Activity");
 
         name=findViewById(R.id.name);
         duration=findViewById(R.id.duration);
@@ -182,12 +190,14 @@ public class CreateActivity extends AppCompatActivity {
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 Toast.makeText(getApplicationContext(),"Something went wrong, Try again later", Toast.LENGTH_LONG).show();
             }
 
@@ -195,6 +205,7 @@ public class CreateActivity extends AppCompatActivity {
             public void onNetworkRequestComplete(String response) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 console.log(response);
                 if (response.equals("1")) {
                     Toast.makeText(getApplicationContext(), "Request Generated", Toast.LENGTH_SHORT).show();

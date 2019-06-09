@@ -14,12 +14,15 @@ import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.fragments.ViewPurchaseOrderFragment;
 import buildnlive.com.buildlive.fragments.ViewRequestsFragment;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class PurchaseOrder extends AppCompatActivity {
     private App app;
     private TextView edit, view;
     private Fragment fragment;
     private ImageButton back;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity=this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +32,14 @@ public class PurchaseOrder extends AppCompatActivity {
         edit = findViewById(R.id.edit);
         view = findViewById(R.id.view);
 
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        utilityofActivity=new UtilityofActivity(appCompatActivity);
+        utilityofActivity.configureToolbar(appCompatActivity);
+
         TextView toolbar_title=findViewById(R.id.toolbar_title);
-        toolbar_title.setText("Purchase Order");
+        TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
+        toolbar_title.setText("Receive Items");
+        toolbar_subtitle.setText(App.projectName);
+
         fragment = ViewPurchaseOrderFragment.newInstance(app);
         changeScreen();
         edit = findViewById(R.id.edit);

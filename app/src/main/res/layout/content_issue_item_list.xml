@@ -49,8 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:textSize="15sp"
-                    android:padding="5dp"
-                    android:layout_weight="1" />
+                    android:padding="5dp" />
 
             </LinearLayout>
 
@@ -130,6 +129,29 @@
                     android:textStyle="bold" />
 
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/receiver_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/border">
+
+                <EditText
+                    android:id="@+id/receiver_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:textSize="15sp"
+                    android:hint="Receiver"
+                    android:background="@color/transparent"
+                    android:padding="5dp" />
+
+            </LinearLayout>
+
 
             <Spinner
                 android:id="@+id/receiver"

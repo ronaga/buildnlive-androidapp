@@ -1,11 +1,13 @@
 package buildnlive.com.buildlive.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,6 +41,7 @@ import buildnlive.com.buildlive.adapters.IssueItemListAdapter;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Item;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class IssueItemListFragment extends Fragment {
 
@@ -52,6 +55,8 @@ public class IssueItemListFragment extends Fragment {
     private LinearLayout search_view;
     private EditText search_text;
     private ImageButton search_close,search;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity;
 
 
 
@@ -70,6 +75,17 @@ public class IssueItemListFragment extends Fragment {
 
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.appCompatActivity = (AppCompatActivity) activity;
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -79,10 +95,12 @@ public class IssueItemListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        context=getContext();
+
         recyclerView= view.findViewById(R.id.items);
         progress = view.findViewById(R.id.progress);
         hider = view.findViewById(R.id.hider);
+
+        utilityofActivity = new UtilityofActivity(appCompatActivity);
 
         search_view = view.findViewById(R.id.search_view);
         search_text=view.findViewById(R.id.search_text);
@@ -155,12 +173,14 @@ public class IssueItemListFragment extends Fragment {
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 console.error("Network request failed with error :" + error);
                 Toast.makeText(getContext(), "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
             }
@@ -170,6 +190,7 @@ public class IssueItemListFragment extends Fragment {
                 console.log(response);
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 try {
                     JSONArray array = new JSONArray(response);
                     for (int i = 0; i < array.length(); i++) {
@@ -200,12 +221,14 @@ public class IssueItemListFragment extends Fragment {
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 console.error("Network request failed with error :" + error);
                 Toast.makeText(getContext(), "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
             }
@@ -213,6 +236,7 @@ public class IssueItemListFragment extends Fragment {
             @Override
             public void onNetworkRequestComplete(String response) {
 //                console.log(response);
+                utilityofActivity.dismissProgressDialog();
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
                 try {

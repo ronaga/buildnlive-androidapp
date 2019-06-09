@@ -1,59 +1,40 @@
 package buildnlive.com.buildlive.activities;
 
-import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.util.Base64;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.byox.drawview.enums.BackgroundScale;
 import com.byox.drawview.enums.BackgroundType;
 import com.byox.drawview.enums.DrawingCapture;
 import com.byox.drawview.views.DrawView;
-import com.github.chrisbanes.photoview.PhotoView;
-import com.raodevs.touchdraw.TouchDrawView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import buildnlive.com.buildlive.App;
-import buildnlive.com.buildlive.BuildConfig;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
-import buildnlive.com.buildlive.adapters.ActivityImagesAdapter;
-import buildnlive.com.buildlive.console;
-import buildnlive.com.buildlive.elements.Packet;
-import buildnlive.com.buildlive.utils.AdvancedRecyclerView;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 
 public class PreviewImage extends AppCompatActivity {
@@ -62,12 +43,18 @@ public class PreviewImage extends AppCompatActivity {
     private DrawView drawView;
     private String overview = "", ID = "";
     private int step = 0;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity = this;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(R.style.HolyBlack);
         setContentView(R.layout.activity_preview_image);
+
+        utilityofActivity = new UtilityofActivity(appCompatActivity);
+
         File folder = new File(Environment.getExternalStorageDirectory() + File.separator + "BL");
         final File f = new File(folder, getIntent().getStringExtra("image"));
         ID = getIntent().getStringExtra("id");
@@ -158,16 +145,17 @@ public class PreviewImage extends AppCompatActivity {
                     app.sendNetworkRequest(Config.REQ_PLAN_MARKUP, 1, params, new Interfaces.NetworkInterfaceListener() {
                         @Override
                         public void onNetworkRequestStart() {
-
+                            utilityofActivity.showProgressDialog();
                         }
 
                         @Override
                         public void onNetworkRequestError(String error) {
-
+                            utilityofActivity.dismissProgressDialog();
                         }
 
                         @Override
                         public void onNetworkRequestComplete(String response) {
+                            utilityofActivity.dismissProgressDialog();
                             if (response.equals("1")) {
                                 Toast.makeText(getApplicationContext(), "Plan Updated", Toast.LENGTH_SHORT).show();
                                 finish();

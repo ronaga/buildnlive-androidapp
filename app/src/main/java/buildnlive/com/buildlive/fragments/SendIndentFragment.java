@@ -1,12 +1,13 @@
 package buildnlive.com.buildlive.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,29 +34,45 @@ import java.util.List;
 import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
-import buildnlive.com.buildlive.adapters.AddItemAdapter;
 import buildnlive.com.buildlive.adapters.CategorySpinAdapter;
 import buildnlive.com.buildlive.adapters.IndentItemAdapter;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Category;
 import buildnlive.com.buildlive.elements.IndentItem;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 
-public class SendIndentFragment extends Fragment{
+public class SendIndentFragment extends Fragment {
     private static List<IndentItem> siteIndentItem = new ArrayList<>();
     private RecyclerView items;
     private Button next, submit;
     private ProgressBar progress;
-    private TextView hider, checkout_text,search_textview;
+    private TextView hider, checkout_text, search_textview;
     private boolean LOADING;
     private ImageButton close;
     private IndentItemAdapter adapter;
-    public static String category="";
+    public static String category = "";
     private Spinner categorySpinner;
     private CategorySpinAdapter categoryAdapter;
     private ArrayList<Category> categoryList = new ArrayList<>();
     private android.support.v7.widget.SearchView searchView;
     AlertDialog.Builder builder;
+    private Context context;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity;
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.appCompatActivity = (AppCompatActivity) activity;
+    }
 
 
     public IndentItemAdapter.OnItemSelectedListener listener = new IndentItemAdapter.OnItemSelectedListener() {
@@ -79,46 +95,47 @@ public class SendIndentFragment extends Fragment{
 //        siteIndentItem = u;
         return new SendIndentFragment();
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         categoryList.clear();
-        IndentItemAdapter.ViewHolder.CHECKOUT=false;
+        IndentItemAdapter.ViewHolder.CHECKOUT = false;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.fragment_indent_item, container, false);
+        View view = inflater.inflate(R.layout.fragment_indent_item, container, false);
 
         return view;
     }
-
 
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         items = view.findViewById(R.id.items);
+        utilityofActivity = new UtilityofActivity(appCompatActivity);
         items.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        builder= new AlertDialog.Builder(getContext());
+        builder = new AlertDialog.Builder(getContext());
         searchView = view.findViewById(R.id.search_view);
 
         submit = view.findViewById(R.id.submit);
         next = view.findViewById(R.id.next);
         close = view.findViewById(R.id.close_checkout);
         setCategorySpinner();
-        categorySpinner=view.findViewById(R.id.category);
+        categorySpinner = view.findViewById(R.id.category);
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String a = categoryAdapter.getID(i);
-                    if(!a.equals("0")){
-                        refresh(a);
-                        searchView.setVisibility(View.VISIBLE);
-                        search_textview.setVisibility(View.VISIBLE);
+                if (!a.equals("0")) {
+                    refresh(a);
+                    searchView.setVisibility(View.VISIBLE);
+                    search_textview.setVisibility(View.VISIBLE);
 
-                    }
+                }
 
             }
 
@@ -128,12 +145,9 @@ public class SendIndentFragment extends Fragment{
             }
         });
 
-        categoryAdapter=new CategorySpinAdapter(getContext(), R.layout.custom_spinner,categoryList);
+        categoryAdapter = new CategorySpinAdapter(getContext(), R.layout.custom_spinner, categoryList);
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(categoryAdapter);
-
-
-
 
 
         close.setOnClickListener(new View.OnClickListener() {
@@ -188,7 +202,7 @@ public class SendIndentFragment extends Fragment{
                 submit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        builder.setMessage("Are you sure?") .setTitle("Request Item");
+                        builder.setMessage("Are you sure?").setTitle("Request Item");
 
                         //Setting message manually and performing action on button click
                         builder.setMessage("Do you want to Submit?")
@@ -234,7 +248,7 @@ public class SendIndentFragment extends Fragment{
         }
 
 
-        search_textview=view.findViewById(R.id.search_textview);
+        search_textview = view.findViewById(R.id.search_textview);
         searchView = view.findViewById(R.id.search_view);
 
         // Associate searchable configuration with the SearchView
@@ -276,7 +290,7 @@ public class SendIndentFragment extends Fragment{
     }
 
     private void sendRequest(List<IndentItem> items) throws JSONException {
-        App app= ((App)getActivity().getApplication());
+        App app = ((App) getActivity().getApplication());
         HashMap<String, String> params = new HashMap<>();
         params.put("user_id", App.userId);
         params.put("detail_id", App.projectId);
@@ -291,22 +305,25 @@ public class SendIndentFragment extends Fragment{
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
-                Toast.makeText(getContext(),"Error"+error,Toast.LENGTH_LONG).show();
+                utilityofActivity.dismissProgressDialog();
+                Toast.makeText(getContext(), "Error" + error, Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onNetworkRequestComplete(String response) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 if (response.equals("Success")) {
                     Toast.makeText(getContext(), "Request Generated", Toast.LENGTH_SHORT).show();
-                    IndentItemAdapter.ViewHolder.CHECKOUT=false;
+                    IndentItemAdapter.ViewHolder.CHECKOUT = false;
                     getActivity().finish();
                 }
             }
@@ -315,19 +332,19 @@ public class SendIndentFragment extends Fragment{
 
 
     private void setCategorySpinner() {
-        App app= ((App)getActivity().getApplication());
-        String requestURl= Config.REQ_SENT_CATEGORIES ;
+        App app = ((App) getActivity().getApplication());
+        String requestURl = Config.REQ_SENT_CATEGORIES;
         requestURl = requestURl.replace("[0]", App.userId);
         categoryList.clear();
         app.sendNetworkRequest(requestURl, Request.Method.GET, null, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
-
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
-
+                utilityofActivity.dismissProgressDialog();
                 console.error("Network request failed with error :" + error);
                 Toast.makeText(getContext(), "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
 
@@ -336,7 +353,7 @@ public class SendIndentFragment extends Fragment{
             @Override
             public void onNetworkRequestComplete(String response) {
                 console.log(response);
-
+                utilityofActivity.dismissProgressDialog();
                 try {
                     JSONArray array = new JSONArray(response);
                     for (int i = 0; i < array.length(); i++) {
@@ -353,7 +370,7 @@ public class SendIndentFragment extends Fragment{
     }
 
     private void refresh(String a) {
-        App app= ((App)getActivity().getApplication());
+        App app = ((App) getActivity().getApplication());
         siteIndentItem.clear();
         String requestUrl = Config.GET_SITE_LIST;
         requestUrl = requestUrl.replace("[1]", App.userId);
@@ -365,11 +382,12 @@ public class SendIndentFragment extends Fragment{
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
-
+                utilityofActivity.dismissProgressDialog();
                 console.error("Network request failed with error :" + error);
                 Toast.makeText(getContext(), "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
             }
@@ -377,18 +395,19 @@ public class SendIndentFragment extends Fragment{
             @Override
             public void onNetworkRequestComplete(String response) {
                 console.log(response);
+                utilityofActivity.dismissProgressDialog();
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
                 try {
                     JSONArray array = new JSONArray(response);
-                  for (int i = 0; i < array.length(); i++) {
+                    for (int i = 0; i < array.length(); i++) {
                         siteIndentItem.add(new IndentItem().parseFromJSON(array.getJSONObject(i)));
                     }
                     console.log("data set changed");
                     adapter = new IndentItemAdapter(getContext(), siteIndentItem, listener);
                     items.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
-                    console.log(""+adapter.getItemCount());
+                    console.log("" + adapter.getItemCount());
 
                 } catch (JSONException e) {
                     e.printStackTrace();

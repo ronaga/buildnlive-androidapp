@@ -10,9 +10,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -46,9 +44,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
-
-import buildnlive.com.buildlive.BuildConfig;
 import buildnlive.com.buildlive.App;
+import buildnlive.com.buildlive.BuildConfig;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.adapters.ActivityImagesAdapter;
@@ -64,37 +61,40 @@ import io.realm.RealmResults;
 
 public class WorkProgress extends AppCompatActivity {
     private App app;
-    private TextView edit, filter,view,reset;
+    private TextView edit, filter, view, reset;
     private Fragment fragment;
-    private String status_text,category_text,results;
+    private String status_text, category_text, results;
     private RecyclerView items;
     private ProgressBar progress;
-    private TextView hider,no_content;
+    private TextView hider, no_content;
     private DailyWorkAdapter adapter;
     private static RealmResults<Work> works;
-    private static ArrayList<Work> workslist=new ArrayList<>();
+    private static ArrayList<Work> workslist = new ArrayList<>();
     private Realm realm;
     private boolean LOADING = true;
     public static final int QUALITY = 10;
     private ImageButton back;
     private Context context;
     private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity=this;
     public static final int REQUEST_GALLERY_IMAGE = 7191;
-
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_progress);
-        context=this;
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        context = this;
+        utilityofActivity=new UtilityofActivity(appCompatActivity);
+        utilityofActivity.configureToolbar(appCompatActivity);
+
+        TextView toolbar_title=findViewById(R.id.toolbar_title);
+        TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
+        toolbar_title.setText("Work Progress");
+        toolbar_subtitle.setText(App.projectName);
+
         app = (App) getApplication();
-        utilityofActivity=new UtilityofActivity(this);
+
 //        edit = findViewById(R.id.edit);
 //        view = findViewById(R.id.view);
 //        items = view.findViewById(R.id.items);
@@ -114,8 +114,6 @@ public class WorkProgress extends AppCompatActivity {
 //                alertDialog.show();
 //            }
 //        });
-        TextView toolbar_title=findViewById(R.id.toolbar_title);
-        toolbar_title.setText("Work Progress");
         loadWorks();
         items = findViewById(R.id.items);
         progress = findViewById(R.id.progress);
@@ -205,8 +203,8 @@ public class WorkProgress extends AppCompatActivity {
         }
 
 
-
     }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
@@ -228,49 +226,43 @@ public class WorkProgress extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case R.id.filter:
                 LayoutInflater inflater = getLayoutInflater();
                 View dialogView = inflater.inflate(R.layout.alert_filter, null);
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context, R.style.PinDialog);
                 final AlertDialog alertDialog = dialogBuilder.setCancelable(false).setView(dialogView).create();
                 alertDialog.show();
-                final Spinner status= dialogView.findViewById(R.id.status);
-                final Spinner catfilt= dialogView.findViewById(R.id.category_filter);
-                final EditText startDateDD= dialogView.findViewById(R.id.start_date_dd);
-                final EditText startDateMM= dialogView.findViewById(R.id.start_date_mm);
-                final EditText startDateYYYY= dialogView.findViewById(R.id.start_date_yyyy);
-                final EditText endDateDD= dialogView.findViewById(R.id.end_date_dd);
-                final EditText endDateMM= dialogView.findViewById(R.id.end_date_mm);
-                final EditText endDateYYYY= dialogView.findViewById(R.id.end_date_yyyy);
+                final Spinner status = dialogView.findViewById(R.id.status);
+                final Spinner catfilt = dialogView.findViewById(R.id.category_filter);
+                final EditText startDateDD = dialogView.findViewById(R.id.start_date_dd);
+                final EditText startDateMM = dialogView.findViewById(R.id.start_date_mm);
+                final EditText startDateYYYY = dialogView.findViewById(R.id.start_date_yyyy);
+                final EditText endDateDD = dialogView.findViewById(R.id.end_date_dd);
+                final EditText endDateMM = dialogView.findViewById(R.id.end_date_mm);
+                final EditText endDateYYYY = dialogView.findViewById(R.id.end_date_yyyy);
 
                 Button positive = dialogView.findViewById(R.id.positive);
                 positive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        if(!(status.getSelectedItem().toString().equals("Select Status")))
-                        {
+                        if (!(status.getSelectedItem().toString().equals("Select Status"))) {
                             status_text = status.getSelectedItem().toString();
                             console.log(status_text);
+                        } else {
+                            status_text = "";
                         }
-                        else
-                        {
-                            status_text="";
-                        }
-                        if(!(catfilt.getSelectedItem().toString().equals("Select Category")))
-                        {
+                        if (!(catfilt.getSelectedItem().toString().equals("Select Category"))) {
                             category_text = catfilt.getSelectedItem().toString();
                             console.log(category_text);
+                        } else {
+                            category_text = "";
                         }
-                        else
-                        {
-                            category_text="";
-                        }
-                        String start_date=startDateDD.getText()+"/"+startDateMM.getText()+"/"+startDateYYYY.getText();
-                        String end_date=endDateDD.getText()+"/"+endDateMM.getText()+"/"+endDateYYYY.getText();
-                        console.log(start_date+" "+end_date);
-                        filter(status_text,category_text,start_date,end_date);
+                        String start_date = startDateDD.getText() + "/" + startDateMM.getText() + "/" + startDateYYYY.getText();
+                        String end_date = endDateDD.getText() + "/" + endDateMM.getText() + "/" + endDateYYYY.getText();
+                        console.log(start_date + " " + end_date);
+                        filter(status_text, category_text, start_date, end_date);
                         alertDialog.dismiss();
 
                     }
@@ -291,7 +283,7 @@ public class WorkProgress extends AppCompatActivity {
         }
     }
 
-    private void filter(String status,String category,String startdate,String enddate) {
+    private void filter(String status, String category, String startdate, String enddate) {
         workslist.clear();
         progress.setVisibility(View.VISIBLE);
         hider.setVisibility(View.VISIBLE);
@@ -299,20 +291,21 @@ public class WorkProgress extends AppCompatActivity {
         HashMap<String, String> params = new HashMap<>();
         params.put("status", status);
         params.put("project_id", App.projectId);
-        params.put("category_filter",category);
-        params.put("start_date",startdate);
-        params.put("end_date",enddate);
-        console.log("Params: "+params);
+        params.put("category_filter", category);
+        params.put("start_date", startdate);
+        params.put("end_date", enddate);
+        console.log("Params: " + params);
         app.sendNetworkRequest(filterURL, Request.Method.POST, params, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
-
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.dismissProgressDialog();
                 Toast.makeText(context, "Check Internet Connection", Toast.LENGTH_LONG).show();
             }
 
@@ -320,15 +313,16 @@ public class WorkProgress extends AppCompatActivity {
             public void onNetworkRequestComplete(String response) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 console.log("Response:" + response);
-                try{
+                try {
                     JSONArray array = new JSONArray(response);
-                    for (int i=0; i<array.length(); i++){
+                    for (int i = 0; i < array.length(); i++) {
                         JSONObject par = array.getJSONObject(i);
                         JSONObject sch = par.getJSONObject("work_schedule");
-                        final Work work = new Work().parseFromJSON(sch.getJSONObject("work_details"), par.getString("work_list_id"),par.getString("master_work_id"),
+                        final Work work = new Work().parseFromJSON(sch.getJSONObject("work_details"), par.getString("work_list_id"), par.getString("master_work_id"),
                                 sch.getString("work_duration"), sch.getString("qty"), sch.getString("schedule_start_date"), sch.getString("schedule_finish_date")
-                                , sch.getString("current_status"),sch.getString("qty_completed"),sch.getString("percent_compl"),"Work");
+                                , sch.getString("current_status"), sch.getString("qty_completed"), sch.getString("percent_compl"), "Work");
                         workslist.add(work);
 //                        , par.getString("completed_activities"), par.getString("total_activities")
                         //                        realm.executeTransaction(new Realm.Transaction() {
@@ -337,12 +331,12 @@ public class WorkProgress extends AppCompatActivity {
 //                                realm.copyToRealmOrUpdate(work);
 //                            }
 //                        });
-                        console.log("Worklist"+workslist.get(i));
+                        console.log("Worklist" + workslist.get(i));
                     }
-                    if(workslist.isEmpty()){
+                    if (workslist.isEmpty()) {
                         no_content.setVisibility(View.VISIBLE);
                     }
-                    adapter = new DailyWorkAdapter(context, workslist,"Work", new DailyWorkAdapter.OnItemClickListener() {
+                    adapter = new DailyWorkAdapter(context, workslist, "Work", new DailyWorkAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(int pos, View view) {
                             Intent intent = new Intent(context, DailyWorkProgressActivities.class);
@@ -352,35 +346,35 @@ public class WorkProgress extends AppCompatActivity {
                         }
                     }, new DailyWorkAdapter.OnButtonClickListener() {
                         @Override
-                        public void onButtonClick(int pos,View view) {
+                        public void onButtonClick(int pos, View view) {
                             menuUpdate(workslist.get(pos));
                         }
                     });
                     items.setLayoutManager(new LinearLayoutManager(context));
                     items.setAdapter(adapter);
 
-                } catch (JSONException e){
+                } catch (JSONException e) {
 
                 }
             }
         });
     }
 
-    private void loadWorks(){
+    private void loadWorks() {
         workslist.clear();
         String url = Config.REQ_DAILY_WORK;
         url = url.replace("[0]", App.userId);
         url = url.replace("[1]", App.projectId);
-        console.log("URL:"+url);
+        console.log("URL:" + url);
         app.sendNetworkRequest(url, 0, null, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
-
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
-
+                utilityofActivity.dismissProgressDialog();
             }
 
             @Override
@@ -388,15 +382,16 @@ public class WorkProgress extends AppCompatActivity {
                 workslist.clear();
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
-                console.log("Response:"+response);
-                try{
+                utilityofActivity.dismissProgressDialog();
+                console.log("Response:" + response);
+                try {
                     JSONArray array = new JSONArray(response);
-                    for (int i=0; i<array.length(); i++){
+                    for (int i = 0; i < array.length(); i++) {
                         JSONObject par = array.getJSONObject(i);
                         JSONObject sch = par.getJSONObject("work_schedule");
-                        final Work work = new Work().parseFromJSON(sch.getJSONObject("work_details"), par.getString("work_list_id"),par.getString("master_work_id"),
+                        final Work work = new Work().parseFromJSON(sch.getJSONObject("work_details"), par.getString("work_list_id"), par.getString("master_work_id"),
                                 sch.getString("work_duration"), sch.getString("qty"), sch.getString("schedule_start_date"), sch.getString("schedule_finish_date")
-                                , sch.getString("current_status"),sch.getString("qty_completed"),sch.getString("percent_compl"),"Work");
+                                , sch.getString("current_status"), sch.getString("qty_completed"), sch.getString("percent_compl"), "Work");
                         workslist.add(work);
 //                        , par.getString("completed_activities"), par.getString("total_activities")
                         //                        realm.executeTransaction(new Realm.Transaction() {
@@ -405,13 +400,12 @@ public class WorkProgress extends AppCompatActivity {
 //                                realm.copyToRealmOrUpdate(work);
 //                            }
 //                        });
-                        console.log("Worklist"+workslist.get(i).getWorkName());
+                        console.log("Worklist" + workslist.get(i).getWorkName());
                     }
-                    if(workslist.isEmpty()){
+                    if (workslist.isEmpty()) {
                         no_content.setVisibility(View.VISIBLE);
-                    }
-                    else no_content.setVisibility(View.GONE);
-                    adapter = new DailyWorkAdapter(context, workslist,"Work", new DailyWorkAdapter.OnItemClickListener() {
+                    } else no_content.setVisibility(View.GONE);
+                    adapter = new DailyWorkAdapter(context, workslist, "Work", new DailyWorkAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(int pos, View view) {
                             Intent intent = new Intent(context, DailyWorkProgressActivities.class);
@@ -421,14 +415,14 @@ public class WorkProgress extends AppCompatActivity {
                         }
                     }, new DailyWorkAdapter.OnButtonClickListener() {
                         @Override
-                        public void onButtonClick(int pos,View view) {
+                        public void onButtonClick(int pos, View view) {
                             menuUpdate(workslist.get(pos));
                         }
                     });
                     items.setLayoutManager(new LinearLayoutManager(context));
                     items.setAdapter(adapter);
 
-                } catch (JSONException e){
+                } catch (JSONException e) {
 
                 }
             }
@@ -467,8 +461,8 @@ public class WorkProgress extends AppCompatActivity {
                     android.support.v7.app.AlertDialog.Builder dialogBuilder = new android.support.v7.app.AlertDialog.Builder(context, R.style.PinDialog);
                     final android.support.v7.app.AlertDialog alertDialog = dialogBuilder.setCancelable(false).setView(dialogView).create();
                     alertDialog.show();
-                    final TextView gallery= dialogView.findViewById(R.id.gallery);
-                    final TextView camera= dialogView.findViewById(R.id.camera);
+                    final TextView gallery = dialogView.findViewById(R.id.gallery);
+                    final TextView camera = dialogView.findViewById(R.id.camera);
 
                     gallery.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -511,7 +505,7 @@ public class WorkProgress extends AppCompatActivity {
                         }
                     });
 
-                } else{
+                } else {
                     images.remove(pos);
                     imagesAdapter.notifyItemRemoved(pos);
                     imagesAdapter.notifyDataSetChanged();
@@ -573,36 +567,36 @@ public class WorkProgress extends AppCompatActivity {
                 packet.setName(imagePath);
 //                Uri uri=data.getData();
 //                packet.setName(getRealPathFromURI(uri));
-                console.log("Image Path "+packet.getName()+"EXTRAS "+packet.getExtra());
+                console.log("Image Path " + packet.getName() + "EXTRAS " + packet.getExtra());
                 images.add(0, new Packet());
                 images.add(packet);
                 imagesAdapter.notifyDataSetChanged();
             } else if (resultCode == android.app.Activity.RESULT_CANCELED) {
                 console.log("Canceled");
             }
-        }
-        else if(requestCode == REQUEST_GALLERY_IMAGE){
+        } else if (requestCode == REQUEST_GALLERY_IMAGE) {
             Packet packet = images.remove(0);
 //            packet.setName(imagePath);
-            Uri uri=data.getData();
+            Uri uri = data.getData();
             packet.setName(getRealPathFromURI(uri));
-            console.log("Image Path "+packet.getName()+"EXTRAS "+packet.getExtra());
+            console.log("Image Path " + packet.getName() + "EXTRAS " + packet.getExtra());
             images.add(0, new Packet());
             images.add(packet);
             imagesAdapter.notifyDataSetChanged();
         }
     }
+
     // And to convert the image URI to the direct file system path of the image file
     public String getRealPathFromURI(Uri contentUri) {
 
         // can post image
-        String [] proj={MediaStore.Images.Media.DATA};
-        Cursor cursor =context.getContentResolver().query(contentUri,
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = context.getContentResolver().query(contentUri,
                 proj, // Which columns to return
                 null,       // WHERE clause; which rows to return (all rows)
                 null,       // WHERE clause selection arguments (none)
                 null); // Order-by clause (ascending by name)
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             results = cursor.getString(column_index);
         }
@@ -611,7 +605,6 @@ public class WorkProgress extends AppCompatActivity {
         cursor.close();
         return results;
     }
-
 
 
     private File createImageFile() throws IOException {
@@ -626,12 +619,12 @@ public class WorkProgress extends AppCompatActivity {
         float q = Float.parseFloat(quantity);
         float c = Float.parseFloat(activity.getQty_completed());
         float qo = Float.parseFloat(activity.getQuantity());
-        console.log("entry completed quanity "+q+" "+c+" "+qo+" " + (qo-c));
+        console.log("entry completed quanity " + q + " " + c + " " + qo + " " + (qo - c));
         if (q <= (qo - c)) {
             HashMap<String, String> params = new HashMap<>();
             params.put("work_update", new JSONObject()
 //                    .put("activity_list_id", activity.getActivityListId())
-                    .put("work_list_id",activity.getWorkListId())
+                    .put("work_list_id", activity.getWorkListId())
                     .put("type", "work")
                     .put("project_comment", message)
                     .put("quantity_done", quantity)
@@ -639,7 +632,7 @@ public class WorkProgress extends AppCompatActivity {
                     .put("user_id", App.userId)
                     .put("project_id", App.projectId)
                     .put("percentage_work", q / qo).toString());
-            console.log("Work"+params.toString());
+            console.log("Work" + params.toString());
             JSONArray array = new JSONArray();
             for (Packet p : images) {
                 if (p.getName() != null) {
@@ -650,19 +643,19 @@ public class WorkProgress extends AppCompatActivity {
                     String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
                     array.put(encodedImage);
                 }
-                params.put("images",array.toString());
+                params.put("images", array.toString());
             }
 
             app.sendNetworkRequest(Config.REQ_DAILY_WORK_ACTIVITY_UPDATE, 1, params, new Interfaces.NetworkInterfaceListener() {
                 @Override
                 public void onNetworkRequestStart() {
-                 utilityofActivity.showProgressDialog();
+                    utilityofActivity.showProgressDialog();
                 }
 
                 @Override
                 public void onNetworkRequestError(String error) {
-                utilityofActivity.dismissProgressDialog();
-                utilityofActivity.toast("Error");
+                    utilityofActivity.dismissProgressDialog();
+                    utilityofActivity.toast("Error");
                 }
 
                 @Override

@@ -1,9 +1,11 @@
 package buildnlive.com.buildlive.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -39,6 +41,7 @@ import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Item;
 import buildnlive.com.buildlive.elements.RequestList;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -51,6 +54,23 @@ public class ViewItemFragment extends Fragment {
     private ViewItemAdapter adapter;
     private ImageButton search_close,search;
     private EditText search_text;
+    private Context context;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity;
+
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.appCompatActivity = (AppCompatActivity) activity;
+    }
 
     public static ViewItemFragment newInstance(App a) {
         app=a;
@@ -70,6 +90,7 @@ public class ViewItemFragment extends Fragment {
         progress = view.findViewById(R.id.progress);
         hider = view.findViewById(R.id.hider);
 
+        utilityofActivity=new UtilityofActivity(appCompatActivity);
         itemsList=new ArrayList<>();
 
         adapter = new ViewItemAdapter(getContext(), itemsList);
@@ -140,12 +161,14 @@ public class ViewItemFragment extends Fragment {
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
             }
 
             @Override
@@ -153,6 +176,7 @@ public class ViewItemFragment extends Fragment {
                 console.log("Response:" + response);
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 try {
                     JSONArray array = new JSONArray(response);
                     for (int i = 0; i < array.length(); i++) {
@@ -197,12 +221,14 @@ public class ViewItemFragment extends Fragment {
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 console.error("Network request failed with error :" + error);
                 Toast.makeText(getContext(), "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
             }
@@ -212,6 +238,7 @@ public class ViewItemFragment extends Fragment {
 //                console.log(response);
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 try {
                     JSONArray array = new JSONArray(response);
                     for (int i = 0; i < array.length(); i++) {

@@ -43,6 +43,7 @@
         <item name="colorButtonNormal">@color/c2</item>
         <item name="android:textColor">#ffffff</item>
     </style>
+    <style name="AppTheme.Toolbar" parent="ThemeOverlay.AppCompat.Light" />
     <!--<style name="PrimaryReadButton" parent="Theme.AppCompat.Light">-->
         <!--&lt;!&ndash;<item name="android:buttonStyle">@style/Widget.AppCompat.Button.Borderless.Colored</item>&ndash;&gt;-->
         <!--<item name="colorControlHighlight">@color/colorAccent</item>-->

@@ -18,10 +18,12 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import buildnlive.com.buildlive.R
 import java.io.IOException
 import java.lang.Long
 
@@ -259,6 +261,15 @@ class UtilityofActivity(activity: AppCompatActivity) {
 
     fun showResponse(body: String) {
         Log.e("Full response => ", body)
+    }
+
+
+    fun configureToolbar(appCompatActivity: AppCompatActivity)
+    {
+        val toolbar = appCompatActivity.findViewById<Toolbar>(R.id.toolbar)
+        appCompatActivity.setSupportActionBar(toolbar)
+        appCompatActivity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        appCompatActivity.supportActionBar!!.setDisplayShowHomeEnabled(true)
     }
 
 

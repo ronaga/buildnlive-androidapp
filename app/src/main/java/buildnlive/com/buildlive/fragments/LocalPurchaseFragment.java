@@ -1,5 +1,6 @@
 package buildnlive.com.buildlive.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,9 +12,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -47,7 +50,6 @@ import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.BuildConfig;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
-import buildnlive.com.buildlive.adapters.ActivityImagesAdapter;
 import buildnlive.com.buildlive.adapters.CategorySpinAdapter;
 import buildnlive.com.buildlive.adapters.ItemSpinAdapter;
 import buildnlive.com.buildlive.adapters.SingleImageAdapter;
@@ -57,19 +59,20 @@ import buildnlive.com.buildlive.elements.IndentItem;
 import buildnlive.com.buildlive.elements.Packet;
 import buildnlive.com.buildlive.utils.AdvancedRecyclerView;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class LocalPurchaseFragment extends Fragment {
     private static ArrayList<IndentItem> itemList = new ArrayList<>();
-    private static ArrayList<Category> categoryList=new ArrayList<>();
-    private Button submit,upload;
+    private static ArrayList<Category> categoryList = new ArrayList<>();
+    private Button submit, upload;
     private ProgressBar progress;
-    private boolean val=true;
+    private boolean val = true;
     private TextView hider, checkout_text;
-    private EditText quantity_edit,total_edit,overheads_edit,vendor_details_edit,ship_no_edit,details_edit;
-//    name_edit name,
-    private static String quantity,total,overheads,unit,vendor_details,ship_no,details,category,item,results;
+    private EditText quantity_edit, total_edit, overheads_edit, vendor_details_edit, ship_no_edit, details_edit;
+    //    name_edit name,
+    private static String quantity, total, overheads, unit, vendor_details, ship_no, details, category, item, results;
     private boolean LOADING;
-    private Spinner categorySpinner,itemSpinner,unitspinner;
+    private Spinner categorySpinner, itemSpinner, unitspinner;
     private ItemSpinAdapter itemAdapter;
     private CategorySpinAdapter categoryAdapter;
     private static String stockid;
@@ -81,7 +84,21 @@ public class LocalPurchaseFragment extends Fragment {
     private SingleImageAdapter imagesAdapter;
     private Context context;
     public static final int REQUEST_GALLERY_IMAGE = 7191;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity;
 
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.appCompatActivity = (AppCompatActivity) activity;
+    }
 
 
     public static LocalPurchaseFragment newInstance() {
@@ -92,7 +109,7 @@ public class LocalPurchaseFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.fragment_local_purchase, container, false);
+        View view = inflater.inflate(R.layout.fragment_local_purchase, container, false);
         setCategorySpinner();
         return view;
     }
@@ -100,16 +117,18 @@ public class LocalPurchaseFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        }
+    }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
 
-        progress=view.findViewById(R.id.progress);
+        progress = view.findViewById(R.id.progress);
         submit = view.findViewById(R.id.submit);
-        context=getContext();
+
+        utilityofActivity = new UtilityofActivity(appCompatActivity);
+
 //        name_edit = view.findViewById(R.id.name);
         quantity_edit = view.findViewById(R.id.quantity);
         total_edit = view.findViewById(R.id.total);
@@ -118,19 +137,19 @@ public class LocalPurchaseFragment extends Fragment {
         ship_no_edit = view.findViewById(R.id.ship_no);
         details_edit = view.findViewById(R.id.details);
         builder = new AlertDialog.Builder(getContext());
-        categorySpinner=view.findViewById(R.id.category_local);
-        itemSpinner=view.findViewById(R.id.material);
-        unitspinner=view.findViewById(R.id.unit);
+        categorySpinner = view.findViewById(R.id.category_local);
+        itemSpinner = view.findViewById(R.id.material);
+        unitspinner = view.findViewById(R.id.unit);
 
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String a = categoryAdapter.getID(i);
-                category=categoryAdapter.getName(i);
-                if(!a.equals("0")){
+                category = categoryAdapter.getName(i);
+                if (!a.equals("0")) {
                     refresh(a);
-                    }
-                itemAdapter=new ItemSpinAdapter(getContext(), R.layout.custom_spinner,itemList);
+                }
+                itemAdapter = new ItemSpinAdapter(context, R.layout.custom_spinner, itemList);
                 itemSpinner.setAdapter(itemAdapter);
             }
 
@@ -143,8 +162,8 @@ public class LocalPurchaseFragment extends Fragment {
         itemSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                item=itemAdapter.getName(i);
-                stockid=itemAdapter.getID(i);
+                item = itemAdapter.getName(i);
+                stockid = itemAdapter.getID(i);
             }
 
             @Override
@@ -156,7 +175,7 @@ public class LocalPurchaseFragment extends Fragment {
         unitspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                unit=unitspinner.getSelectedItem().toString();
+                unit = unitspinner.getSelectedItem().toString();
             }
 
             @Override
@@ -165,7 +184,7 @@ public class LocalPurchaseFragment extends Fragment {
             }
         });
 
-        categoryAdapter=new CategorySpinAdapter(getContext(), R.layout.custom_spinner,categoryList);
+        categoryAdapter = new CategorySpinAdapter(context, R.layout.custom_spinner, categoryList);
         categorySpinner.setAdapter(categoryAdapter);
 
 
@@ -181,7 +200,6 @@ public class LocalPurchaseFragment extends Fragment {
         }
 
 
-
         final AdvancedRecyclerView list = view.findViewById(R.id.images);
         images = new ArrayList<>();
         images.add(new Packet());
@@ -195,8 +213,8 @@ public class LocalPurchaseFragment extends Fragment {
                     android.support.v7.app.AlertDialog.Builder dialogBuilder = new android.support.v7.app.AlertDialog.Builder(context, R.style.PinDialog);
                     final android.support.v7.app.AlertDialog alertDialog = dialogBuilder.setCancelable(false).setView(dialogView).create();
                     alertDialog.show();
-                    final TextView gallery= dialogView.findViewById(R.id.gallery);
-                    final TextView camera= dialogView.findViewById(R.id.camera);
+                    final TextView gallery = dialogView.findViewById(R.id.gallery);
+                    final TextView camera = dialogView.findViewById(R.id.camera);
 
                     gallery.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -239,7 +257,7 @@ public class LocalPurchaseFragment extends Fragment {
                         }
                     });
 
-                } else{
+                } else {
                     images.remove(pos);
                     imagesAdapter.notifyItemRemoved(pos);
                     imagesAdapter.notifyDataSetChanged();
@@ -251,34 +269,33 @@ public class LocalPurchaseFragment extends Fragment {
         list.setmMaxHeight(350);
 
 
-
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                name=name_edit.getText().toString();
-                quantity=quantity_edit.getText().toString();
-                total=total_edit.getText().toString();
-                overheads=overheads_edit.getText().toString();
-                vendor_details=vendor_details_edit.getText().toString();
-                ship_no=ship_no_edit.getText().toString();
-                details=details_edit.getText().toString();
+                quantity = quantity_edit.getText().toString();
+                total = total_edit.getText().toString();
+                overheads = overheads_edit.getText().toString();
+                vendor_details = vendor_details_edit.getText().toString();
+                ship_no = ship_no_edit.getText().toString();
+                details = details_edit.getText().toString();
 
-                builder.setMessage("Are you sure?") .setTitle("Payment");
+                builder.setMessage("Are you sure?").setTitle("Payment");
 
                 //Setting message manually and performing action on button click  
                 builder.setMessage("Do you want to Submit?")
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                if(validate(category,item,quantity,total,vendor_details,unit))
-                                { console.log("From Validate");
+                                if (validate(category, item, quantity, total, vendor_details, unit)) {
+                                    console.log("From Validate");
                                     try {
-                                        sendRequest(stockid,quantity,unit,total,overheads,vendor_details,ship_no,details,images);
+                                        sendRequest(stockid, quantity, unit, total, overheads, vendor_details, ship_no, details, images);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
                                 }
-                                }
+                            }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -298,15 +315,13 @@ public class LocalPurchaseFragment extends Fragment {
         });
 
 
-
     }
 
-    private boolean validate(String category,String item,String quantity,String total,String vendor_details,String unit)
-    {
+    private boolean validate(String category, String item, String quantity, String total, String vendor_details, String unit) {
 
-        if(TextUtils.equals(category,"Select Category")){
-            Toast.makeText(getContext(),"Please Select Category",Toast.LENGTH_LONG).show();
-            val=false;
+        if (TextUtils.equals(category, "Select Category")) {
+            Toast.makeText(getContext(), "Please Select Category", Toast.LENGTH_LONG).show();
+            val = false;
         }
 
 //        if((!TextUtils.isEmpty(name))&&(!TextUtils.equals(item,"Select Item"))){
@@ -315,50 +330,50 @@ public class LocalPurchaseFragment extends Fragment {
 //            val=false;
 //
 //        }
-        if(TextUtils.equals(item,"Select Item")){
+        if (TextUtils.equals(item, "Select Item")) {
 
-            Toast.makeText(getContext(),"Choose Item from the list",Toast.LENGTH_LONG).show();
-            val=false;
-
-        }
-
-        if(TextUtils.equals(unit,"Unit")){
-
-            Toast.makeText(getContext(),"Select Unit",Toast.LENGTH_LONG).show();
-            val=false;
+            Toast.makeText(getContext(), "Choose Item from the list", Toast.LENGTH_LONG).show();
+            val = false;
 
         }
 
-        if(TextUtils.isEmpty(quantity)){
+        if (TextUtils.equals(unit, "Unit")) {
+
+            Toast.makeText(getContext(), "Select Unit", Toast.LENGTH_LONG).show();
+            val = false;
+
+        }
+
+        if (TextUtils.isEmpty(quantity)) {
             quantity_edit.setError("Enter Quantity");
-            val=false;
+            val = false;
         }
 
-        if(TextUtils.isEmpty(total)){
+        if (TextUtils.isEmpty(total)) {
             total_edit.setError("Enter Total");
-            val=false;
+            val = false;
         }
-        if(TextUtils.isEmpty(vendor_details)){
+        if (TextUtils.isEmpty(vendor_details)) {
             vendor_details_edit.setError("Enter Vendor Details");
-            val=false;
+            val = false;
         }
         return val;
     }
 
-    private void sendRequest(String stockid,String quantity,String units,String total,
-                             String overheads,String vendor_details,String ship_no,String details,ArrayList<Packet> images) throws JSONException {
-        App app= ((App)getActivity().getApplication());
+    private void sendRequest(String stockid, String quantity, String units, String total,
+                             String overheads, String vendor_details, String ship_no, String details, ArrayList<Packet> images) throws JSONException {
+        App app = ((App) getActivity().getApplication());
         HashMap<String, String> params = new HashMap<>();
         params.put("local_purchase", App.userId);
 //        JSONArray array = new JSONArray();
-        JSONObject jsonObject=new JSONObject();
+        JSONObject jsonObject = new JSONObject();
         jsonObject.put("stock_id", stockid).put("project_id", App.projectId).put("user_id", App.userId)
-                .put("quantity",quantity).put("units",units).put("total_amount",total)
-                .put("overheads",overheads).put("vendor_details",vendor_details).put("slip_no",ship_no)
-                .put("details",details);
+                .put("quantity", quantity).put("units", units).put("total_amount", total)
+                .put("overheads", overheads).put("vendor_details", vendor_details).put("slip_no", ship_no)
+                .put("details", details);
         params.put("local_purchase", jsonObject.toString());
-        console.log("Local Purchase"+params);
-        JSONArray array =new JSONArray();
+        console.log("Local Purchase" + params);
+        JSONArray array = new JSONArray();
         for (Packet p : images) {
             if (p.getName() != null) {
                 Bitmap bm = BitmapFactory.decodeFile(p.getName());
@@ -369,56 +384,57 @@ public class LocalPurchaseFragment extends Fragment {
                 array.put(encodedImage);
             }
         }
-        params.put("images",array.toString());
-        console.log("Image"+params);
+        params.put("images", array.toString());
+        console.log("Image" + params);
         app.sendNetworkRequest(Config.SEND_LOCAL_PURCHASE, 1, params, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
-                hider.setVisibility(View.VISIBLE);;
+                hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
-                Toast.makeText(getContext(),"Error"+error,Toast.LENGTH_LONG).show();
+                utilityofActivity.dismissProgressDialog();
+                Toast.makeText(getContext(), "Error" + error, Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onNetworkRequestComplete(String response) {
-                    console.log(response);
-                    progress.setVisibility(View.GONE);
+                console.log(response);
+                progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
-                    if(response.equals("1")) {
-                        Toast.makeText(getContext(), "Request Generated", Toast.LENGTH_SHORT).show();
-                        getActivity().finish();
-                    }
-                    else{
-                        Toast.makeText(getContext(), "Check Your Network", Toast.LENGTH_SHORT).show();
+                utilityofActivity.dismissProgressDialog();
 
-                    }
+                if (response.equals("1")) {
+                    Toast.makeText(getContext(), "Request Generated", Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
+                } else {
+                    Toast.makeText(getContext(), "Check Your Network", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
     }
 
 
-
-
     private void setCategorySpinner() {
-        App app= ((App)getActivity().getApplication());
+        App app = ((App) getActivity().getApplication());
         categoryList.clear();
-        String requestURl= Config.REQ_SENT_CATEGORIES ;
+        String requestURl = Config.REQ_SENT_CATEGORIES;
         requestURl = requestURl.replace("[0]", App.userId);
         app.sendNetworkRequest(requestURl, Request.Method.GET, null, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
-
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
-
+                utilityofActivity.dismissProgressDialog();
                 console.error("Network request failed with error :" + error);
                 Toast.makeText(getContext(), "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
 
@@ -427,6 +443,7 @@ public class LocalPurchaseFragment extends Fragment {
             @Override
             public void onNetworkRequestComplete(String response) {
                 console.log(response);
+                utilityofActivity.dismissProgressDialog();
 
                 try {
                     JSONArray array = new JSONArray(response);
@@ -443,13 +460,13 @@ public class LocalPurchaseFragment extends Fragment {
     }
 
     private void refresh(String a) {
-        App app= ((App)getActivity().getApplication());
+        App app = ((App) getActivity().getApplication());
         String requestUrl = Config.GET_SITE_LIST;
         requestUrl = requestUrl.replace("[1]", App.userId);
         requestUrl = requestUrl.replace("[0]", a);
         console.log(requestUrl);
         itemList.clear();
-        IndentItem temp1=new IndentItem();
+        IndentItem temp1 = new IndentItem();
         temp1.setId("0");
         temp1.setName("Select Item");
         itemList.add(temp1);
@@ -458,12 +475,14 @@ public class LocalPurchaseFragment extends Fragment {
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
-                }
+                utilityofActivity.showProgressDialog();
+            }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 console.error("Network request failed with error :" + error);
                 Toast.makeText(getContext(), "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
             }
@@ -473,6 +492,7 @@ public class LocalPurchaseFragment extends Fragment {
                 console.log(response);
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 try {
                     JSONArray array = new JSONArray(response);
                     for (int i = 0; i < array.length(); i++) {
@@ -488,6 +508,7 @@ public class LocalPurchaseFragment extends Fragment {
             }
         });
     }
+
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "IMG_" + timeStamp + "_";
@@ -495,6 +516,7 @@ public class LocalPurchaseFragment extends Fragment {
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         return image;
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CAPTURE_IMAGE) {
@@ -503,36 +525,36 @@ public class LocalPurchaseFragment extends Fragment {
                 packet.setName(imagePath);
 //                Uri uri=data.getData();
 //                packet.setName(getRealPathFromURI(uri));
-                console.log("Image Path "+packet.getName()+"EXTRAS "+packet.getExtra());
+                console.log("Image Path " + packet.getName() + "EXTRAS " + packet.getExtra());
                 images.add(0, new Packet());
                 images.add(packet);
                 imagesAdapter.notifyDataSetChanged();
             } else if (resultCode == android.app.Activity.RESULT_CANCELED) {
                 console.log("Canceled");
             }
-        }
-        else if(requestCode == REQUEST_GALLERY_IMAGE){
+        } else if (requestCode == REQUEST_GALLERY_IMAGE) {
             Packet packet = images.remove(0);
 //            packet.setName(imagePath);
-            Uri uri=data.getData();
+            Uri uri = data.getData();
             packet.setName(getRealPathFromURI(uri));
-            console.log("Image Path "+packet.getName()+"EXTRAS "+packet.getExtra());
+            console.log("Image Path " + packet.getName() + "EXTRAS " + packet.getExtra());
             images.add(0, new Packet());
             images.add(packet);
             imagesAdapter.notifyDataSetChanged();
         }
     }
+
     // And to convert the image URI to the direct file system path of the image file
     public String getRealPathFromURI(Uri contentUri) {
 
         // can post image
-        String [] proj={MediaStore.Images.Media.DATA};
-        Cursor cursor =context.getContentResolver().query(contentUri,
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = context.getContentResolver().query(contentUri,
                 proj, // Which columns to return
                 null,       // WHERE clause; which rows to return (all rows)
                 null,       // WHERE clause selection arguments (none)
                 null); // Order-by clause (ascending by name)
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             results = cursor.getString(column_index);
         }
@@ -541,9 +563,6 @@ public class LocalPurchaseFragment extends Fragment {
         cursor.close();
         return results;
     }
-
-
-
 
 
 }

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    app:popupTheme="@style/AppTheme.PopupOverlay"
+    android:background="@color/white"
+    android:theme="@style/AppTheme.Toolbar"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_buildnlive_logo" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="46dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="46dp">
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:text="Buildo Site App"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/toolbar_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="Home"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+
+        <ImageButton
+            android:id="@+id/notification"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="5dp"
+            android:visibility="gone"
+            android:layout_marginRight="5dp"
+            android:background="@color/transparent"
+            android:padding="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_notifications_none_black_24dp"
+            />
+        <TextView
+            android:id="@+id/badge_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/notification"
+            android:background="@drawable/badge_item_count"
+            android:text="27"
+            android:visibility="gone"
+            android:textColor="#FFF"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:layout_alignEnd="@id/notification" />
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_marginStart="46dp"-->
+        <!--android:fontFamily="@font/calibri"-->
+        <!--android:text="Shotang"-->
+        <!--android:layout_marginTop="4dp"-->
+        <!--android:textColor="#000000"-->
+        <!--android:textSize="22sp"-->
+        <!--android:textStyle="bold" />-->
+
+        <!--<ImageView-->
+        <!--android:visibility="gone"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:id="@+id/search"-->
+        <!--android:layout_width="36dp"-->
+        <!--android:layout_height="36dp"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_marginEnd="56dp"-->
+        <!--android:src="@drawable/ic_seach_black" />-->
+
+
+
+    </RelativeLayout>
+
+</android.support.v7.widget.Toolbar>

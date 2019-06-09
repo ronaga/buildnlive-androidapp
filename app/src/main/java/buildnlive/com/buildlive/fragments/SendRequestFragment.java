@@ -1,11 +1,15 @@
 package buildnlive.com.buildlive.fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -39,6 +43,7 @@ import buildnlive.com.buildlive.adapters.AddItemAdapter;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Item;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 import buildnlive.com.buildlive.utils.Utils;
 import io.realm.Realm;
 
@@ -56,7 +61,24 @@ public class SendRequestFragment extends Fragment {
     private int itemSelected = 0;
     private AlertDialog.Builder builder;
     private EditText name, description, quantity;
-    Snackbar snackbar;
+
+    private Context context;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity;
+
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.appCompatActivity = (AppCompatActivity) activity;
+    }
     public static SendRequestFragment newInstance(App a) {
         app = a;
         return new SendRequestFragment();
@@ -71,10 +93,13 @@ public class SendRequestFragment extends Fragment {
     private String data;
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        utilityofActivity=new UtilityofActivity(appCompatActivity);
+
         name = view.findViewById(R.id.name);
-        builder=new AlertDialog.Builder(getContext());
+        builder=new AlertDialog.Builder(context);
         description = view.findViewById(R.id.message);
         type = view.findViewById(R.id.type);
         progress = view.findViewById(R.id.progress);
@@ -105,8 +130,8 @@ public class SendRequestFragment extends Fragment {
                                                 .put("units", unit.getText().toString())
                                                 .put("material", material_data.get(itemSelected))
                                                 .put("date", Utils.fromTimeStampToDate(System.currentTimeMillis()));
-                                        console.log("Req:" + req.toString());
                                         params.put("request", req.toString());
+                                        console.log("Req:" + params.toString());
                                         data = req.toString();
                                     } catch (Exception e) {
                                         e.printStackTrace();
@@ -116,18 +141,21 @@ public class SendRequestFragment extends Fragment {
                                         public void onNetworkRequestStart() {
                                             progress.setVisibility(View.VISIBLE);
                                             hider.setVisibility(View.VISIBLE);
+                                            utilityofActivity.showProgressDialog();
                                         }
 
                                         @Override
                                         public void onNetworkRequestError(String error) {
                                             progress.setVisibility(View.GONE);
                                             hider.setVisibility(View.GONE);
+                                            utilityofActivity.dismissProgressDialog();
                                         }
 
                                         @Override
                                         public void onNetworkRequestComplete(String response) {
                                             progress.setVisibility(View.GONE);
                                             hider.setVisibility(View.GONE);
+                                            utilityofActivity.dismissProgressDialog();
                                             if (response.equals("1")) {
                                                 Toast.makeText(getContext(), "Item Requested", Toast.LENGTH_LONG).show();
 
@@ -198,12 +226,14 @@ public class SendRequestFragment extends Fragment {
                         public void onNetworkRequestStart() {
                             progress.setVisibility(View.VISIBLE);
                             hider.setVisibility(View.VISIBLE);
+                            utilityofActivity.showProgressDialog();
                         }
 
                         @Override
                         public void onNetworkRequestError(String error) {
                             progress.setVisibility(View.GONE);
                             hider.setVisibility(View.GONE);
+                            utilityofActivity.dismissProgressDialog();
                         }
 
                         @Override
@@ -211,6 +241,7 @@ public class SendRequestFragment extends Fragment {
                             console.log("res:" + response);
                             progress.setVisibility(View.GONE);
                             hider.setVisibility(View.GONE);
+                            utilityofActivity.dismissProgressDialog();
                             try {
                                 isSelected = false;
                                 handleMaterial(response, type_data.get(position));

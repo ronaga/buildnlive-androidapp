@@ -15,9 +15,12 @@ import com.android.volley.toolbox.Volley;
 import java.util.Map;
 
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.Permissions;
+import buildnlive.com.buildlive.utils.PrefernceFile;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
+import com.google.gson.Gson;
 import static buildnlive.com.buildlive.activities.LoginActivity.PREF_KEY_PERMISSIONS;
 import static buildnlive.com.buildlive.activities.LoginActivity.PREF_KEY_PROJECTS;
 import static buildnlive.com.buildlive.activities.LoginActivity.PREF_KEY_USER_ID;
@@ -30,6 +33,7 @@ public class App extends Application {
     public static String projectId;
     public static String belongsTo;
     public static String permissions;
+    public static String projectName;
 
     @Override
     public void onCreate() {
@@ -46,6 +50,9 @@ public class App extends Application {
         projectId = pref.getString(PREF_KEY_PROJECTS, "{}");
         belongsTo = projectId + userId;
         permissions=pref.getString(PREF_KEY_PERMISSIONS,"");
+
+
+//        permissionsArray = new Gson().fromJson(PrefernceFile.Companion.getInstance(this).getString("PREF_KEY_USER_DATA"), Permissions.class);
     }
 
     public void sendNetworkRequest(final String URL, final int METHOD, final Map<String, String> params, final Interfaces.NetworkInterfaceListener listener) {

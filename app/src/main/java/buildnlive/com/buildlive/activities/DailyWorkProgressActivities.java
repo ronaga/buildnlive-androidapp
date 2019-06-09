@@ -8,10 +8,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,10 +46,9 @@ import buildnlive.com.buildlive.adapters.DailyWorkActivityAdapter;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Activity;
 import buildnlive.com.buildlive.elements.Packet;
-import buildnlive.com.buildlive.elements.Work;
 import buildnlive.com.buildlive.utils.AdvancedRecyclerView;
 import buildnlive.com.buildlive.utils.Config;
-import io.realm.Realm;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class DailyWorkProgressActivities extends AppCompatActivity {
     private App app;
@@ -65,6 +60,9 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
     private TextView no_content;
     private FloatingActionButton fab;
     private String masterWorkId;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity=this;
+
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -78,36 +76,36 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
         finish();
     }
 
-        @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_work_activities);
         app = (App) getApplication();
+        utilityofActivity.configureToolbar(appCompatActivity);
 
-            final Toolbar toolbar = findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            TextView textView= findViewById(R.id.toolbar_title);
-            textView.setText("Activites");
+        TextView toolbar_title=findViewById(R.id.toolbar_title);
+        TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
+        toolbar_title.setText("Activities");
+        toolbar_subtitle.setText(App.projectName);
 
 
-            Bundle bundle = getIntent().getExtras();
+
+        Bundle bundle = getIntent().getExtras();
 
         id = bundle.getString("id");
         masterWorkId = bundle.getString("masterWorkId");
 
         items = findViewById(R.id.items);
-        no_content=findViewById(R.id.no_content);
-        fab=findViewById(R.id.fab);
+        no_content = findViewById(R.id.no_content);
+        fab = findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent= new Intent(DailyWorkProgressActivities.this,CreateActivity.class);
-                intent.putExtra("workListId",id);
-                intent.putExtra("masterWorkId",masterWorkId);
-                startActivity(intent);
+                Intent intent = new Intent(DailyWorkProgressActivities.this, CreateActivity.class);
+                intent.putExtra("workListId", id);
+                intent.putExtra("masterWorkId", masterWorkId);
+                startActivityForResult(intent, 789);
             }
         });
 
@@ -184,9 +182,10 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    if (message.getText().toString() != null || quantity.getText().toString() != null)
+                    if (message.getText().toString() != null || quantity.getText().toString() != null) {
                         submit(activity, message.getText().toString(), quantity.getText().toString(), images, alertDialog);
-                    else
+                        alertDialog.dismiss();
+                    } else
                         Toast.makeText(getApplicationContext(), "Fill data properly!", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), "Fill data properly!", Toast.LENGTH_SHORT).show();
@@ -214,6 +213,11 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
             } else if (resultCode == android.app.Activity.RESULT_CANCELED) {
                 console.log("Canceled");
             }
+
+        }
+        if (requestCode == 789) {
+            activities.clear();
+            fetchActivities(id);
         }
     }
 
@@ -252,21 +256,22 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
                     array.put(encodedImage);
                 }
             }
-            params.put("images",array.toString());
+            params.put("images", array.toString());
 
             app.sendNetworkRequest(Config.REQ_DAILY_WORK_ACTIVITY_UPDATE, 1, params, new Interfaces.NetworkInterfaceListener() {
                 @Override
                 public void onNetworkRequestStart() {
-
+                    utilityofActivity.showProgressDialog();
                 }
 
                 @Override
                 public void onNetworkRequestError(String error) {
-
+                    utilityofActivity.dismissProgressDialog();
                 }
 
                 @Override
                 public void onNetworkRequestComplete(String response) {
+                    utilityofActivity.dismissProgressDialog();
                     if (response.equals("1")) {
                         Toast.makeText(getApplicationContext(), "Status Updated", Toast.LENGTH_SHORT).show();
                         alertDialog.dismiss();
@@ -287,32 +292,33 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
         app.sendNetworkRequest(url, 0, null, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
-
+                utilityofActivity.dismissProgressDialog();
             }
 
             @Override
             public void onNetworkRequestComplete(String response) {
                 console.log("Response:" + response);
+                utilityofActivity.dismissProgressDialog();
                 try {
                     JSONArray array = new JSONArray(response);
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject par = array.getJSONObject(i);
                         JSONObject sch = par.getJSONObject("work_schedule");
-                        final Activity activity = new Activity().parseFromJSON(sch.getJSONObject("work_details"), par.getString("activity_list_id"),sch.getString("work_duration"),
-                                 sch.getString("qty"), sch.getString("units"),
+                        final Activity activity = new Activity().parseFromJSON(sch.getJSONObject("work_details"), par.getString("activity_list_id"), sch.getString("work_duration"),
+                                sch.getString("qty"), sch.getString("units"),
                                 sch.getString("schedule_start_date"), sch.getString("schedule_finish_date"),
                                 sch.getString("current_status"), sch.getString("qty_completed"));
                         activities.add(activity);
 
-                        console.log(""+activities.get(i));
+                        console.log("" + activities.get(i));
                     }
-                    if(activities.isEmpty())
-                    {
-                          no_content.setVisibility(View.VISIBLE);
+                    if (activities.isEmpty()) {
+                        no_content.setVisibility(View.VISIBLE);
 //                        LayoutInflater inflater = getLayoutInflater();
 //                        View dialogView = inflater.inflate(R.layout.alert_dialog, null);
 //                        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getApplicationContext(), R.style.PinDialog);
@@ -332,6 +338,8 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
 //
 //                        alert_message.setText("Nothing to Show");
 //                        Toast.makeText(getApplicationContext(),"Nothing to Display",Toast.LENGTH_SHORT).show();
+                    } else {
+                        no_content.setVisibility(View.GONE);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

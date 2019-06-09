@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import buildnlive.com.buildlive.R;
@@ -14,12 +15,11 @@ import buildnlive.com.buildlive.elements.Request;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
 
-public class ViewRequestAdapter extends RealmRecyclerViewAdapter<Request, ViewRequestAdapter.ViewHolder> {
-    private final List<Request> items;
+public class ViewRequestAdapter extends RecyclerView.Adapter<ViewRequestAdapter.ViewHolder> {
+    private final ArrayList<Request> items;
     private Context context;
 
-    public ViewRequestAdapter(Context context, OrderedRealmCollection<Request> users) {
-        super(users, true);
+    public ViewRequestAdapter(Context context, ArrayList<Request> users) {
         this.items = users;
         this.context = context;
     }

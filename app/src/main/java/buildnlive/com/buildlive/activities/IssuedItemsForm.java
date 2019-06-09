@@ -38,30 +38,34 @@ import buildnlive.com.buildlive.elements.IssueVendor;
 import buildnlive.com.buildlive.elements.Item;
 import buildnlive.com.buildlive.elements.ProjectMember;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
 public class IssuedItemsForm extends AppCompatActivity {
     private ProgressBar progress;
-    private TextView hider, max, unit, unit2,item;
+    private TextView hider, max, unit, unit2, item;
     private Button submit;
-    private EditText quantity,slip_no,comments;
+    private EditText quantity, slip_no, comments;
     private Spinner receiver;
     private ArrayList<Item> inventory;
     private ArrayList<String> items, receivers;
     private static App app;
     private Realm realm;
     private ArrayAdapter item_adapter, receiver_adapter;
-    private String selectedItem, selectedReceiver, itemName, receiverName,item_rent_id,vendor_id,user_type,item_type,asset_id;
+    private String selectedItem, selectedReceiver, itemName, receiverName, item_rent_id, vendor_id, user_type="", item_type="", asset_id;
     private AlertDialog.Builder builder;
-    private static ArrayList<IssueVendor> IssueVendorList=new ArrayList<>();
+    private static ArrayList<IssueVendor> IssueVendorList = new ArrayList<>();
     private IssueVendorSpinAdapter IssueVendorAdapter;
     private Spinner vendorSpinner;
-    private static ArrayList<Assets> assetsList=new ArrayList<>();
+    private static ArrayList<Assets> assetsList = new ArrayList<>();
     private AssetsSpinAdapter assetsAdapter;
     private Spinner assetsSpinner;
     private Context context;
     private Item itemList;
+    private EditText receiver_person;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity=this;
 
 
     @Override
@@ -80,34 +84,41 @@ public class IssuedItemsForm extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issue_item_list);
+        context = this;
+
+        utilityofActivity = new UtilityofActivity(this);
+
         setContractorSpinner();
         setAssetsSpinner();
-        context=this;
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        TextView textView=findViewById(R.id.toolbar_title);
-        textView.setText("Issue Item");
-        Bundle bundle= getIntent().getExtras();
+
+        utilityofActivity.configureToolbar(appCompatActivity);
+
+        TextView toolbar_title=findViewById(R.id.toolbar_title);
+        TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
+        toolbar_title.setText("Issue Item");
+        toolbar_subtitle.setText(App.projectName);
+
+        Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            itemList= (Item) bundle.getSerializable("Items");
+            itemList = (Item) bundle.getSerializable("Items");
         }
 
         app = (App) getApplication();
 
-        slip_no=findViewById(R.id.slip_no);
+        slip_no = findViewById(R.id.slip_no);
         progress = findViewById(R.id.progress);
         hider = findViewById(R.id.hider);
         builder = new AlertDialog.Builder(context);
         submit = findViewById(R.id.submit);
         quantity = findViewById(R.id.quantity);
-        comments=findViewById(R.id.comment);
+        comments = findViewById(R.id.comment);
         max = findViewById(R.id.max_quantity);
         item = findViewById(R.id.item);
         unit = findViewById(R.id.unit);
         unit2 = findViewById(R.id.unit2);
         receiver = findViewById(R.id.receiver);
+        receiver_person = findViewById(R.id.receiver_edittext);
+
         realm = Realm.getDefaultInstance();
         items = new ArrayList<>();
         receivers = new ArrayList<>();
@@ -115,11 +126,11 @@ public class IssuedItemsForm extends AppCompatActivity {
         items.add(0, "Select Item");
 
         item.setText(itemList.getName());
-        itemName=itemList.getName();
-        item_type=itemList.getItem_type();
+        itemName = itemList.getName();
+        item_type = itemList.getItem_type();
 
-        console.log("Item Type"+ item_type);
-        selectedItem=itemList.getId();
+        console.log("Item Type" + item_type);
+        selectedItem = itemList.getId();
 
         max.setText(itemList.getQuantity());
         unit.setText(itemList.getUnit());
@@ -149,10 +160,10 @@ public class IssuedItemsForm extends AppCompatActivity {
                                             Toast.makeText(context, "Check Quantity!", Toast.LENGTH_SHORT).show();
                                             return;
                                         }
-                                        if((!(vendor_id.equals(""))&&!(selectedReceiver.equals("")))||(vendor_id.equals(""))&&(selectedReceiver.equals(""))){
-                                            Toast.makeText(context, "Select Either Member Or Vendor", Toast.LENGTH_SHORT).show();
-                                        }
-                                        else sendIssue();
+//                                        if ((!(vendor_id.equals("")) && !(selectedReceiver.equals(""))) || (vendor_id.equals("")) && (selectedReceiver.equals(""))) {
+//                                            Toast.makeText(context, "Select Either Member Or Vendor", Toast.LENGTH_SHORT).show();
+//                                        } else
+                                            sendIssue();
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -175,10 +186,8 @@ public class IssuedItemsForm extends AppCompatActivity {
                 alert.show();
 
 
-
             }
         });
-
 
 
         receiver.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -187,7 +196,7 @@ public class IssuedItemsForm extends AppCompatActivity {
                 if (position > 0) {
                     selectedReceiver = receivers1.get(position - 1).getUserId();
                     receiverName = receivers1.get(position - 1).getName();
-                    user_type="user";
+                    user_type = "user";
                 } else {
                     selectedReceiver = "";
                 }
@@ -199,15 +208,15 @@ public class IssuedItemsForm extends AppCompatActivity {
             }
         });
 
-        vendorSpinner=findViewById(R.id.contractor);
+        vendorSpinner = findViewById(R.id.contractor);
         vendorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                vendor_id=IssueVendorAdapter.getID(i);
+                vendor_id = IssueVendorAdapter.getID(i);
 
                 if (i > 0) {
-                    vendor_id=IssueVendorAdapter.getID(i);
-                    user_type="vendor";
+                    vendor_id = IssueVendorAdapter.getID(i);
+                    user_type = "vendor";
                 } else {
                     vendor_id = "";
                 }
@@ -220,21 +229,19 @@ public class IssuedItemsForm extends AppCompatActivity {
             }
         });
 
-        IssueVendorAdapter=new IssueVendorSpinAdapter(context, R.layout.custom_spinner,IssueVendorList);
+        IssueVendorAdapter = new IssueVendorSpinAdapter(context, R.layout.custom_spinner, IssueVendorList);
         IssueVendorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         vendorSpinner.setAdapter(IssueVendorAdapter);
 
-        assetsSpinner=findViewById(R.id.asset);
+        assetsSpinner = findViewById(R.id.asset);
         assetsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i>0) {
+                if (i > 0) {
                     item_rent_id = assetsAdapter.getRentId(i);
                     asset_id = assetsAdapter.getAssetId(i);
-                }
-                else
-                {
-                    item_rent_id="" ;
+                } else {
+                    item_rent_id = "";
                 }
 
 
@@ -246,15 +253,12 @@ public class IssuedItemsForm extends AppCompatActivity {
             }
         });
 
-        assetsAdapter=new AssetsSpinAdapter(context, R.layout.custom_spinner,assetsList);
+        assetsAdapter = new AssetsSpinAdapter(context, R.layout.custom_spinner, assetsList);
         assetsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         assetsSpinner.setAdapter(assetsAdapter);
 
 
     }
-
-   
-
 
 
     private void sendIssue() throws JSONException {
@@ -262,37 +266,43 @@ public class IssuedItemsForm extends AppCompatActivity {
         hider.setVisibility(View.VISIBLE);
         HashMap<String, String> params = new HashMap<>();
         params.put("user_id", App.userId);
+
         final JSONObject obj = new JSONObject();
-        console.log("user type: "+user_type);
-        if(user_type.equals("user")) {
+        console.log("user type: " + user_type);
+
+//        if (user_type.equals("user")) {
             obj.put("stock_id", selectedItem).put("quantity", quantity.getText().toString())
                     .put("receiver_id", selectedReceiver).put("comments", comments.getText().toString())
                     .put("item_rent_id", item_rent_id).put("slip_no", slip_no.getText().toString())
-                    .put("user_type", user_type).put("item_type", item_type).put("asset_id",asset_id);
+                    .put("user_type", user_type).put("item_type", item_type).put("asset_id", asset_id)
+                    .put("reciver", receiver_person.getText().toString());
             params.put("issue_list", obj.toString());
 
-            console.log("Item User"+ obj.toString());
-        }else if(user_type.equals("vendor")) {
-            obj.put("stock_id", selectedItem).put("quantity", quantity.getText().toString())
-                    .put("receiver_id", vendor_id).put("comments", comments.getText().toString())
-                    .put("item_rent_id", item_rent_id).put("slip_no", slip_no.getText().toString())
-                    .put("user_type", user_type).put("item_type", item_type).put("asset_id",asset_id);
-            params.put("issue_list", obj.toString());
-            console.log("Item Vendor"+ obj.toString());
+            console.log("Item User" + obj.toString());
+//        } else if (user_type.equals("vendor")) {
+//            obj.put("stock_id", selectedItem).put("quantity", quantity.getText().toString())
+//                    .put("receiver_id", vendor_id).put("comments", comments.getText().toString())
+//                    .put("item_rent_id", item_rent_id).put("slip_no", slip_no.getText().toString())
+//                    .put("user_type", user_type).put("item_type", item_type).put("asset_id", asset_id)
+//                    .put("reciver", receiver_person.getText().toString());
+//            params.put("issue_list", obj.toString());
+//            console.log("Item Vendor" + obj.toString());
 
-        }
-        console.log("ISSUE DATA:"+params);
+//        }
+        console.log("ISSUE DATA:" + params);
         app.sendNetworkRequest(Config.SEND_ISSUED_ITEM, 1, params, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
             }
 
             @Override
@@ -300,6 +310,7 @@ public class IssuedItemsForm extends AppCompatActivity {
                 console.log("Response:" + response);
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 console.log(response);
                 if (response.equals("1")) {
                     try {
@@ -324,9 +335,9 @@ public class IssuedItemsForm extends AppCompatActivity {
     }
 
     private void setAssetsSpinner() {
-        App app= ((App) getApplication());
+        App app = ((App) getApplication());
         assetsList.clear();
-        String requestURl= Config.SEND_ASSETS ;
+        String requestURl = Config.SEND_ASSETS;
         requestURl = requestURl.replace("[0]", App.userId);
         requestURl = requestURl.replace("[1]", App.projectId);
 
@@ -334,12 +345,12 @@ public class IssuedItemsForm extends AppCompatActivity {
         app.sendNetworkRequest(requestURl, Request.Method.GET, null, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
-
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
-
+                utilityofActivity.dismissProgressDialog();
                 console.error("Network request failed with error :" + error);
                 Toast.makeText(context, "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
 
@@ -348,7 +359,7 @@ public class IssuedItemsForm extends AppCompatActivity {
             @Override
             public void onNetworkRequestComplete(String response) {
                 console.log(response);
-
+                utilityofActivity.dismissProgressDialog();
                 try {
                     JSONArray array = new JSONArray(response);
                     for (int i = 0; i < array.length(); i++) {
@@ -362,21 +373,22 @@ public class IssuedItemsForm extends AppCompatActivity {
             }
         });
     }
+
     private void setContractorSpinner() {
-        App app= ((App) getApplication());
+        App app = ((App) getApplication());
         IssueVendorList.clear();
-        String requestURl= Config.SEND_ISSUE_VENDORS ;
+        String requestURl = Config.SEND_ISSUE_VENDORS;
         requestURl = requestURl.replace("[0]", App.userId);
         requestURl = requestURl.replace("[1]", App.projectId);
         app.sendNetworkRequest(requestURl, Request.Method.GET, null, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
-
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
-
+                utilityofActivity.dismissProgressDialog();
                 console.error("Network request failed with error :" + error);
                 Toast.makeText(context, "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
 
@@ -385,6 +397,7 @@ public class IssuedItemsForm extends AppCompatActivity {
             @Override
             public void onNetworkRequestComplete(String response) {
                 console.log(response);
+                utilityofActivity.dismissProgressDialog();
 
                 try {
                     JSONArray array = new JSONArray(response);

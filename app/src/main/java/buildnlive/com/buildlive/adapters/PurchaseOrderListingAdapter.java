@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -73,6 +74,10 @@ public class PurchaseOrderListingAdapter extends RecyclerView.Adapter<PurchaseOr
         }
 
         public void bind(final Context context, final OrderItem item, final int pos, final OnItemClickListener listener) {
+
+//            final String max_qty=item.getQuantity();
+            item.setMax_qty(item.getQuantity());
+
             name.setText(item.getName());
             quantity.setText(item.getQuantity());
             quantity.addTextChangedListener(new TextWatcher() {
@@ -88,7 +93,16 @@ public class PurchaseOrderListingAdapter extends RecyclerView.Adapter<PurchaseOr
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    item.setQuantity(s.toString());
+//                    if(Integer.parseInt(item.getQuantity())<=Integer.parseInt(max_qty))
+//                    {
+                        item.setQuantity(s.toString());
+//                    }
+//                    else
+//                    {
+//                        Toast.makeText(context,"Enter Valid Quantity",Toast.LENGTH_LONG).show();
+//                        item.setIncluded(false);
+//                        check.setChecked(false);
+//                    }
                 }
             });
             unit.setText(item.getUnit());

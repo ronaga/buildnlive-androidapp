@@ -14,21 +14,27 @@ import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.fragments.ManageLabourFragment;
 import buildnlive.com.buildlive.fragments.ViewLabourReportFragment;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class LabourReportActivity extends AppCompatActivity {
     private App app;
     private TextView edit, view;
     private Fragment fragment;
 
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity=this;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_labour_activity);
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        utilityofActivity=new UtilityofActivity(appCompatActivity);
+        utilityofActivity.configureToolbar(appCompatActivity);
+
         TextView toolbar_title=findViewById(R.id.toolbar_title);
+        TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
+        toolbar_subtitle.setText(App.projectName);
         toolbar_title.setText("Manage Labour");
 
 

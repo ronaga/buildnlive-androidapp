@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="#00ffffff"
+    android:elevation="7dp"
+    card_view:cardCornerRadius="3dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/alert_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="5dp"
+            android:text="Receive Transfer"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="25sp" />
+        <View
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/alert_title"
+            android:background="#e8e8e8"/>
+
+        <TextView
+            android:layout_below="@+id/separator"
+            android:id="@+id/status_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:text="Status"
+            android:textStyle="bold"
+            android:textAlignment="textStart"
+            android:textColor="@color/color2"
+            android:textSize="16sp"
+            android:gravity="start" />
+
+        <Spinner
+            android:layout_below="@+id/status_title"
+            android:id="@+id/status"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/transfer_status"
+            />
+
+        <TextView
+            android:layout_below="@id/status"
+            android:id="@+id/comment_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:text="Comment"
+            android:textStyle="bold"
+            android:textAlignment="textStart"
+            android:textColor="@color/color2"
+            android:textSize="16sp"
+            android:gravity="start" />
+
+        <EditText
+            android:layout_below="@+id/comment_title"
+            android:id="@+id/comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:padding="15dp"
+            android:background="@drawable/border"
+            android:inputType="textMultiLine"
+            android:lines="3"
+            android:hint="Add a comment"
+            android:gravity="start"
+            android:textAlignment="textStart"
+            android:textColor="@color/color2"
+            android:textSize="16sp" />
+
+
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_below="@+id/comment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <Button
+        android:id="@+id/positive"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:background="@drawable/inactive_button"
+        android:text="Submit"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/negative"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:background="@drawable/active_button"
+        android:text="Close"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+</LinearLayout>
+
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

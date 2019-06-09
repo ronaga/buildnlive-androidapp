@@ -1,6 +1,7 @@
 package buildnlive.com.buildlive.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -27,7 +28,6 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.android.volley.Request;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,14 +35,16 @@ import java.util.HashMap;
 
 import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.Interfaces;
+import buildnlive.com.buildlive.Notifications.FirebaseMessagingService;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.console;
-import buildnlive.com.buildlive.elements.Item;
 import buildnlive.com.buildlive.fragments.AboutUsFragment;
 import buildnlive.com.buildlive.fragments.HomeFragment;
 import buildnlive.com.buildlive.fragments.PlansFragment;
 import buildnlive.com.buildlive.fragments.ProfileFragment;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.PrefernceFile;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 import io.realm.Realm;
 
 import static buildnlive.com.buildlive.activities.LoginActivity.PREF_KEY_EMAIL;
@@ -57,6 +59,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private SharedPreferences pref;
     public static final String PREF_KEY_LOGGED_IN = "is_logged_in";
     private App app;
+    private Context context;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity;
+
 
     @Override
     protected void onStart() {
@@ -74,7 +80,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Realm realm =Realm.getDefaultInstance();
+        Realm realm = Realm.getDefaultInstance();
+        utilityofActivity = new UtilityofActivity(this);
+
+        FirebaseMessagingService fire = new FirebaseMessagingService();
+
+        console.log("Token Fcm "+ fire.getToken(this));
+
+        try {
+            sendFcmToken(fire.getToken(this));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED, WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
         setContentView(R.layout.activity_home);
@@ -88,14 +105,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             finish();
         }
-        badge=findViewById(R.id.badge_notification);
+        badge = findViewById(R.id.badge_notification);
+
 
         imageButton = findViewById(R.id.notification);
+
+        imageButton.setVisibility(View.VISIBLE);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 badge.setVisibility(View.GONE);
-                startActivity(new Intent(getApplicationContext(),NotificationActivity.class));
+                startActivity(new Intent(getApplicationContext(), NotificationActivity.class));
 
             }
         });
@@ -147,13 +167,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 fragment = PlansFragment.newInstance((App) getApplication());
                 break;
             case R.id.nav_about:
-                fragment= AboutUsFragment.newInstance();
+                fragment = AboutUsFragment.newInstance();
                 break;
             case R.id.nav_logout:
                 logout();
                 break;
             case R.id.nav_profile:
-                fragment= ProfileFragment.newInstance(app);
+                fragment = ProfileFragment.newInstance(app);
                 break;
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -162,19 +182,19 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void logout() {
-        App app= ((App) getApplication());
+        App app = ((App) getApplication());
         String requestUrl = Config.LOGOOUT;
         requestUrl = requestUrl.replace("[0]", App.userId);
         console.log(requestUrl);
         app.sendNetworkRequest(requestUrl, Request.Method.POST, null, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
-
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
-
+                utilityofActivity.dismissProgressDialog();
                 console.error("Network request failed with error :" + error);
                 Toast.makeText(getApplicationContext(), "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
 
@@ -182,26 +202,24 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onNetworkRequestComplete(String response) {
-
+                utilityofActivity.dismissProgressDialog();
                 pref.edit().clear().commit();
+                PrefernceFile.Companion.getInstance(context).clearData();
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
-                    public void execute(Realm realm) {
+                    public void execute(@NonNull Realm realm) {
                         realm.deleteAll();
                     }
                 });
 
-                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                    finish();
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                finish();
 
             }
         });
 
     }
-
-
-
 
 
     private DrawerLayout.DrawerListener listener = new DrawerLayout.DrawerListener() {
@@ -238,13 +256,46 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
     private void sendRequest() throws JSONException {
-        App app= ((App)getApplication());
+        App app = ((App) getApplication());
         HashMap<String, String> params = new HashMap<>();
-        JSONObject jsonObject=new JSONObject();
+        JSONObject jsonObject = new JSONObject();
         jsonObject.put("project_id", App.projectId).put("user_id", App.userId);
         params.put("notification_count", jsonObject.toString());
         console.log("Res:" + params);
         app.sendNetworkRequest(Config.GET_NOTIFICATIONS_COUNT, 1, params, new Interfaces.NetworkInterfaceListener() {
+            @Override
+            public void onNetworkRequestStart() {
+//                utilityofActivity.showProgressDialog();
+            }
+
+            @Override
+            public void onNetworkRequestError(String error) {
+//                utilityofActivity.dismissProgressDialog();
+            }
+
+            @Override
+            public void onNetworkRequestComplete(String response) {
+                console.log(response);
+//                utilityofActivity.dismissProgressDialog();
+                if (response.equals("0")) {
+                    badge.setVisibility(View.GONE);
+                } else {
+                    badge.setVisibility(View.VISIBLE);
+                    badge.setText(response);
+                }
+            }
+        });
+    }
+
+    private void sendFcmToken(String fcmToken) throws JSONException {
+        App app= ((App)getApplication());
+        HashMap<String, String> params = new HashMap<>();
+        params.put("fcm_token", fcmToken);
+        params.put("user_id", App.userId);
+
+        console.log("Res:" + params);
+
+        app.sendNetworkRequest(Config.UPDATE_FCM_KEY, Request.Method.POST , params, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
 
@@ -252,19 +303,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onNetworkRequestError(String error) {
-
+                console.log(error+" Fail");
             }
 
             @Override
             public void onNetworkRequestComplete(String response) {
-                console.log(response);
-                if (response.equals("0")) {
-                    badge.setVisibility(View.GONE);
-                }
-                else{
-                    badge.setVisibility(View.VISIBLE);
-                    badge.setText(response);
-                }
+                console.log(response+" Success");
             }
         });
     }

@@ -1,12 +1,15 @@
 package buildnlive.com.buildlive.fragments;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +28,7 @@ import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class ProfileFragment extends Fragment {
     private static App app;
@@ -38,6 +42,23 @@ public class ProfileFragment extends Fragment {
     private TextView hider;
     private AlertDialog.Builder builder;
 
+    private Context context;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity;
+
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.appCompatActivity = (AppCompatActivity) activity;
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,6 +69,9 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mob= view.findViewById(R.id.mobile);
+
+        utilityofActivity=new UtilityofActivity(appCompatActivity);
+
         name=view.findViewById(R.id.name);
         last_name=view.findViewById(R.id.last_name);
         old_pass= view.findViewById(R.id.old_password);
@@ -110,19 +134,21 @@ public class ProfileFragment extends Fragment {
         app.sendNetworkRequest(resetPass, Request.Method.POST, params, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
-
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.dismissProgressDialog();
                 Toast.makeText(getContext(), "Check Internet Connection", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onNetworkRequestComplete(String response) {
                 console.log("Response:" + response);
+                utilityofActivity.dismissProgressDialog();
                 if (response.equals("0")) {
                     Toast.makeText(getContext(), "Error, Please Try Again Later", Toast.LENGTH_LONG).show();
                 } else if(response.equals("1")) {

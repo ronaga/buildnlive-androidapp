@@ -84,11 +84,17 @@
         <item>cum</item>
         <item>cuft</item>
     </string-array>
+    <string-array name="transfer_status">
+        <item>Select Status</item>
+        <item>Received</item>
+        <item>Rejected</item>
+    </string-array>
     <string name="about_us">"BuildnLive is an initiative to simplify people's life by providing an array of personalised services at their fingertips and then at their doorstep.This application is for Architects, Builders and Contractors"</string>
     <string name="select_status">Status</string>
     <string name="profession">Profession</string>
     <string name="select_vendor">Vendor</string>
     <string name="return_item"><u>Return</u></string>
+    <string name="return_repair_item"><u>Return/Receive</u></string>
 
 
 </resources>

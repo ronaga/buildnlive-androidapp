@@ -1,9 +1,12 @@
 package buildnlive.com.buildlive.fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,6 +33,7 @@ import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Order;
 import buildnlive.com.buildlive.elements.Worker;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 import io.realm.RealmResults;
 
 public class ViewPurchaseOrderFragment extends Fragment {
@@ -37,13 +41,36 @@ public class ViewPurchaseOrderFragment extends Fragment {
     private List<Order> orders;
     private ProgressBar progress;
     private ViewPurchaseOrderAdapter adapter;
-    private TextView hider;
+    private TextView hider,no_content;
     private boolean LOADING;
     private static App app;
+    private Context context;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity;
+
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.appCompatActivity = (AppCompatActivity) activity;
+    }
 
     public static ViewPurchaseOrderFragment newInstance(App a) {
         app = a;
         return new ViewPurchaseOrderFragment();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        requestPurchaseOrder();
     }
 
     @Nullable
@@ -55,9 +82,14 @@ public class ViewPurchaseOrderFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        utilityofActivity=new UtilityofActivity(appCompatActivity);
+
         list = view.findViewById(R.id.list);
         progress = view.findViewById(R.id.progress);
         hider = view.findViewById(R.id.hider);
+        no_content = view.findViewById(R.id.no_content);
+
         orders = new ArrayList<>();
         adapter = new ViewPurchaseOrderAdapter(getContext(), orders, new ViewPurchaseOrderAdapter.OnItemClickListener() {
             @Override
@@ -70,7 +102,6 @@ public class ViewPurchaseOrderFragment extends Fragment {
         list.setAdapter(adapter);
         list.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        requestPurchaseOrder();
     }
 
     private void requestPurchaseOrder() {
@@ -80,18 +111,22 @@ public class ViewPurchaseOrderFragment extends Fragment {
             @Override
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
-                hider.setVisibility(View.VISIBLE);}
+                hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
+            }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
             }
 
             @Override
             public void onNetworkRequestComplete(String response) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 console.log("Res:" + response);
                 orders.clear();
                 try {
@@ -101,6 +136,9 @@ public class ViewPurchaseOrderFragment extends Fragment {
                         Order order = new Order().parseFromJSON(object);
                         orders.add(order);
                     }
+                    if (orders.isEmpty()) {
+                        no_content.setVisibility(View.VISIBLE);
+                    } else no_content.setVisibility(View.GONE);
                 } catch (JSONException e) {
 
                 }

@@ -1,11 +1,13 @@
 package buildnlive.com.buildlive.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +29,6 @@ import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.activities.AddItem;
 import buildnlive.com.buildlive.activities.IndentItems;
-import buildnlive.com.buildlive.activities.Inventory;
 import buildnlive.com.buildlive.activities.IssuedItems;
 import buildnlive.com.buildlive.activities.LabourActivity;
 import buildnlive.com.buildlive.activities.LabourReportActivity;
@@ -36,25 +37,44 @@ import buildnlive.com.buildlive.activities.MachineList;
 import buildnlive.com.buildlive.activities.MarkAttendance;
 import buildnlive.com.buildlive.activities.Planning;
 import buildnlive.com.buildlive.activities.PurchaseOrder;
+import buildnlive.com.buildlive.activities.RepairRequest;
 import buildnlive.com.buildlive.activities.RequestItems;
+import buildnlive.com.buildlive.activities.TransferRequest;
 import buildnlive.com.buildlive.activities.WorkProgress;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Project;
 import buildnlive.com.buildlive.elements.ProjectMember;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.PrefernceFile;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-import static buildnlive.com.buildlive.activities.LoginActivity.PREF_KEY_NAME;
 import static buildnlive.com.buildlive.utils.Config.PREF_NAME;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
-//    private TextView title;
-    private LinearLayout markAttendance, manageInventory, issuedItems, requestItems, workProgress, purchaseOrder,siteRequest,localPurchase,labour,labourReport,planning,machine;
+    //    private TextView title;
+    private LinearLayout repairRequest, transferRequest, markAttendance, manageInventory, issuedItems, requestItems, workProgress, purchaseOrder, siteRequest, localPurchase, labour, labourReport, planning, machine;
     private SharedPreferences pref;
     private Spinner projects;
     private static App app;
     private TextView badge;
+    private Context context;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity;
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.appCompatActivity = (AppCompatActivity) activity;
+    }
 
     public static HomeFragment newInstance(App a) {
         app = a;
@@ -74,20 +94,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+        utilityofActivity = new UtilityofActivity(appCompatActivity);
+
         pref = getActivity().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         markAttendance = view.findViewById(R.id.mark_attendance);
         manageInventory = view.findViewById(R.id.manage_inventory);
         issuedItems = view.findViewById(R.id.issued_items);
         requestItems = view.findViewById(R.id.request_items);
         projects = view.findViewById(R.id.projects);
-        siteRequest=view.findViewById(R.id.request_list);
-        localPurchase=view.findViewById(R.id.local_purchase);
-        labour=view.findViewById(R.id.labour);
-        labourReport=view.findViewById(R.id.manage_labour);
-        planning=view.findViewById(R.id.planning);
-        machine=view.findViewById(R.id.machine);
+        siteRequest = view.findViewById(R.id.request_list);
+        localPurchase = view.findViewById(R.id.local_purchase);
+        labour = view.findViewById(R.id.labour);
+        labourReport = view.findViewById(R.id.manage_labour);
+        planning = view.findViewById(R.id.planning);
+        machine = view.findViewById(R.id.machine);
+        transferRequest = view.findViewById(R.id.transfer_request);
+        repairRequest = view.findViewById(R.id.repair);
 
-        badge=getActivity().findViewById(R.id.badge_notification);
+        badge = getActivity().findViewById(R.id.badge_notification);
 
         Realm realm = Realm.getDefaultInstance();
         final RealmResults<Project> projects = realm.where(Project.class).findAll();
@@ -102,6 +127,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 App.projectId = projects.get(position).getId();
                 App.belongsTo = App.projectId + App.userId;
+                App.projectName = projects.get(position).getName();
                 syncProject();
             }
 
@@ -127,49 +153,127 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         labourReport.setOnClickListener(this);
         planning.setOnClickListener(this);
         machine.setOnClickListener(this);
+        transferRequest.setOnClickListener(this);
+        repairRequest.setOnClickListener(this);
 
-        switch (App.permissions) {
-            case "Storekeeper":
-                labour.setVisibility(View.GONE);
-                siteRequest.setVisibility(View.GONE);
-                workProgress.setVisibility(View.GONE);
-                break;
-            case "Siteengineer":
-                markAttendance.setVisibility(View.GONE);
-                manageInventory.setVisibility(View.GONE);
-                purchaseOrder.setVisibility(View.GONE);
-                issuedItems.setVisibility(View.GONE);
-                localPurchase.setVisibility(View.GONE);
 
-                break;
-            case "Siteadmin":
-                siteRequest.setVisibility(View.GONE);
-                issuedItems.setVisibility(View.GONE);
-                purchaseOrder.setVisibility(View.GONE);
-                manageInventory.setVisibility(View.GONE);
-                workProgress.setVisibility(View.GONE);
-                labour.setVisibility(View.GONE);
+        ArrayList<String> permissionList = PrefernceFile.Companion.getInstance(context).getArrayList("Perm");
 
-                break;
-            case "Siteincharge":
-                siteRequest.setVisibility(View.GONE);
-                labour.setVisibility(View.GONE);
-                break;
-            case "labourmanager":
-                workProgress.setVisibility(View.GONE);
-                purchaseOrder.setVisibility(View.GONE);
-                markAttendance.setVisibility(View.GONE);
-                manageInventory.setVisibility(View.GONE);
-                issuedItems.setVisibility(View.GONE);
-                requestItems.setVisibility(View.GONE);
-                workProgress.setVisibility(View.GONE);
-                purchaseOrder.setVisibility(View.GONE);
-                siteRequest.setVisibility(View.GONE);
-                localPurchase.setVisibility(View.GONE);
-                labour.setVisibility(View.GONE);
-                break;
-
+        for (String permission : permissionList) {
+            switch (permission) {
+                case "Work": {
+                    workProgress.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case "Progress": {
+                    planning.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case "Work Schedule": {
+                    workProgress.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case "Labour Progress": {
+                    labourReport.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case "Inventory": {
+                    manageInventory.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case "Indent Item": {
+                    manageInventory.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case "Issue Item": {
+                    issuedItems.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case "Receive Item": {
+                    purchaseOrder.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case "Local Purchase": {
+                    localPurchase.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case "Site Payments": {
+                    localPurchase.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case "Labour Mgmt": {
+                    labour.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case "Assets": {
+                    machine.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case "Request": {
+                    requestItems.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case "Inventory Stock Request": {
+                    siteRequest.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case "Repair": {
+                    repairRequest.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case "Transfer": {
+                    transferRequest.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case "Attendance": {
+                    markAttendance.setVisibility(View.VISIBLE);
+                    break;
+                }
+            }
         }
+
+//        switch (App.permissions) {
+//            case "Storekeeper":
+//                labour.setVisibility(View.GONE);
+//                siteRequest.setVisibility(View.GONE);
+//                workProgress.setVisibility(View.GONE);
+//                break;
+//            case "Siteengineer":
+//                markAttendance.setVisibility(View.GONE);
+//                manageInventory.setVisibility(View.GONE);
+//                purchaseOrder.setVisibility(View.GONE);
+//                issuedItems.setVisibility(View.GONE);
+//                localPurchase.setVisibility(View.GONE);
+//
+//                break;
+//            case "Siteadmin":
+//                siteRequest.setVisibility(View.GONE);
+//                issuedItems.setVisibility(View.GONE);
+//                purchaseOrder.setVisibility(View.GONE);
+//                manageInventory.setVisibility(View.GONE);
+//                workProgress.setVisibility(View.GONE);
+//                labour.setVisibility(View.GONE);
+//
+//                break;
+//            case "Siteincharge":
+//                siteRequest.setVisibility(View.GONE);
+//                labour.setVisibility(View.GONE);
+//                break;
+//            case "labourmanager":
+//                workProgress.setVisibility(View.GONE);
+//                purchaseOrder.setVisibility(View.GONE);
+//                markAttendance.setVisibility(View.GONE);
+//                manageInventory.setVisibility(View.GONE);
+//                issuedItems.setVisibility(View.GONE);
+//                requestItems.setVisibility(View.GONE);
+//                workProgress.setVisibility(View.GONE);
+//                purchaseOrder.setVisibility(View.GONE);
+//                siteRequest.setVisibility(View.GONE);
+//                localPurchase.setVisibility(View.GONE);
+//                labour.setVisibility(View.GONE);
+//                break;
+//
+//        }
 
 //            title.setText("Welcome " + pref.getString(PREF_KEY_NAME, "Dummy").split(" ")[0]);
 
@@ -235,31 +339,37 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(getContext(), PurchaseOrder.class));
                 break;
             case R.id.request_list:
-                startActivity(new Intent(getContext(),IndentItems.class));
+                startActivity(new Intent(getContext(), IndentItems.class));
                 break;
             case R.id.local_purchase:
-                startActivity(new Intent(getContext(),LocalPurchase.class));
+                startActivity(new Intent(getContext(), LocalPurchase.class));
                 break;
             case R.id.labour:
-                startActivity(new Intent(getContext(),LabourActivity.class));
+                startActivity(new Intent(getContext(), LabourActivity.class));
                 break;
             case R.id.manage_labour:
-                startActivity(new Intent(getContext(),LabourReportActivity.class));
+                startActivity(new Intent(getContext(), LabourReportActivity.class));
                 break;
             case R.id.planning:
-                startActivity(new Intent(getContext(),Planning.class));
+                startActivity(new Intent(getContext(), Planning.class));
                 break;
             case R.id.machine:
                 startActivity(new Intent(getContext(), MachineList.class));
+                break;
+            case R.id.transfer_request:
+                startActivity(new Intent(getContext(), TransferRequest.class));
+                break;
+            case R.id.repair:
+                startActivity(new Intent(getContext(), RepairRequest.class));
                 break;
 
         }
     }
 
     private void sendRequest() throws JSONException {
-        App app= ((App)getActivity().getApplication());
+        App app = ((App) getActivity().getApplication());
         HashMap<String, String> params = new HashMap<>();
-        JSONObject jsonObject=new JSONObject();
+        JSONObject jsonObject = new JSONObject();
         jsonObject.put("project_id", App.projectId).put("user_id", App.userId);
         params.put("notification_count", jsonObject.toString());
         console.log("Res:" + params);
@@ -279,8 +389,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 console.log(response);
                 if (response.equals("0")) {
                     badge.setVisibility(View.GONE);
-                }
-                else{
+                } else {
                     badge.setVisibility(View.VISIBLE);
                     badge.setText(response);
                 }

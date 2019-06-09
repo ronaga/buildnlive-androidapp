@@ -1,9 +1,12 @@
 package buildnlive.com.buildlive.fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,6 +29,7 @@ import buildnlive.com.buildlive.adapters.PlansAdapter;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Plans;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -35,6 +39,23 @@ public class PlansFragment extends Fragment {
     private static App app;
     private ProgressBar progress;
     private TextView hider;
+    private Context context;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity;
+
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.appCompatActivity = (AppCompatActivity) activity;
+    }
 
     public static PlansFragment newInstance(App a) {
         app = a;
@@ -50,6 +71,9 @@ public class PlansFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        utilityofActivity=new UtilityofActivity(appCompatActivity);
+
         recyclerView = view.findViewById(R.id.plans);
         realm = Realm.getDefaultInstance();
         progress = view.findViewById(R.id.progress);
@@ -81,12 +105,14 @@ public class PlansFragment extends Fragment {
                 public void onNetworkRequestStart() {
                     progress.setVisibility(View.VISIBLE);
                     hider.setVisibility(View.VISIBLE);
+                    utilityofActivity.showProgressDialog();
                 }
 
                 @Override
                 public void onNetworkRequestError(String error) {
                     progress.setVisibility(View.GONE);
                     hider.setVisibility(View.GONE);
+                    utilityofActivity.dismissProgressDialog();
                     Toast.makeText(getContext(), "Check Internet Connection", Toast.LENGTH_SHORT).show();
                 }
 
@@ -95,6 +121,7 @@ public class PlansFragment extends Fragment {
                     console.log("Res:" + response);
                     progress.setVisibility(View.GONE);
                     hider.setVisibility(View.GONE);
+                    utilityofActivity.dismissProgressDialog();
                     try {
                         flag = 0;
                         JSONObject obj = new JSONObject(response);

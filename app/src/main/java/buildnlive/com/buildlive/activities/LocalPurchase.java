@@ -18,6 +18,7 @@ import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.fragments.LocalPurchaseFragment;
 import buildnlive.com.buildlive.fragments.LocalPurchaseListFragment;
 import buildnlive.com.buildlive.fragments.PaymentFragment;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 import io.realm.Realm;
 
 public class LocalPurchase extends AppCompatActivity {
@@ -27,6 +28,10 @@ public class LocalPurchase extends AppCompatActivity {
     private TextView edit, view;
     Interfaces.SyncListener listener;
     private ImageButton back;
+
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity=this;
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -40,11 +45,13 @@ public class LocalPurchase extends AppCompatActivity {
         app = (App) getApplication();
         realm = Realm.getDefaultInstance();
         fragment = LocalPurchaseListFragment.newInstance(app);
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        utilityofActivity=new UtilityofActivity(appCompatActivity);
+        utilityofActivity.configureToolbar(appCompatActivity);
+
         TextView toolbar_title=findViewById(R.id.toolbar_title);
+        TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
+        toolbar_subtitle.setText(App.projectName);
         toolbar_title.setText("Puchase & Payments");
         changeScreen();
         edit = findViewById(R.id.edit);

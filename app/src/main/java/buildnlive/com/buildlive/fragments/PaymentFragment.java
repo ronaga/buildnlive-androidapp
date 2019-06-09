@@ -1,5 +1,6 @@
 package buildnlive.com.buildlive.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -52,6 +54,7 @@ import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Packet;
 import buildnlive.com.buildlive.utils.AdvancedRecyclerView;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class PaymentFragment extends Fragment {
     private Button submit;
@@ -74,6 +77,22 @@ public class PaymentFragment extends Fragment {
     private SingleImageAdapter imagesAdapter;
     public static final int REQUEST_GALLERY_IMAGE = 7191;
     private Context context;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity;
+
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.appCompatActivity = (AppCompatActivity) activity;
+    }
 
 
     public static PaymentFragment newInstance() {
@@ -97,7 +116,9 @@ public class PaymentFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         submit = view.findViewById(R.id.submit);
-        context=getContext();
+
+        utilityofActivity=new UtilityofActivity(appCompatActivity);
+
         details_edit = view.findViewById(R.id.payment_details);
         to_edit = view.findViewById(R.id.receiver);
         reason_edit = view.findViewById(R.id.reason);
@@ -355,12 +376,14 @@ public class PaymentFragment extends Fragment {
             public void onNetworkRequestStart() {
             progress.setVisibility(View.VISIBLE);
             hider.setVisibility(View.VISIBLE);
+            utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 Toast.makeText(getContext(),"Something went wrong, Try again later",Toast.LENGTH_LONG).show();
             }
 
@@ -368,6 +391,7 @@ public class PaymentFragment extends Fragment {
             public void onNetworkRequestComplete(String response) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 console.log(response);
                 if (response.equals("1")) {
                     Toast.makeText(getContext(), "Request Generated", Toast.LENGTH_SHORT).show();

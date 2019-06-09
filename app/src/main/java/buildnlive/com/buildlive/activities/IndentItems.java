@@ -15,6 +15,7 @@ import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.fragments.SendIndentFragment;
 import buildnlive.com.buildlive.fragments.ViewIndentFragment;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 
 public class IndentItems extends AppCompatActivity {
@@ -23,18 +24,23 @@ public class IndentItems extends AppCompatActivity {
     private TextView edit, view;
     private ImageButton back;
 
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity=this;
+
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_indent_item);
         app = (App) getApplication();
         fragment = SendIndentFragment.newInstance();
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        utilityofActivity=new UtilityofActivity(appCompatActivity);
+        utilityofActivity.configureToolbar(appCompatActivity);
+
         TextView toolbar_title=findViewById(R.id.toolbar_title);
-        toolbar_title.setText("Request Item");
+        TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
+        toolbar_title.setText("Request Items");
+        toolbar_subtitle.setText(App.projectName);
+
         changeScreen();
         edit = findViewById(R.id.edit);
         edit.setOnClickListener(new View.OnClickListener() {

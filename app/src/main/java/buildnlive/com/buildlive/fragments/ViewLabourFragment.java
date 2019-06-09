@@ -1,9 +1,12 @@
 package buildnlive.com.buildlive.fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -34,6 +37,7 @@ import buildnlive.com.buildlive.elements.Item;
 import buildnlive.com.buildlive.elements.LabourInfo;
 import buildnlive.com.buildlive.elements.ViewLabour;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class ViewLabourFragment extends Fragment{
     private static List<ViewLabour> viewLabourList=new ArrayList<>();
@@ -42,6 +46,23 @@ public class ViewLabourFragment extends Fragment{
     private ProgressBar progress;
     private TextView hider,no_content;
     private ViewLabourAdapter adapter;
+    private Context context;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity;
+
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.appCompatActivity = (AppCompatActivity) activity;
+    }
 
     public ViewLabourAdapter.OnItemClickListener listener= new ViewLabourAdapter.OnItemClickListener() {
         @Override
@@ -96,6 +117,7 @@ public class ViewLabourFragment extends Fragment{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        utilityofActivity=new UtilityofActivity(appCompatActivity);
         no_content=view.findViewById(R.id.no_content);
         items = view.findViewById(R.id.items);
         progress = view.findViewById(R.id.progress);
@@ -115,12 +137,14 @@ public class ViewLabourFragment extends Fragment{
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 console.log("Error"+error);
             }
 
@@ -128,6 +152,7 @@ public class ViewLabourFragment extends Fragment{
             public void onNetworkRequestComplete(String response) {
                 console.log("Response:" + response);
                 progress.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 hider.setVisibility(View.GONE);
                 try {
                     JSONArray array = new JSONArray(response);
@@ -177,16 +202,18 @@ public class ViewLabourFragment extends Fragment{
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
-
+                utilityofActivity.dismissProgressDialog();
             }
 
             @Override
             public void onNetworkRequestComplete(String response) {
                 console.log(response);
+                utilityofActivity.dismissProgressDialog();
                 if (response.equals("1")) {
                     refresh();
                     Toast.makeText(getContext(), "Request Generated", Toast.LENGTH_SHORT).show();

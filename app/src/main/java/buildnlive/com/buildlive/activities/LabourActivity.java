@@ -17,6 +17,7 @@ import buildnlive.com.buildlive.fragments.RequestLabourFragment;
 import buildnlive.com.buildlive.fragments.SendIndentFragment;
 import buildnlive.com.buildlive.fragments.ViewIndentFragment;
 import buildnlive.com.buildlive.fragments.ViewLabourFragment;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class LabourActivity extends AppCompatActivity {
     private App app;
@@ -24,18 +25,23 @@ public class LabourActivity extends AppCompatActivity {
     private TextView edit, view;
     private ImageButton back;
 
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity=this;
+
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_labour);
         app = (App) getApplication();
         fragment = RequestLabourFragment.newInstance();
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        utilityofActivity=new UtilityofActivity(appCompatActivity);
+        utilityofActivity.configureToolbar(appCompatActivity);
+
         TextView toolbar_title=findViewById(R.id.toolbar_title);
+        TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
+        toolbar_subtitle.setText(App.projectName);
         toolbar_title.setText("Manage Labour");
+
         changeScreen();
         edit = findViewById(R.id.edit);
         edit.setOnClickListener(new View.OnClickListener() {

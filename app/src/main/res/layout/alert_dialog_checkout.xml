@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="#00ffffff"
+    android:elevation="7dp"
+    card_view:cardCornerRadius="3dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/alert_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="5dp"
+            android:text="Title"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="25sp" />
+        <View
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/alert_title"
+            android:background="#e8e8e8"/>
+
+        <!--<TextView-->
+        <!--android:id="@+id/alert_message"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/separator"-->
+        <!--android:background="@color/white"-->
+        <!--android:padding="10dp"-->
+        <!--android:text="Message"-->
+        <!--android:textAlignment="center"-->
+        <!--android:textColor="@color/light_black"-->
+        <!--android:textSize="16dp" />-->
+
+        <!--<EditText-->
+        <!--android:id="@+id/message"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="80dp"-->
+        <!--android:layout_below="@id/alert_message"-->
+        <!--android:layout_margin="10dp"-->
+        <!--android:background="@drawable/border"-->
+        <!--android:gravity="start"-->
+        <!--android:hint="Specify your requirements."-->
+        <!--android:maxHeight="200dp"-->
+        <!--android:padding="5dp"-->
+        <!--android:textSize="16dp" />-->
+        <LinearLayout
+            android:layout_below="@id/separator"
+            android:id="@+id/container"
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content"
+            >
+            <TextView
+                android:layout_weight="1.6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:text="Check Out Time:"/>
+            <EditText
+                android:id="@+id/hours"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:hint="HH"
+                android:textAlignment="center"
+                android:maxLength="2"
+                android:inputType="number"/>
+            <EditText
+                android:id="@+id/minutes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:maxLength="2"
+                android:textAlignment="center"
+                android:hint="MM"
+                android:inputType="number"/>
+
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_below="@+id/container"
+            android:id="@+id/overtime_hours_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Overtime Hours:"
+            android:padding="5dp"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:layout_margin="5dp"/>
+        <EditText
+            android:layout_below="@+id/overtime_hours_text"
+            android:id="@+id/overtime_hours"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Hours"
+            android:textAlignment="center"
+            android:background="@drawable/border"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            android:inputType="numberDecimal"/>
+        <TextView
+            android:layout_below="@+id/overtime_hours"
+            android:id="@+id/overtime_work_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Overtime Work:"
+            android:padding="5dp"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:layout_margin="5dp"/>
+        <EditText
+            android:layout_below="@+id/overtime_work_text"
+            android:id="@+id/overtime_work"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Overtime Work"
+            android:textAlignment="center"
+            android:background="@drawable/border"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            android:lines="3"
+            android:inputType="textMultiLine"/>
+
+
+        <LinearLayout
+            android:id="@+id/action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/overtime_work"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
+
+            <Button
+                android:id="@+id/negative"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@color/transparent"
+                android:text="Close"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+            <Button
+                android:id="@+id/positive"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="#5089e3"
+                android:text="Submit"
+                android:textColor="@color/white"
+                android:textSize="16dp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/disableView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#88ffffff"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="?android:attr/progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/action"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/colorAccent"
+        android:visibility="gone" />
+</android.support.v7.widget.CardView>

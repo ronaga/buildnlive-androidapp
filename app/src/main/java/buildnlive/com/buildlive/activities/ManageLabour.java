@@ -1,7 +1,6 @@
 package buildnlive.com.buildlive.activities;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +37,7 @@ import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.LabourModel;
 import buildnlive.com.buildlive.fragments.ManageLabourFragment;
 import buildnlive.com.buildlive.utils.Config;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class ManageLabour extends AppCompatActivity {
     private TextView name;
@@ -49,17 +48,20 @@ public class ManageLabour extends AppCompatActivity {
     private LabourAdapter labourAdapter;
     private Button submit;
     private AlertDialog.Builder builder;
-    private String user,quantity;
-    private static ArrayList<LabourModel> data=new ArrayList<>();
-    private static ArrayList<LabourModel> newItems=new ArrayList<>();
+    private String user, quantity;
+    private static ArrayList<LabourModel> data = new ArrayList<>();
+    private static ArrayList<LabourModel> newItems = new ArrayList<>();
     private int mYear, mMonth, mDay;
     private Calendar c;
     private Context context;
     private ProgressBar progress;
-    private TextView hider,no_content;
+    private TextView hider, no_content;
     private CoordinatorLayout coordinatorLayout;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity=this;
 
-    LabourAdapter.OnItemClickListener listener= new LabourAdapter.OnItemClickListener() {
+
+    LabourAdapter.OnItemClickListener listener = new LabourAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(LabourModel items, int pos, View view) {
 
@@ -99,20 +101,26 @@ public class ManageLabour extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_labour);
-        context=this;
-        progress=findViewById(R.id.progress);
-        coordinatorLayout = findViewById(R.id.coordinatorLayout);
-        hider=findViewById(R.id.hider);
+        context = this;
 
-        name=findViewById(R.id.name);
-        builder= new AlertDialog.Builder(this);
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        no_content=findViewById(R.id.no_content);
+        utilityofActivity = new UtilityofActivity(this);
+
+        progress = findViewById(R.id.progress);
+        coordinatorLayout = findViewById(R.id.coordinatorLayout);
+        hider = findViewById(R.id.hider);
+
+        name = findViewById(R.id.name);
+        builder = new AlertDialog.Builder(this);
+
+        utilityofActivity=new UtilityofActivity(appCompatActivity);
+        utilityofActivity.configureToolbar(appCompatActivity);
+
         TextView toolbar_title=findViewById(R.id.toolbar_title);
+        TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
+        toolbar_subtitle.setText(App.projectName);
         toolbar_title.setText("Request Labour");
+
+        no_content = findViewById(R.id.no_content);
 //        date_button=findViewById(R.id.date_button);
 //        date=findViewById(R.id.date);
 //        date.setEnabled(false);
@@ -162,8 +170,8 @@ public class ManageLabour extends AppCompatActivity {
 //        quantity10=findViewById(R.id.quantity9);
 //        quantity11=findViewById(R.id.quantity10);
 
-        items=findViewById(R.id.item);
-        submit=findViewById(R.id.submit);
+        items = findViewById(R.id.item);
+        submit = findViewById(R.id.submit);
 //        data.clear();
 //        data.add(new LabourModel("Male Helper",""));
 //        data.add(new LabourModel("Female Helper",""));
@@ -181,23 +189,23 @@ public class ManageLabour extends AppCompatActivity {
         name.setEnabled(false);
 
         items.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(items.getContext(),LinearLayoutManager.VERTICAL);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(items.getContext(), LinearLayoutManager.VERTICAL);
         items.addItemDecoration(dividerItemDecoration);
 
-        labourAdapter=new LabourAdapter(context,data,listener);
+        labourAdapter = new LabourAdapter(context, data, listener);
         items.setAdapter(labourAdapter);
 
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    newItems.clear();
-                    for (int i = 0; i < data.size(); i++) {
-                        if (data.get(i).isUpdated()) {
-                            newItems.add(data.get(i));
-                        }
+                newItems.clear();
+                for (int i = 0; i < data.size(); i++) {
+                    if (data.get(i).isUpdated()) {
+                        newItems.add(data.get(i));
                     }
-                builder.setMessage("Are you sure?") .setTitle("Submit");
+                }
+                builder.setMessage("Are you sure?").setTitle("Submit");
 
                 //Setting message manually and performing action on button click
                 builder.setMessage("Do you want to Submit?")
@@ -223,7 +231,6 @@ public class ManageLabour extends AppCompatActivity {
                 //Setting the title manually
                 alert.setTitle("Submit");
                 alert.show();
-
 
 
             }
@@ -270,8 +277,8 @@ public class ManageLabour extends AppCompatActivity {
         App app = ((App) getApplication());
         HashMap<String, String> params = new HashMap<>();
         params.put("user_id", App.userId);
-        params.put("project_id",App.projectId);
-        params.put("vendor_id",ManageLabourFragment.user_id_s);
+        params.put("project_id", App.projectId);
+        params.put("vendor_id", ManageLabourFragment.user_id_s);
 //        params.put("date",date);
         JSONArray array = new JSONArray();
         for (LabourModel i : items) {
@@ -284,12 +291,14 @@ public class ManageLabour extends AppCompatActivity {
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
 //                Toast.makeText(getApplicationContext(),"Error:"+error,Toast.LENGTH_LONG).show();
                 Snackbar snackbar = Snackbar.make(coordinatorLayout, "Something went wrong, Try again later", Snackbar.LENGTH_LONG);
                 snackbar.show();
@@ -300,6 +309,7 @@ public class ManageLabour extends AppCompatActivity {
             public void onNetworkRequestComplete(String response) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 console.log(response);
                 if (response.equals("1")) {
                     Toast.makeText(getApplicationContext(), "Request Generated", Toast.LENGTH_SHORT).show();
@@ -313,9 +323,8 @@ public class ManageLabour extends AppCompatActivity {
     }
 
 
-
     private void refresh() {
-        App app= ((App) getApplication());
+        App app = ((App) getApplication());
         data.clear();
         String requestUrl = Config.LABOUR_TYPE_LIST;
         requestUrl = requestUrl.replace("[0]", App.userId);
@@ -325,20 +334,22 @@ public class ManageLabour extends AppCompatActivity {
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
-
+                utilityofActivity.dismissProgressDialog();
                 console.error("Network request failed with error :" + error);
 //                Toast.makeText(getContext(), "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
-                Snackbar snackbar= Snackbar.make(coordinatorLayout,"Check Network, Something went wrong",Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(coordinatorLayout, "Check Network, Something went wrong", Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
 
             @Override
             public void onNetworkRequestComplete(String response) {
                 console.log(response);
+                utilityofActivity.dismissProgressDialog();
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
                 try {
@@ -347,20 +358,18 @@ public class ManageLabour extends AppCompatActivity {
                         data.add(new LabourModel().parseFromJSON(array.getJSONObject(i)));
                     }
                     console.log("data set changed");
-                    if(data.isEmpty()){
+                    if (data.isEmpty()) {
                         no_content.setVisibility(View.VISIBLE);
                         no_content.setText("No Labour");
-                    }
-                    else
-                    {
+                    } else {
                         no_content.setVisibility(View.GONE);
                     }
 
                     items.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-                    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(items.getContext(),LinearLayoutManager.VERTICAL);
+                    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(items.getContext(), LinearLayoutManager.VERTICAL);
                     items.addItemDecoration(dividerItemDecoration);
 
-                    labourAdapter=new LabourAdapter(context,data,listener);
+                    labourAdapter = new LabourAdapter(context, data, listener);
                     items.setAdapter(labourAdapter);
 
 //                    adapter = new EmployeeAdapter(getContext(), employeeList, listner);

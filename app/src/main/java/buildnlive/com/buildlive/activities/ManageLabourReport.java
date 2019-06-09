@@ -1,5 +1,6 @@
 package buildnlive.com.buildlive.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -31,6 +32,7 @@ import buildnlive.com.buildlive.fragments.ViewLabourReportFragment;
 import buildnlive.com.buildlive.utils.Config;
 import buildnlive.com.buildlive.adapters.BreakUpAdapter;
 import buildnlive.com.buildlive.elements.LabourModel;
+import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class ManageLabourReport extends AppCompatActivity {
 
@@ -44,8 +46,10 @@ public class ManageLabourReport extends AppCompatActivity {
     private ProgressBar progress;
     private TextView hider;
     private CoordinatorLayout coordinatorLayout;
+    private UtilityofActivity utilityofActivity;
+    private AppCompatActivity appCompatActivity=this;
 
-    BreakUpAdapter.OnItemClickListener listener= new BreakUpAdapter.OnItemClickListener() {
+BreakUpAdapter.OnItemClickListener listener= new BreakUpAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(LabourModel items, int pos, View view) {
 
@@ -74,11 +78,14 @@ public class ManageLabourReport extends AppCompatActivity {
         setContentView(R.layout.activity_labour_report);
         context=this;
         progress=findViewById(R.id.progress);
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        utilityofActivity=new UtilityofActivity(appCompatActivity);
+        utilityofActivity.configureToolbar(appCompatActivity);
+
+        TextView toolbar_title=findViewById(R.id.toolbar_title);
+        TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
+        toolbar_subtitle.setText(App.projectName);
+        toolbar_title.setText("View Labour Request");
         coordinatorLayout = findViewById(R.id.coordinatorLayout);
         hider=findViewById(R.id.hider);
 
@@ -117,12 +124,14 @@ public class ManageLabourReport extends AppCompatActivity {
             public void onNetworkRequestStart() {
                 progress.setVisibility(View.VISIBLE);
                 hider.setVisibility(View.VISIBLE);
+                utilityofActivity.showProgressDialog();
             }
 
             @Override
             public void onNetworkRequestError(String error) {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
                 console.error("Network request failed with error :" + error);
 //                Toast.makeText(context, "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
                 final Snackbar snackbar = Snackbar.make(coordinatorLayout, "Something went wrong, Try again later", Snackbar.LENGTH_INDEFINITE);
@@ -137,6 +146,7 @@ public class ManageLabourReport extends AppCompatActivity {
             @Override
             public void onNetworkRequestComplete(String response) {
                 console.log(response);
+                utilityofActivity.dismissProgressDialog();
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
                 try {
