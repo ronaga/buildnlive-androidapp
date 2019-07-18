@@ -1,16 +1,15 @@
 package buildnlive.com.buildlive.activities;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
 import buildnlive.com.buildlive.App;
-import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.fragments.MarkAttendanceNew;
 import buildnlive.com.buildlive.fragments.ViewAttendanceFragment;
@@ -40,7 +39,7 @@ public class MarkAttendance extends AppCompatActivity {
 
         TextView toolbar_title=findViewById(R.id.toolbar_title);
         TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
-        toolbar_title.setText("Attedance");
+        toolbar_title.setText("Labour Attendance");
         toolbar_subtitle.setText(App.projectName);
 
         app = (App) getApplication();

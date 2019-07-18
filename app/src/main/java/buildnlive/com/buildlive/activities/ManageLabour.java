@@ -4,14 +4,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -188,7 +188,7 @@ public class ManageLabour extends AppCompatActivity {
         name.setText(ManageLabourFragment.name_s);
         name.setEnabled(false);
 
-        items.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        items.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(items.getContext(), LinearLayoutManager.VERTICAL);
         items.addItemDecoration(dividerItemDecoration);
 
@@ -365,7 +365,7 @@ public class ManageLabour extends AppCompatActivity {
                         no_content.setVisibility(View.GONE);
                     }
 
-                    items.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+                    items.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
                     DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(items.getContext(), LinearLayoutManager.VERTICAL);
                     items.addItemDecoration(dividerItemDecoration);
 

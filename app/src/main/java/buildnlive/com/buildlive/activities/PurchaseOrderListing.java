@@ -1,6 +1,5 @@
 package buildnlive.com.buildlive.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,12 +10,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.core.content.FileProvider;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,12 +43,9 @@ import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.BuildConfig;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
-import buildnlive.com.buildlive.adapters.ActivityImagesAdapter;
-import buildnlive.com.buildlive.adapters.DailyWorkActivityAdapter;
 import buildnlive.com.buildlive.adapters.PurchaseOrderListingAdapter;
 import buildnlive.com.buildlive.adapters.SingleImageAdapter;
 import buildnlive.com.buildlive.console;
-import buildnlive.com.buildlive.elements.Order;
 import buildnlive.com.buildlive.elements.OrderItem;
 import buildnlive.com.buildlive.elements.Packet;
 import buildnlive.com.buildlive.utils.AdvancedRecyclerView;
@@ -58,7 +54,7 @@ import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class PurchaseOrderListing extends AppCompatActivity {
     private App app;
-    private String id;
+    private String id,type_id;
     private RecyclerView list;
     private PurchaseOrderListingAdapter adapter;
     private List<OrderItem> itemList;
@@ -113,6 +109,7 @@ public class PurchaseOrderListing extends AppCompatActivity {
         app = (App) getApplication();
         Bundle bundle = getIntent().getExtras();
         id = bundle.getString("id");
+        type_id = bundle.getString("type_id");
         fetchOrders();
 
         final AdvancedRecyclerView list = findViewById(R.id.images);
@@ -253,6 +250,7 @@ public class PurchaseOrderListing extends AppCompatActivity {
         HashMap<String, String> params = new HashMap<>();
         params.put("user_id", App.userId);
         params.put("purchase_order_id", id);
+        params.put("type_id", type_id);
         JSONArray array = new JSONArray();
         for (int i = 0; i < itemList.size(); i++) {
             if (itemList.get(i).isIncluded()) {

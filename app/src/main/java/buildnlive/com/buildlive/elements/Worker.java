@@ -29,6 +29,8 @@ public class Worker extends RealmObject {
     private String labour_present;
     private String start_time;
     private String end_time;
+    private String fix_time_in;
+    private String fix_time_out;
     @Index
     private String belongsTo;
 
@@ -53,8 +55,30 @@ public class Worker extends RealmObject {
         setPresent(obj.getString("labour_present"));
         setStart_time(obj.getString("start_time"));
         setEnd_time(obj.getString("end_time"));
+        setFix_time_in(obj.getString("fix_time_in"));
+        setFix_time_out(obj.getString("fix_time_out"));
         setBelongsTo(App.belongsTo);
         return this;
+    }
+
+    public String getFix_time_in() {
+        return fix_time_in;
+    }
+
+    public String getFix_time_out() {
+        return fix_time_out;
+    }
+
+    public void setFix_time_in(String fix_time_in) {
+        this.fix_time_in = fix_time_in;
+    }
+
+    public void setFix_time_out(String fix_time_out) {
+        this.fix_time_out = fix_time_out;
+    }
+
+    public void setLabour_present(String labour_present) {
+        this.labour_present = labour_present;
     }
 
     public void setStart_time(String start_time) {

@@ -1,16 +1,15 @@
 package buildnlive.com.buildlive.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -30,8 +29,6 @@ import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.LabourModel;
 import buildnlive.com.buildlive.fragments.ViewLabourReportFragment;
 import buildnlive.com.buildlive.utils.Config;
-import buildnlive.com.buildlive.adapters.BreakUpAdapter;
-import buildnlive.com.buildlive.elements.LabourModel;
 import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class ManageLabourReport extends AppCompatActivity {

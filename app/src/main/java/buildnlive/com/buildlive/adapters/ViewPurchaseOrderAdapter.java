@@ -1,22 +1,16 @@
 package buildnlive.com.buildlive.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.HashMap;
 import java.util.List;
 
 import buildnlive.com.buildlive.R;
-import buildnlive.com.buildlive.activities.PurchaseOrder;
 import buildnlive.com.buildlive.elements.Order;
-import buildnlive.com.buildlive.elements.Worker;
-import buildnlive.com.buildlive.utils.Utils;
-import io.realm.OrderedRealmCollection;
-import io.realm.RealmRecyclerViewAdapter;
 
 public class ViewPurchaseOrderAdapter extends RecyclerView.Adapter<ViewPurchaseOrderAdapter.ViewHolder> {
     private final List<Order> items;

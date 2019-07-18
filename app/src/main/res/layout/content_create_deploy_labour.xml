@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_daily_work_activities"
+    tools:context=".activities.DailyWorkProgressActivities"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Spinner
+        android:spinnerMode="dialog"
+        android:background="@drawable/border"
+        android:padding="10dp"
+        android:id="@+id/structure"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        />
+
+
+    <LinearLayout
+        android:layout_below="@+id/structure"
+        android:id="@+id/title_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_height="match_parent"
+            android:text="Name"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_height="match_parent"
+            android:text="Quantity"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_height="match_parent"
+            android:text="Available"/>
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/title_text"
+        android:background="#e8e8e8"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/item"
+        android:layout_below="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_above="@id/submit"
+        android:layout_height="match_parent"/>
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/color3"
+        android:text="Submit"
+        android:visibility="gone"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/no_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="No Content"
+        android:textSize="25sp"
+        android:visibility="gone"/>
+
+
+</RelativeLayout>

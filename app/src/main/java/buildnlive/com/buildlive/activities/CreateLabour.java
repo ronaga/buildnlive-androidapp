@@ -4,40 +4,50 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
+import buildnlive.com.buildlive.adapters.LabourTradeSpinAdapter;
 import buildnlive.com.buildlive.console;
+import buildnlive.com.buildlive.elements.LabourTrade;
 import buildnlive.com.buildlive.utils.Config;
 import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class CreateLabour extends AppCompatActivity {
     private EditText name, mobile, referenceNo;
-    private Spinner type;
+    private Spinner skill,workHours,gender,type,trade;
     private Button submit, add;
     private AlertDialog.Builder builder;
     private Boolean val = true;
     private Context context;
     private UtilityofActivity utilityofActivity;
     private AppCompatActivity appCompatActivity=this;
+    private LabourTradeSpinAdapter labourTradeAdapter,labourTypeAdapter;
+    private ArrayList<LabourTrade> labourTradeList=new ArrayList<>();
+    private ArrayList<LabourTrade> labourTypeList=new ArrayList<>();
+    private String labourTradeName="0";
+    private String labourTypeName="0";
 
 
     @Override
@@ -53,10 +63,23 @@ public class CreateLabour extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        try {
+
+            getLabourType();
+            getLabourTrade();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_labour);
 
+        context=this;
 
         utilityofActivity=new UtilityofActivity(appCompatActivity);
         utilityofActivity.configureToolbar(appCompatActivity);
@@ -68,11 +91,48 @@ public class CreateLabour extends AppCompatActivity {
 
         name = findViewById(R.id.name);
         mobile = findViewById(R.id.mobile);
+        skill = findViewById(R.id.skill);
+        workHours = findViewById(R.id.workingHours);
+        gender = findViewById(R.id.gender);
+
         type = findViewById(R.id.type);
+        trade = findViewById(R.id.trade);
+
         submit = findViewById(R.id.submit);
         add = findViewById(R.id.findbyref);
         referenceNo = findViewById(R.id.reference_no);
         submit = findViewById(R.id.submit);
+
+
+        labourTradeAdapter  = new LabourTradeSpinAdapter(context, R.layout.custom_spinner, labourTradeList);
+        trade.setAdapter(labourTradeAdapter);
+
+        trade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                labourTradeName=labourTradeAdapter.getName(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                labourTradeName="0";
+            }
+        });
+
+        labourTypeAdapter = new LabourTradeSpinAdapter(context, R.layout.custom_spinner, labourTypeList);
+        type.setAdapter(labourTypeAdapter);
+
+        type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                labourTypeName = labourTypeAdapter.getName(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                labourTypeName = "0";
+            }
+        });
 
 
         builder = new AlertDialog.Builder(this);
@@ -88,9 +148,9 @@ public class CreateLabour extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
 
-                                if (validate(name.getText().toString(), mobile.getText().toString(), type.getSelectedItem().toString())) {
+                                if (validate(name.getText().toString(), "", skill.getSelectedItem().toString(),gender.getSelectedItem().toString(),workHours.getSelectedItem().toString())) {
                                     try {
-                                        sendRequest(name.getText().toString(), mobile.getText().toString(), type.getSelectedItem().toString());
+                                        sendRequest(name.getText().toString(), "", skill.getSelectedItem().toString(),gender.getSelectedItem().toString(),workHours.getSelectedItem().toString(),labourTradeName,labourTypeName);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -152,10 +212,18 @@ public class CreateLabour extends AppCompatActivity {
 
     }
 
-    private boolean validate(String name_text, String mobile_text, String type) {
+    private boolean validate(String name_text, String mobile_text, String skill,String gender,String workHours) {
 
-        if (TextUtils.equals(type, "Select Labour Type")) {
-            Toast.makeText(getApplicationContext(), "Please Select Type", Toast.LENGTH_LONG).show();
+        if (TextUtils.equals(skill, "Select Skill Level")) {
+            Toast.makeText(getApplicationContext(), "Please Select Skill Level", Toast.LENGTH_LONG).show();
+            val = false;
+        }
+        if (TextUtils.equals(gender, "Select Gender")) {
+            Toast.makeText(getApplicationContext(), "Please Select Gender", Toast.LENGTH_LONG).show();
+            val = false;
+        }
+        if (TextUtils.equals(gender, "Select Work Hours")) {
+            Toast.makeText(getApplicationContext(), "Please Select Work Hours", Toast.LENGTH_LONG).show();
             val = false;
         }
 
@@ -164,11 +232,11 @@ public class CreateLabour extends AppCompatActivity {
             name.setError("Enter Name");
             val = false;
         }
-
+/*
         if (TextUtils.isEmpty(mobile_text)) {
             mobile.setError("Enter Mobile");
             val = false;
-        }
+        }*/
 //        if(TextUtils.isEmpty(to)){
 //            to_edit.setError("Enter Payee");
 //            val=false;
@@ -177,15 +245,20 @@ public class CreateLabour extends AppCompatActivity {
     }
 
 
-    private void sendRequest(String name, String mobile, String type) throws JSONException {
+    private void sendRequest(String name, String mobile, String skill,String gender,String workHours,String labourTradeName,String labourTypeName) throws JSONException {
         App app = ((App) getApplication());
         HashMap<String, String> params = new HashMap<>();
         params.put("user_id", App.userId);
         params.put("project_id", App.projectId);
         params.put("labour_name", name);
         params.put("labour_mobile", mobile);
-        params.put("labour_type", type);
+        params.put("labour_gender", gender);
+        params.put("labour_working_hrs", workHours);
+        params.put("labour_skill", skill);
+        params.put("labour_trade", labourTradeName);
+        params.put("labour_type", labourTypeName);
         console.log("Res:" + params);
+
         app.sendNetworkRequest(Config.CREATE_LABOUR, 1, params, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
@@ -209,6 +282,101 @@ public class CreateLabour extends AppCompatActivity {
             }
         });
     }
+
+    private void getLabourTrade() throws JSONException {
+
+        App app= ((App)getApplication());
+
+        String url = Config.LABOUR_TRADE;
+
+        url = url.replace("[0]", App.userId);
+        url = url.replace("[1]", App.projectId);
+
+
+        app.sendNetworkRequest(url, 1, null, new Interfaces.NetworkInterfaceListener() {
+            @Override
+            public void onNetworkRequestStart() {
+                utilityofActivity.showProgressDialog();
+            }
+
+            @Override
+            public void onNetworkRequestError(String error) {
+                utilityofActivity.dismissProgressDialog();
+                Toast.makeText(context,"Something went wrong, Try again later",Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNetworkRequestComplete(String response) {
+                utilityofActivity.dismissProgressDialog();
+                console.log("LABOUR TRADE"+response);
+
+                try {
+                    labourTradeList.clear();
+
+                    Type labourTradeType = new TypeToken<ArrayList<LabourTrade>>() {
+                    }.getType();
+                    labourTradeList = new Gson().fromJson(response, labourTradeType);
+                    labourTradeAdapter  = new LabourTradeSpinAdapter(context, R.layout.custom_spinner, labourTradeList);
+                    trade.setAdapter(labourTradeAdapter);
+
+
+                    labourTradeAdapter.notifyDataSetChanged();
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+
+    private void getLabourType() throws JSONException {
+
+        App app= ((App)getApplication());
+
+        String url = Config.LABOUR_TYPE;
+
+        url = url.replace("[0]", App.userId);
+        url = url.replace("[1]", App.projectId);
+
+
+        app.sendNetworkRequest(url, 1, null, new Interfaces.NetworkInterfaceListener() {
+            @Override
+            public void onNetworkRequestStart() {
+                utilityofActivity.showProgressDialog();
+            }
+
+            @Override
+            public void onNetworkRequestError(String error) {
+                utilityofActivity.dismissProgressDialog();
+                Toast.makeText(context,"Something went wrong, Try again later",Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNetworkRequestComplete(String response) {
+                utilityofActivity.dismissProgressDialog();
+                console.log("LABOUR TYPE"+response);
+
+                try {
+                    labourTypeList.clear();
+
+                    Type labourTradeType = new TypeToken<ArrayList<LabourTrade>>() {
+                    }.getType();
+                    labourTypeList = new Gson().fromJson(response, labourTradeType);
+                    labourTypeAdapter  = new LabourTradeSpinAdapter(context, R.layout.custom_spinner, labourTypeList);
+                    type.setAdapter(labourTypeAdapter);
+
+
+                    labourTypeAdapter.notifyDataSetChanged();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
 
 
     private void findByRefLabour(String refNo) throws JSONException {

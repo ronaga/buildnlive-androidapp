@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:id="@+id/cover"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="40dp"/>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="Testing"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:paddingTop="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textSize="30sp"
+            android:layout_marginTop="10dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#3e3e3e"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:paddingBottom="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:layout_gravity="center_horizontal"
+            android:text="testing@gmail.com"/>
+
+
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:layout_marginTop="40dp"
+            android:layout_gravity="center_horizontal"
+            android:text=""/>
+
+        <Button
+            android:id="@+id/checkin"
+            android:layout_gravity="center"
+            android:text="Check In"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingStart="25dp"
+            android:paddingEnd="25dp"
+            android:layout_marginTop="80dp"
+            android:textColor="@color/white"
+            android:background="@drawable/home_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+     <Button
+            android:id="@+id/absent"
+            android:layout_gravity="center"
+            android:text="Take a Leave"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingStart="25dp"
+            android:paddingEnd="25dp"
+            android:layout_marginTop="80dp"
+            android:textColor="@color/white"
+            android:background="@drawable/home_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/checkout"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:text="Check Out"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingStart="25dp"
+            android:paddingEnd="25dp"
+            android:layout_marginTop="80dp"
+            android:textColor="@color/white"
+            android:background="@drawable/home_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:indeterminate="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/hider"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.6"
+        android:background="#ffffff"
+        android:visibility="gone" />
+
+</RelativeLayout>
+    <!--</ScrollView>-->

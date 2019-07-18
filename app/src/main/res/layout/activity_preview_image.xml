@@ -110,7 +110,7 @@
         app:dv_draw_zoomregion_minscale="2"
         app:dv_draw_zoomregion_scale="4" />
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_button"
         android:layout_width="56dp"
         android:layout_height="56dp"

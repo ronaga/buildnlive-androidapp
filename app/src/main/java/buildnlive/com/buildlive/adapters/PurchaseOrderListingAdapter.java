@@ -1,7 +1,7 @@
 package buildnlive.com.buildlive.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -10,12 +10,10 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import buildnlive.com.buildlive.R;
-import buildnlive.com.buildlive.elements.Activity;
 import buildnlive.com.buildlive.elements.OrderItem;
 
 public class PurchaseOrderListingAdapter extends RecyclerView.Adapter<PurchaseOrderListingAdapter.ViewHolder> {

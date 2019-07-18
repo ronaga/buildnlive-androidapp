@@ -1,32 +1,18 @@
 package buildnlive.com.buildlive.adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.Console;
-import java.util.ArrayList;
 import java.util.List;
 
 import buildnlive.com.buildlive.R;
-import buildnlive.com.buildlive.elements.IndentItem;
-import buildnlive.com.buildlive.elements.Item;
 import buildnlive.com.buildlive.elements.TransferMachine;
-import buildnlive.com.buildlive.fragments.AddItemFragment;
 
 public class TransferInAdapter extends RecyclerView.Adapter<TransferInAdapter.ViewHolder> {
 

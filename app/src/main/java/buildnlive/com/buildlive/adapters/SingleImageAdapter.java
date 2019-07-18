@@ -1,22 +1,19 @@
 package buildnlive.com.buildlive.adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.Date;
 import java.util.List;
 
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.elements.Packet;
-import buildnlive.com.buildlive.utils.Utils;
 
 public class SingleImageAdapter extends RecyclerView.Adapter<SingleImageAdapter.ViewHolder> {
 

@@ -1,14 +1,11 @@
 package buildnlive.com.buildlive.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.List;

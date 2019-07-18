@@ -9,18 +9,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.core.content.FileProvider;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -30,6 +31,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +41,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,8 +54,10 @@ import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.adapters.ActivityImagesAdapter;
 import buildnlive.com.buildlive.adapters.DailyWorkAdapter;
+import buildnlive.com.buildlive.adapters.StructureSpinAdapter;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Packet;
+import buildnlive.com.buildlive.elements.Structure;
 import buildnlive.com.buildlive.elements.Work;
 import buildnlive.com.buildlive.utils.AdvancedRecyclerView;
 import buildnlive.com.buildlive.utils.Config;
@@ -78,6 +84,18 @@ public class WorkProgress extends AppCompatActivity {
     private UtilityofActivity utilityofActivity;
     private AppCompatActivity appCompatActivity=this;
     public static final int REQUEST_GALLERY_IMAGE = 7191;
+    private StructureSpinAdapter structureSpinAdapter;
+    private ArrayList<Structure> structureList = new ArrayList<>();
+    private Spinner structureSpinner;
+    private String structureId;
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setStructureSpinner();
+
+    }
 
 
     @Override
@@ -94,105 +112,30 @@ public class WorkProgress extends AppCompatActivity {
         toolbar_subtitle.setText(App.projectName);
 
         app = (App) getApplication();
-
-//        edit = findViewById(R.id.edit);
-//        view = findViewById(R.id.view);
-//        items = view.findViewById(R.id.items);
-//        progress = view.findViewById(R.id.progress);
-//        hider = view.findViewById(R.id.hider);
-//        no_content = view.findViewById(R.id.no_content);
-//        filter = findViewById(R.id.filter);
-//        fragment = DailyWorkProgressFragment.newInstance(app);
-//        changeScreen();
-//        filter.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                LayoutInflater inflater = getLayoutInflater();
-//                View dialogView = inflater.inflate(R.layout.alert_filter, null);
-//                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context, R.style.PinDialog);
-//                final AlertDialog alertDialog = dialogBuilder.setCancelable(false).setView(dialogView).create();
-//                alertDialog.show();
-//            }
-//        });
-        loadWorks();
         items = findViewById(R.id.items);
         progress = findViewById(R.id.progress);
         hider = findViewById(R.id.hider);
         no_content = findViewById(R.id.no_content);
-//        back =view.findViewById(R.id.back);
-//        back.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                getActivity().finish();
-//            }
-//        });
-//        reset =view.findViewById(R.id.reset);
-//        reset.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                loadWorks();
-//            }
-//        });
-//        filter = view.findViewById(R.id.filter);
-//        filter.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                LayoutInflater inflater = getLayoutInflater();
-//                View dialogView = inflater.inflate(R.layout.alert_filter, null);
-//                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context, R.style.PinDialog);
-//                final AlertDialog alertDialog = dialogBuilder.setCancelable(false).setView(dialogView).create();
-//                alertDialog.show();
-//                final Spinner status= dialogView.findViewById(R.id.status);
-//                final Spinner catfilt= dialogView.findViewById(R.id.category_filter);
-//                final EditText startDateDD= dialogView.findViewById(R.id.start_date_dd);
-//                final EditText startDateMM= dialogView.findViewById(R.id.start_date_mm);
-//                final EditText startDateYYYY= dialogView.findViewById(R.id.start_date_yyyy);
-//                final EditText endDateDD= dialogView.findViewById(R.id.end_date_dd);
-//                final EditText endDateMM= dialogView.findViewById(R.id.end_date_mm);
-//                final EditText endDateYYYY= dialogView.findViewById(R.id.end_date_yyyy);
-//
-//                Button positive = dialogView.findViewById(R.id.positive);
-//                positive.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//
-//                        if(!(status.getSelectedItem().toString().equals("Select Status")))
-//                        {
-//                            status_text = status.getSelectedItem().toString();
-//                            console.log(status_text);
-//                        }
-//                        else
-//                        {
-//                            status_text="";
-//                        }
-//                        if(!(catfilt.getSelectedItem().toString().equals("Select Category")))
-//                        {
-//                            category_text = catfilt.getSelectedItem().toString();
-//                            console.log(category_text);
-//                        }
-//                        else
-//                        {
-//                            category_text="";
-//                        }
-//                        String start_date=startDateDD.getText()+"/"+startDateMM.getText()+"/"+startDateYYYY.getText();
-//                        String end_date=endDateDD.getText()+"/"+endDateMM.getText()+"/"+endDateYYYY.getText();
-//                        console.log(start_date+" "+end_date);
-//                        filter(status_text,category_text,start_date,end_date);
-//                        alertDialog.dismiss();
-//
-//                    }
-//                });
-//                Button negative = dialogView.findViewById(R.id.negative);
-//                negative.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        alertDialog.dismiss();
-//                    }
-//                });
-//            }
-//        });
-//        realm = Realm.getDefaultInstance();
-//        works = realm.where(Work.class).equalTo("belongsTo", App.belongsTo).findAllAsync();
+
+
+        structureSpinner = findViewById(R.id.structure);
+        structureSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                structureId = structureSpinAdapter.getStructureId(i);
+                loadWorks(structureId);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        structureSpinAdapter = new StructureSpinAdapter(context, R.layout.custom_spinner, structureList);
+        structureSpinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        structureSpinner.setAdapter(structureSpinAdapter);
+
 
         if (LOADING) {
             progress.setVisibility(View.VISIBLE);
@@ -276,7 +219,7 @@ public class WorkProgress extends AppCompatActivity {
                 });
                 return true;
             case R.id.reset:
-                loadWorks();
+                loadWorks("0");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -322,7 +265,7 @@ public class WorkProgress extends AppCompatActivity {
                         JSONObject sch = par.getJSONObject("work_schedule");
                         final Work work = new Work().parseFromJSON(sch.getJSONObject("work_details"), par.getString("work_list_id"), par.getString("master_work_id"),
                                 sch.getString("work_duration"), sch.getString("qty"), sch.getString("schedule_start_date"), sch.getString("schedule_finish_date")
-                                , sch.getString("current_status"), sch.getString("qty_completed"), sch.getString("percent_compl"), "Work");
+                                , sch.getString("current_status"), sch.getString("qty_completed"), sch.getString("percent_compl"), "Work",sch.getString("status_color"));
                         workslist.add(work);
 //                        , par.getString("completed_activities"), par.getString("total_activities")
                         //                        realm.executeTransaction(new Realm.Transaction() {
@@ -360,11 +303,12 @@ public class WorkProgress extends AppCompatActivity {
         });
     }
 
-    private void loadWorks() {
+    private void loadWorks(String structureId) {
         workslist.clear();
         String url = Config.REQ_DAILY_WORK;
         url = url.replace("[0]", App.userId);
         url = url.replace("[1]", App.projectId);
+        url = url.replace("[2]", structureId);
         console.log("URL:" + url);
         app.sendNetworkRequest(url, 0, null, new Interfaces.NetworkInterfaceListener() {
             @Override
@@ -391,7 +335,7 @@ public class WorkProgress extends AppCompatActivity {
                         JSONObject sch = par.getJSONObject("work_schedule");
                         final Work work = new Work().parseFromJSON(sch.getJSONObject("work_details"), par.getString("work_list_id"), par.getString("master_work_id"),
                                 sch.getString("work_duration"), sch.getString("qty"), sch.getString("schedule_start_date"), sch.getString("schedule_finish_date")
-                                , sch.getString("current_status"), sch.getString("qty_completed"), sch.getString("percent_compl"), "Work");
+                                , sch.getString("current_status"), sch.getString("qty_completed"), sch.getString("percent_compl"), "Work",sch.getString("status_color"));
                         workslist.add(work);
 //                        , par.getString("completed_activities"), par.getString("total_activities")
                         //                        realm.executeTransaction(new Realm.Transaction() {
@@ -400,7 +344,6 @@ public class WorkProgress extends AppCompatActivity {
 //                                realm.copyToRealmOrUpdate(work);
 //                            }
 //                        });
-                        console.log("Worklist" + workslist.get(i).getWorkName());
                     }
                     if (workslist.isEmpty()) {
                         no_content.setVisibility(View.VISIBLE);
@@ -458,8 +401,8 @@ public class WorkProgress extends AppCompatActivity {
 
                     LayoutInflater inflater = getLayoutInflater();
                     View dialogView = inflater.inflate(R.layout.image_chooser, null);
-                    android.support.v7.app.AlertDialog.Builder dialogBuilder = new android.support.v7.app.AlertDialog.Builder(context, R.style.PinDialog);
-                    final android.support.v7.app.AlertDialog alertDialog = dialogBuilder.setCancelable(false).setView(dialogView).create();
+                    androidx.appcompat.app.AlertDialog.Builder dialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(context, R.style.PinDialog);
+                    final androidx.appcompat.app.AlertDialog alertDialog = dialogBuilder.setCancelable(false).setView(dialogView).create();
                     alertDialog.show();
                     final TextView gallery = dialogView.findViewById(R.id.gallery);
                     final TextView camera = dialogView.findViewById(R.id.camera);
@@ -664,7 +607,8 @@ public class WorkProgress extends AppCompatActivity {
                     if (response.equals("1")) {
                         Toast.makeText(context, "Status Updated", Toast.LENGTH_SHORT).show();
                         alertDialog.dismiss();
-                        finish();
+                        loadWorks(structureId);
+//                        finish();
                     }
                 }
             });
@@ -719,4 +663,47 @@ public class WorkProgress extends AppCompatActivity {
 //        }
 //        edit.setTextColor(getResources().getColor(R.color.white));
 //    }
+private void setStructureSpinner() {
+
+    String requestURl = Config.SendStructures;
+    requestURl = requestURl.replace("[0]", App.userId);
+    requestURl = requestURl.replace("[1]", App.projectId);
+
+    structureList.clear();
+
+    console.log(requestURl);
+    app.sendNetworkRequest(requestURl, Request.Method.GET, null, new Interfaces.NetworkInterfaceListener() {
+        @Override
+        public void onNetworkRequestStart() {
+            utilityofActivity.showProgressDialog();
+        }
+
+        @Override
+        public void onNetworkRequestError(String error) {
+            utilityofActivity.showProgressDialog();
+            console.error("Network request failed with error :" + error);
+            Toast.makeText(context, "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
+
+        }
+
+        @Override
+        public void onNetworkRequestComplete(String response) {
+            console.log(response);
+            utilityofActivity.dismissProgressDialog();
+
+            Type vendorType = new TypeToken<ArrayList<Structure>>() {
+            }.getType();
+            structureList = new Gson().fromJson(response, vendorType);
+
+            structureSpinAdapter.notifyDataSetChanged();
+
+            structureSpinAdapter = new StructureSpinAdapter(context, R.layout.custom_spinner, structureList);
+            structureSpinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            structureSpinner.setAdapter(structureSpinAdapter);
+
+
+        }
+    });
+}
+
 }

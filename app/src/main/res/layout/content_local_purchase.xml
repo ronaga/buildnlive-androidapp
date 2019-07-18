@@ -19,6 +19,7 @@
 
 
 
+<!--
 
         <LinearLayout
             android:id="@+id/action"
@@ -58,6 +59,7 @@
                 android:textSize="20dp" />
 
         </LinearLayout>
+-->
     </LinearLayout>
 
     <!--<Spinner-->

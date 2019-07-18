@@ -30,6 +30,7 @@ public class Work extends RealmObject {
     private String planned_detail_id;
     private String planned_id;
     private String type;
+    private String status_color;
 
     public Work(String id, String workId, String workListId,String masterWorkId, String workName, String units, String workCode, String duration, String quantity, String start, String end, String status,String qty_completed, String percent_compl,String type) {
         this.id = id;
@@ -66,11 +67,30 @@ public class Work extends RealmObject {
         this.percent_compl=percent_compl;
         this.type=type;
     }
+    public Work(String planned_id,String planned_detail_id,String id, String workId, String workListId, String workName, String units, String workCode, String duration, String quantity, String start, String end, String status,String qty_completed, String percent_compl,String type,String status_color) {
+        this.planned_id=planned_id;
+        this.planned_detail_id=planned_detail_id;
+        this.id = id;
+        this.workId = workId;
+        this.workListId = workListId;
+        this.workName = workName;
+        this.units = units;
+        this.workCode = workCode;
+        this.duration = duration;
+        this.quantity = quantity;
+        this.start = start;
+        this.end = end;
+        this.status = status;
+        this.qty_completed=qty_completed;
+        this.percent_compl=percent_compl;
+        this.type=type;
+        this.status_color=status_color;
+    }
 
     public Work() {
     }
 
-    public Work parseFromJSON(JSONObject obj, String workListId,String masterWorkId, String duration, String quantity, String start, String end, String status,String qty_completed,String percent_compl,String type) throws JSONException {
+    public Work parseFromJSON(JSONObject obj, String workListId,String masterWorkId, String duration, String quantity, String start, String end, String status,String qty_completed,String percent_compl,String type,String status_color) throws JSONException {
         setWorkListId(workListId);
         setMasterWorkId(masterWorkId);
         setDuration(duration);
@@ -87,7 +107,17 @@ public class Work extends RealmObject {
         setCompletedQty(qty_completed);
         setPercentCompleted(percent_compl);
         setType(type);
+        setStatus_color(status_color);
+
         return this;
+    }
+
+    public String getStatus_color() {
+        return status_color;
+    }
+
+    public void setStatus_color(String status_color) {
+        this.status_color = status_color;
     }
 
     private void setMasterWorkId(String masterWorkId) {
@@ -98,7 +128,7 @@ public class Work extends RealmObject {
         return masterWorkId;
     }
 
-    public Work parseFromJSON(JSONObject obj, String planned_id, String planned_detail_id, String duration, String quantity, String start, String end, String status, String qty_completed, String percent_compl, String assign_qty, String type) throws JSONException {
+    public Work parseFromJSON(JSONObject obj, String planned_id, String planned_detail_id, String duration, String quantity, String start, String end, String status, String qty_completed, String percent_compl, String assign_qty, String type,String status_color) throws JSONException {
         setPlannedId(planned_id);
         setPlannedDetailid(planned_detail_id);
         setAssignedQuantity(assign_qty);
@@ -116,6 +146,7 @@ public class Work extends RealmObject {
         setCompletedQty(qty_completed);
         setPercentCompleted(percent_compl);
         setType(type);
+        setStatus_color(status_color);
         return this;
     }
 

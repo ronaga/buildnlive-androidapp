@@ -1,22 +1,17 @@
 package buildnlive.com.buildlive.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.Html;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.List;
 
 import buildnlive.com.buildlive.R;
-import buildnlive.com.buildlive.elements.Issue;
-import buildnlive.com.buildlive.elements.LabourModel;
 import buildnlive.com.buildlive.elements.ViewIssue;
 
 public class ViewIssueAdapter extends RecyclerView.Adapter<ViewIssueAdapter.ViewHolder> {

@@ -3,10 +3,10 @@ package buildnlive.com.buildlive.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -272,10 +272,14 @@ public class IssuedItemsForm extends AppCompatActivity {
 
 //        if (user_type.equals("user")) {
             obj.put("stock_id", selectedItem).put("quantity", quantity.getText().toString())
-                    .put("receiver_id", selectedReceiver).put("comments", comments.getText().toString())
+                    .put("comments", comments.getText().toString())
                     .put("item_rent_id", item_rent_id).put("slip_no", slip_no.getText().toString())
                     .put("user_type", user_type).put("item_type", item_type).put("asset_id", asset_id)
                     .put("reciver", receiver_person.getText().toString());
+        if (user_type.equals("user")) {
+            obj.put("receiver_id", selectedReceiver);
+        }
+        else obj.put("receiver_id", vendor_id);
             params.put("issue_list", obj.toString());
 
             console.log("Item User" + obj.toString());

@@ -2,7 +2,7 @@ package buildnlive.com.buildlive.utils;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.AttributeSet;
 
 import buildnlive.com.buildlive.R;

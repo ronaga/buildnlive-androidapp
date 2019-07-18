@@ -9,7 +9,7 @@
     tools:context=".activities.HomeActivity"
     tools:showIn="@layout/app_bar_home">
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/plans"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

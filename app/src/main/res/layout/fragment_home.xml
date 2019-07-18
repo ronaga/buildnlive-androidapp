@@ -75,7 +75,6 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/mark_attendance"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -83,7 +82,8 @@
                         android:layout_weight="1"
                         android:background="@drawable/border"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="50dp"
@@ -103,14 +103,93 @@
                             android:layout_height="match_parent"
                             android:breakStrategy="high_quality"
                             android:padding="5dp"
-                            android:text="Attendance"
+                            android:text="Labour Attendance"
                             android:textAlignment="center"
                             android:textSize="18dp" />
                     </LinearLayout>
 
 
                     <LinearLayout
-                        android:visibility="gone"
+                        android:id="@+id/mark_emp_attendance"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/border"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/border_round"
+                            android:backgroundTint="@color/c1"
+                            android:backgroundTintMode="src_atop"
+                            android:padding="10dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/ic_assignment_black_24dp"
+                            android:tint="@color/c1" />
+
+                        <TextView
+                            android:id="@+id/mark_emp_attendance_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:breakStrategy="high_quality"
+                            android:padding="5dp"
+                            android:text="Staff Attendance"
+                            android:textAlignment="center"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/two"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/issued_items"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/border"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/border_round"
+                            android:backgroundTint="@color/color1"
+                            android:backgroundTintMode="src_atop"
+                            android:padding="10dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/ic_shopping_cart_black_24dp"
+                            android:tint="@color/color1" />
+
+                        <TextView
+                            android:id="@+id/issued_items_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:breakStrategy="high_quality"
+                            android:padding="5dp"
+                            android:text="Issue Item"
+                            android:textAlignment="center"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:id="@+id/manage_inventory"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -119,7 +198,8 @@
                         android:background="@drawable/border"
                         android:clickable="true"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="50dp"
@@ -147,86 +227,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/two"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:visibility="gone"
-                        android:id="@+id/issued_items"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="10dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/border"
-                        android:clickable="true"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_margin="10dp"
-                            android:background="@drawable/border_round"
-                            android:backgroundTint="@color/color1"
-                            android:backgroundTintMode="src_atop"
-                            android:padding="10dp"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/ic_shopping_cart_black_24dp"
-                            android:tint="@color/color1" />
-
-                        <TextView
-                            android:id="@+id/issued_items_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:breakStrategy="high_quality"
-                            android:padding="5dp"
-                            android:text="Issue Item"
-                            android:textAlignment="center"
-                            android:textSize="18dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:visibility="gone"
-                        android:id="@+id/request_items"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="10dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/border"
-                        android:clickable="true"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_margin="10dp"
-                            android:background="@drawable/border_round"
-                            android:backgroundTint="@color/c3"
-                            android:backgroundTintMode="src_atop"
-                            android:padding="10dp"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/ic_receipt_black_24dp"
-                            android:tint="@color/c3" />
-
-                        <TextView
-                            android:id="@+id/request_items_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:breakStrategy="high_quality"
-                            android:padding="5dp"
-                            android:text="Request Form"
-                            android:textAlignment="center"
-                            android:textSize="18dp" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
                     android:id="@+id/three"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -235,7 +235,6 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/work_progress"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -244,7 +243,8 @@
                         android:background="@drawable/border"
                         android:clickable="true"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="50dp"
@@ -270,7 +270,6 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/purchase"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -279,7 +278,8 @@
                         android:background="@drawable/border"
                         android:clickable="true"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="50dp"
@@ -314,8 +314,7 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:visibility="gone"
-                        android:id="@+id/request_list"
+                        android:id="@+id/site_payment"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="10dp"
@@ -323,33 +322,33 @@
                         android:background="@drawable/border"
                         android:clickable="true"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_margin="10dp"
                             android:background="@drawable/border_round"
-                            android:backgroundTint="@color/c3"
+                            android:backgroundTint="@color/c2"
                             android:backgroundTintMode="src_atop"
                             android:padding="10dp"
                             android:scaleType="fitXY"
                             android:src="@drawable/ic_add_black_24dp"
-                            android:tint="@color/c3" />
+                            android:tint="@color/c2" />
 
                         <TextView
-                            android:id="@+id/site_request_text"
+                            android:id="@+id/site_payment_text"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:breakStrategy="high_quality"
                             android:padding="5dp"
-                            android:text="Request Item"
+                            android:text="Site Payment"
                             android:textAlignment="center"
                             android:textSize="18dp" />
                     </LinearLayout>
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/local_purchase"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -358,7 +357,8 @@
                         android:background="@drawable/border"
                         android:clickable="true"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="50dp"
@@ -378,7 +378,7 @@
                             android:layout_height="match_parent"
                             android:breakStrategy="high_quality"
                             android:padding="5dp"
-                            android:text="Purchase &amp; Payments"
+                            android:text="Local Purchase"
                             android:textAlignment="center"
                             android:textSize="18dp" />
                     </LinearLayout>
@@ -393,7 +393,6 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/labour"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -402,7 +401,8 @@
                         android:background="@drawable/border"
                         android:clickable="true"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="50dp"
@@ -429,7 +429,6 @@
 
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/manage_labour"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -438,7 +437,8 @@
                         android:background="@drawable/border"
                         android:clickable="true"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="50dp"
@@ -506,7 +506,6 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/planning"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -515,7 +514,8 @@
                         android:background="@drawable/border"
                         android:clickable="true"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="50dp"
@@ -541,7 +541,6 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/machine"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -550,7 +549,8 @@
                         android:background="@drawable/border"
                         android:clickable="true"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="50dp"
@@ -585,17 +585,17 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/transfer_request"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="10dp"
+                        android:layout_weight="1"
                         android:background="@drawable/border"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="50dp"
@@ -621,17 +621,17 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:id="@+id/repair"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="10dp"
+                        android:layout_weight="1"
                         android:background="@drawable/border"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="50dp"
@@ -654,6 +654,216 @@
                             android:text="Repair Request"
                             android:textAlignment="center"
                             android:textSize="18sp" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/eight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/approve"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/border"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/border_round"
+                            android:backgroundTint="@color/c4"
+                            android:backgroundTintMode="src_atop"
+                            android:padding="10dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/ic_transfer"
+                            android:tint="@color/c4" />
+
+                        <TextView
+                            android:id="@+id/approve_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:breakStrategy="high_quality"
+                            android:padding="5dp"
+                            android:text="Approvals"
+                            android:textAlignment="center"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/request_items"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/border"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/border_round"
+                            android:backgroundTint="@color/c5"
+                            android:backgroundTintMode="src_atop"
+                            android:padding="10dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/ic_receipt_black_24dp"
+                            android:tint="@color/c5" />
+
+                        <TextView
+                            android:id="@+id/request_items_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:breakStrategy="high_quality"
+                            android:padding="5dp"
+                            android:text="Request Form"
+                            android:textAlignment="center"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/nine"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/request_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/border"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/border_round"
+                            android:backgroundTint="@color/c3"
+                            android:backgroundTintMode="src_atop"
+                            android:padding="10dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/ic_add_black_24dp"
+                            android:tint="@color/c3" />
+
+                        <TextView
+                            android:id="@+id/site_request_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:breakStrategy="high_quality"
+                            android:padding="5dp"
+                            android:text="Request Item"
+                            android:textAlignment="center"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/storeRequest"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/border"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/border_round"
+                            android:backgroundTint="@color/c3"
+                            android:backgroundTintMode="src_atop"
+                            android:padding="10dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/ic_transfer"
+                            android:tint="@color/c3" />
+
+                        <TextView
+                            android:id="@+id/storeRequestText"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:breakStrategy="high_quality"
+                            android:padding="5dp"
+                            android:text="Store Request"
+                            android:textAlignment="center"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ten"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/labour_deployment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/border"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/border_round"
+                            android:backgroundTint="@color/c3"
+                            android:backgroundTintMode="src_atop"
+                            android:padding="10dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/ic_add_black_24dp"
+                            android:tint="@color/c3" />
+
+                        <TextView
+                            android:id="@+id/labour_deployment_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:breakStrategy="high_quality"
+                            android:padding="5dp"
+                            android:text="Labour Deployment"
+                            android:textAlignment="center"
+                            android:textSize="18dp" />
                     </LinearLayout>
 
 

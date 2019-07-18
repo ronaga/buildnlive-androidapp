@@ -1,15 +1,14 @@
 package buildnlive.com.buildlive.fragments;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,15 +30,12 @@ import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.adapters.ListAdapter;
-import buildnlive.com.buildlive.adapters.ViewAttendanceAdapter;
 import buildnlive.com.buildlive.adapters.ViewLiveAttendanceAdapter;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Packet;
 import buildnlive.com.buildlive.elements.ViewAttendance;
-import buildnlive.com.buildlive.elements.Worker;
 import buildnlive.com.buildlive.utils.Config;
 import buildnlive.com.buildlive.utils.UtilityofActivity;
-import io.realm.RealmResults;
 
 public class ViewAttendanceFragment extends Fragment {
     private RecyclerView attendees;

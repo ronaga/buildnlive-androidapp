@@ -12,11 +12,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.core.content.FileProvider;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -32,6 +32,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,6 +42,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,8 +54,10 @@ import buildnlive.com.buildlive.BuildConfig;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.adapters.SingleImageAdapter;
+import buildnlive.com.buildlive.adapters.VendorOptionSpinAdapter;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Packet;
+import buildnlive.com.buildlive.elements.VendorOption;
 import buildnlive.com.buildlive.utils.AdvancedRecyclerView;
 import buildnlive.com.buildlive.utils.Config;
 import buildnlive.com.buildlive.utils.UtilityofActivity;
@@ -79,6 +85,8 @@ public class PaymentFragment extends Fragment {
     private Context context;
     private UtilityofActivity utilityofActivity;
     private AppCompatActivity appCompatActivity;
+    private VendorOptionSpinAdapter purposeAdapter;
+    private ArrayList<VendorOption> vendorOptions= new ArrayList<>();
 
 
 
@@ -100,6 +108,18 @@ public class PaymentFragment extends Fragment {
     }
 
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        try {
+            getVendorList();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -116,7 +136,6 @@ public class PaymentFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         submit = view.findViewById(R.id.submit);
-
         utilityofActivity=new UtilityofActivity(appCompatActivity);
 
         details_edit = view.findViewById(R.id.payment_details);
@@ -153,10 +172,13 @@ public class PaymentFragment extends Fragment {
             }
         });
 
+        purposeAdapter  = new VendorOptionSpinAdapter(context, R.layout.custom_spinner, vendorOptions);
+        purposeSpinner.setAdapter(purposeAdapter);
+
         purposeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                purpose=purposeSpinner.getSelectedItem().toString();
+                purpose=purposeAdapter.getVendorOption_id(i);
             }
 
             @Override
@@ -208,8 +230,8 @@ public class PaymentFragment extends Fragment {
 
                     LayoutInflater inflater = getLayoutInflater();
                     View dialogView = inflater.inflate(R.layout.image_chooser, null);
-                    android.support.v7.app.AlertDialog.Builder dialogBuilder = new android.support.v7.app.AlertDialog.Builder(context, R.style.PinDialog);
-                    final android.support.v7.app.AlertDialog alertDialog = dialogBuilder.setCancelable(false).setView(dialogView).create();
+                    androidx.appcompat.app.AlertDialog.Builder dialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(context, R.style.PinDialog);
+                    final androidx.appcompat.app.AlertDialog alertDialog = dialogBuilder.setCancelable(false).setView(dialogView).create();
                     alertDialog.show();
                     final TextView gallery= dialogView.findViewById(R.id.gallery);
                     final TextView camera= dialogView.findViewById(R.id.camera);
@@ -400,6 +422,65 @@ public class PaymentFragment extends Fragment {
             }
         });
     }
+
+
+    private void getVendorList() throws JSONException {
+
+        App app= ((App)getActivity().getApplication());
+
+        String url = Config.SITE_PAYMENT_OPTION;
+
+        url = url.replace("[0]", App.userId);
+        url = url.replace("[1]", App.projectId);
+
+
+        app.sendNetworkRequest(url, 1, null, new Interfaces.NetworkInterfaceListener() {
+            @Override
+            public void onNetworkRequestStart() {
+            progress.setVisibility(View.VISIBLE);
+            hider.setVisibility(View.VISIBLE);
+            utilityofActivity.showProgressDialog();
+            }
+
+            @Override
+            public void onNetworkRequestError(String error) {
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
+                Toast.makeText(getContext(),"Something went wrong, Try again later",Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNetworkRequestComplete(String response) {
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
+                console.log(response);
+
+                try {
+                    vendorOptions.clear();
+
+                    Type vendorType = new TypeToken<ArrayList<VendorOption>>() {
+                    }.getType();
+                    vendorOptions = new Gson().fromJson(response, vendorType);
+
+                    purposeAdapter  = new VendorOptionSpinAdapter(context, R.layout.custom_spinner, vendorOptions);
+                    purposeSpinner.setAdapter(purposeAdapter);
+
+
+                    console.log("ERROR: "+vendorOptions.get(0).getOption_label());
+                    purposeAdapter.notifyDataSetChanged();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+
+
+
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "IMG_" + timeStamp + "_";
@@ -453,6 +534,7 @@ public class PaymentFragment extends Fragment {
         cursor.close();
         return results;
     }
+
 
 
 

@@ -5,11 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -66,8 +66,8 @@ public class NotificationActivity extends AppCompatActivity {
 
                 LayoutInflater inflater = getLayoutInflater();
                 View dialogView = inflater.inflate(R.layout.alert_dialog_review_notification, null);
-                android.support.v7.app.AlertDialog.Builder dialogBuilder = new android.support.v7.app.AlertDialog.Builder(context, R.style.PinDialog);
-                final android.support.v7.app.AlertDialog alertDialog = dialogBuilder.setCancelable(false).setView(dialogView).create();
+                androidx.appcompat.app.AlertDialog.Builder dialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(context, R.style.PinDialog);
+                final androidx.appcompat.app.AlertDialog alertDialog = dialogBuilder.setCancelable(false).setView(dialogView).create();
                 alertDialog.show();
                 final EditText alert_message = dialogView.findViewById(R.id.alert_message);
                 final Button close = dialogView.findViewById(R.id.negative);
@@ -134,6 +134,16 @@ public class NotificationActivity extends AppCompatActivity {
                                     case R.id.reject:
                                         try {
                                             sendRequest(notification.getId(), "", "Rejected");
+                                            notificationList.remove(pos);
+                                            adapter.notifyItemRemoved(pos);
+                                            adapter.notifyItemRangeChanged(pos, notificationList.size());
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        break;
+                                    case R.id.issued:
+                                        try {
+                                            sendRequest(notification.getId(), "", "Issued");
                                             notificationList.remove(pos);
                                             adapter.notifyItemRemoved(pos);
                                             adapter.notifyItemRangeChanged(pos, notificationList.size());

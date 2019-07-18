@@ -7,8 +7,8 @@ import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
-import android.support.v4.app.NotificationCompat
-import android.support.v4.content.ContextCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import buildnlive.com.buildlive.R
 import buildnlive.com.buildlive.activities.NotificationActivity
 import buildnlive.com.buildlive.console

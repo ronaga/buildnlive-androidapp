@@ -30,7 +30,8 @@
             android:background="@drawable/border"
             android:hint="Name"
             android:padding="7dp" />
-        <EditText
+
+  <!--      <EditText
             android:id="@+id/mobile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,6 +40,36 @@
             android:hint="Mobile No"
             android:inputType="phone"
             android:padding="7dp" />
+  -->
+        <Spinner
+            android:id="@+id/gender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="7dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/border"
+            android:entries="@array/gender"
+            />
+
+        <Spinner
+            android:id="@+id/skill"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="7dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/border"
+            android:entries="@array/labour_skill"
+            />
+
+        <Spinner
+            android:id="@+id/workingHours"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="7dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/border"
+            android:entries="@array/work_hours"
+            />
         <Spinner
             android:id="@+id/type"
             android:layout_width="match_parent"
@@ -46,7 +77,14 @@
             android:padding="7dp"
             android:layout_margin="10dp"
             android:background="@drawable/border"
-            android:entries="@array/labour_type"
+            />
+        <Spinner
+            android:id="@+id/trade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="7dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/border"
             />
 
         <Button

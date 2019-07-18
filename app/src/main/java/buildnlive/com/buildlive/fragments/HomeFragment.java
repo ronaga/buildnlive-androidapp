@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,17 +30,22 @@ import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.activities.AddItem;
+import buildnlive.com.buildlive.activities.Approval;
 import buildnlive.com.buildlive.activities.IndentItems;
 import buildnlive.com.buildlive.activities.IssuedItems;
 import buildnlive.com.buildlive.activities.LabourActivity;
+import buildnlive.com.buildlive.activities.LabourDeployment;
 import buildnlive.com.buildlive.activities.LabourReportActivity;
 import buildnlive.com.buildlive.activities.LocalPurchase;
 import buildnlive.com.buildlive.activities.MachineList;
 import buildnlive.com.buildlive.activities.MarkAttendance;
+import buildnlive.com.buildlive.activities.MarkEmployeeAttendance;
 import buildnlive.com.buildlive.activities.Planning;
 import buildnlive.com.buildlive.activities.PurchaseOrder;
 import buildnlive.com.buildlive.activities.RepairRequest;
 import buildnlive.com.buildlive.activities.RequestItems;
+import buildnlive.com.buildlive.activities.SitePayment;
+import buildnlive.com.buildlive.activities.StoreRequest;
 import buildnlive.com.buildlive.activities.TransferRequest;
 import buildnlive.com.buildlive.activities.WorkProgress;
 import buildnlive.com.buildlive.console;
@@ -54,7 +61,7 @@ import static buildnlive.com.buildlive.utils.Config.PREF_NAME;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
     //    private TextView title;
-    private LinearLayout repairRequest, transferRequest, markAttendance, manageInventory, issuedItems, requestItems, workProgress, purchaseOrder, siteRequest, localPurchase, labour, labourReport, planning, machine;
+    private LinearLayout labour_deployment,sitePayment, approval, repairRequest, transferRequest, markAttendance, markEmployeeAttendance, manageInventory, issuedItems, requestItems, workProgress, purchaseOrder, siteRequest, localPurchase, labour, labourReport, planning, machine, storeRequest;
     private SharedPreferences pref;
     private Spinner projects;
     private static App app;
@@ -99,18 +106,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         pref = getActivity().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         markAttendance = view.findViewById(R.id.mark_attendance);
+        markEmployeeAttendance = view.findViewById(R.id.mark_emp_attendance);
         manageInventory = view.findViewById(R.id.manage_inventory);
         issuedItems = view.findViewById(R.id.issued_items);
         requestItems = view.findViewById(R.id.request_items);
         projects = view.findViewById(R.id.projects);
         siteRequest = view.findViewById(R.id.request_list);
         localPurchase = view.findViewById(R.id.local_purchase);
+        sitePayment = view.findViewById(R.id.site_payment);
         labour = view.findViewById(R.id.labour);
         labourReport = view.findViewById(R.id.manage_labour);
         planning = view.findViewById(R.id.planning);
         machine = view.findViewById(R.id.machine);
         transferRequest = view.findViewById(R.id.transfer_request);
         repairRequest = view.findViewById(R.id.repair);
+        approval = view.findViewById(R.id.approve);
+        storeRequest = view.findViewById(R.id.storeRequest);
+        labour_deployment = view.findViewById(R.id.labour_deployment);
 
         badge = getActivity().findViewById(R.id.badge_notification);
 
@@ -142,6 +154,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         purchaseOrder = view.findViewById(R.id.purchase);
 
         markAttendance.setOnClickListener(this);
+        markEmployeeAttendance.setOnClickListener(this);
         manageInventory.setOnClickListener(this);
         issuedItems.setOnClickListener(this);
         requestItems.setOnClickListener(this);
@@ -155,6 +168,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         machine.setOnClickListener(this);
         transferRequest.setOnClickListener(this);
         repairRequest.setOnClickListener(this);
+        approval.setOnClickListener(this);
+        storeRequest.setOnClickListener(this);
+        sitePayment.setOnClickListener(this);
+        labour_deployment.setOnClickListener(this);
 
 
         ArrayList<String> permissionList = PrefernceFile.Companion.getInstance(context).getArrayList("Perm");
@@ -198,7 +215,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     break;
                 }
                 case "Site Payments": {
-                    localPurchase.setVisibility(View.VISIBLE);
+                    sitePayment.setVisibility(View.VISIBLE);
                     break;
                 }
                 case "Labour Mgmt": {
@@ -227,6 +244,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 }
                 case "Attendance": {
                     markAttendance.setVisibility(View.VISIBLE);
+                    markEmployeeAttendance.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case "Approvals": {
+                    approval.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case "Store Request": {
+                    storeRequest.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case "Labour Deployment": {
+                    labour_deployment.setVisibility(View.VISIBLE);
                     break;
                 }
             }
@@ -323,6 +353,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case R.id.mark_attendance:
                 startActivity(new Intent(getContext(), MarkAttendance.class));
                 break;
+            case R.id.mark_emp_attendance:
+                startActivity(new Intent(getContext(), MarkEmployeeAttendance.class));
+                break;
             case R.id.manage_inventory:
                 startActivity(new Intent(getContext(), AddItem.class));
                 break;
@@ -344,6 +377,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case R.id.local_purchase:
                 startActivity(new Intent(getContext(), LocalPurchase.class));
                 break;
+            case R.id.site_payment:
+                startActivity(new Intent(getContext(), SitePayment.class));
+                break;
             case R.id.labour:
                 startActivity(new Intent(getContext(), LabourActivity.class));
                 break;
@@ -361,6 +397,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.repair:
                 startActivity(new Intent(getContext(), RepairRequest.class));
+                break;
+            case R.id.approve:
+                startActivity(new Intent(getContext(), Approval.class));
+                break;
+            case R.id.storeRequest:
+                startActivity(new Intent(getContext(), StoreRequest.class));
+                break;
+            case R.id.labour_deployment:
+                startActivity(new Intent(getContext(), LabourDeployment.class));
                 break;
 
         }

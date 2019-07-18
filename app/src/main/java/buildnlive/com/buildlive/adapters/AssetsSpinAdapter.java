@@ -1,8 +1,8 @@
 package buildnlive.com.buildlive.adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +13,6 @@ import java.util.ArrayList;
 
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.elements.Assets;
-import buildnlive.com.buildlive.elements.Category;
-import buildnlive.com.buildlive.elements.IssueVendor;
 
 public class AssetsSpinAdapter extends ArrayAdapter<Assets> {
 

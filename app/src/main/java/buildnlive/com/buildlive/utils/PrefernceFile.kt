@@ -15,7 +15,7 @@ import android.preference.PreferenceManager
 class PrefernceFile private constructor(context: Context) {
 
     private val language: String? = null
-    val gcmFromPreference: String
+    val gcmFromPreference: String?
         get() = prefs!!.getString("FCM", "")
 
     fun clearData() {

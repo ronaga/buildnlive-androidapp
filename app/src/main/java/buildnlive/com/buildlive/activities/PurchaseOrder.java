@@ -1,19 +1,18 @@
 package buildnlive.com.buildlive.activities;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
+import androidx.fragment.app.Fragment;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.fragments.ViewPurchaseOrderFragment;
-import buildnlive.com.buildlive.fragments.ViewRequestsFragment;
 import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class PurchaseOrder extends AppCompatActivity {

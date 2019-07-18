@@ -197,6 +197,26 @@
 
         </LinearLayout>
 
+  <LinearLayout
+            android:id="@+id/issue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/issued"
+                android:layout_weight="1"
+                android:textSize="12sp"
+                android:layout_marginRight="5dp"
+                android:layout_width="match_parent"
+                android:theme="@style/PrimaryApproveButton"
+                android:layout_height="wrap_content"
+                android:text="Issued" />
+
+
+        </LinearLayout>
+
 
 
 

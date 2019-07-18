@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -13,10 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
 import com.android.volley.Request;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,7 +28,6 @@ import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Project;
 import buildnlive.com.buildlive.utils.Config;
-import buildnlive.com.buildlive.utils.Permissions;
 import buildnlive.com.buildlive.utils.PrefernceFile;
 import buildnlive.com.buildlive.utils.UtilityofActivity;
 import io.realm.Realm;

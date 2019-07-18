@@ -1,15 +1,14 @@
 package buildnlive.com.buildlive.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -31,10 +30,8 @@ import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.adapters.CreateTransferAdapter;
-import buildnlive.com.buildlive.adapters.IssueItemListAdapter;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.CreateTransferObject;
-import buildnlive.com.buildlive.elements.Item;
 import buildnlive.com.buildlive.utils.Config;
 import buildnlive.com.buildlive.utils.UtilityofActivity;
 

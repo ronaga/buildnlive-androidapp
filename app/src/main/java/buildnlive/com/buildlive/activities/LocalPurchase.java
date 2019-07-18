@@ -1,12 +1,12 @@
 package buildnlive.com.buildlive.activities;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -15,7 +15,6 @@ import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.console;
-import buildnlive.com.buildlive.fragments.LocalPurchaseFragment;
 import buildnlive.com.buildlive.fragments.LocalPurchaseListFragment;
 import buildnlive.com.buildlive.fragments.PaymentFragment;
 import buildnlive.com.buildlive.utils.UtilityofActivity;
@@ -52,9 +51,9 @@ public class LocalPurchase extends AppCompatActivity {
         TextView toolbar_title=findViewById(R.id.toolbar_title);
         TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
         toolbar_subtitle.setText(App.projectName);
-        toolbar_title.setText("Puchase & Payments");
+        toolbar_title.setText("Local Puchase");
         changeScreen();
-        edit = findViewById(R.id.edit);
+        /*edit = findViewById(R.id.edit);
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +72,7 @@ public class LocalPurchase extends AppCompatActivity {
                 fragment = PaymentFragment.newInstance();
                 changeScreen();
             }
-        });
+        });*/
     }
     @Override
     public boolean onSupportNavigateUp() {

@@ -1,7 +1,7 @@
 package buildnlive.com.buildlive.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +11,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import buildnlive.com.buildlive.R;
-import buildnlive.com.buildlive.elements.Item;
-import buildnlive.com.buildlive.elements.LabourInfo;
-import buildnlive.com.buildlive.elements.Notification;
 import buildnlive.com.buildlive.elements.ViewLabour;
 
 public class ViewLabourAdapter extends RecyclerView.Adapter<ViewLabourAdapter.ViewHolder> {

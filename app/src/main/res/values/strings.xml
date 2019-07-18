@@ -18,7 +18,7 @@
     <string name="unit">Select Unit</string>
     <string name="Contractor">Select Contractor</string>
     <string-array name="payment_type"><item>Select Payment Type</item><item>Credit</item><item>Debit</item></string-array>
-    <string-array name="payment_mode"><item>Select Payment Mode</item><item>Cash</item><item>Draft</item><item>Cheque</item></string-array>
+    <string-array name="payment_mode"><item>Select Payment Mode</item><item>Cash</item><item>Draft</item><item>Cheque</item><item>RTGS</item></string-array>
     <string-array name="units">
         <item>Unit</item>
         <item>mtr</item>
@@ -55,10 +55,30 @@
         <item>Civil</item>
         <item>Structure</item>
     </string-array>
-    <string-array name="labour_type">
-        <item>Select Labour Type</item>
+    <string-array name="labour_skill">
+        <item>Select Skill Level</item>
         <item>Skilled</item>
         <item>Unskilled</item>
+    </string-array>
+    <string-array name="absent">
+        <item>Select Status</item>
+        <item>Absent</item>
+        <item>Leave</item>
+    </string-array>
+    <string-array name="tax_paid">
+        <item>W/O Tax</item>
+        <item>Tax Paid</item>
+    </string-array>
+    <string-array name="work_hours">
+        <item>Select Work Hours</item>
+        <item>8 Hrs</item>
+        <item>12 Hrs</item>
+    </string-array>
+    <string-array name="gender">
+        <item>Select Gender</item>
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
     </string-array>
     <string-array name="duration_type">
         <item>Select Duration Type</item>
@@ -96,6 +116,13 @@
     <string name="return_item"><u>Return</u></string>
     <string name="return_repair_item"><u>Return/Receive</u></string>
 
+
+    <string name="service_not_available">Service Not Available</string>
+    <string name="invalid_lat_long_used">Invalid Latitude and Longitude</string>
+    <string name="no_address_found">No Address Found</string>
+    <string name="address_found">Address Found</string>
+    <string name="no_geocoder_available">No Geocoder Available</string>
+    <string name="receive_impress">Receive Impress</string>
 
 </resources>
 

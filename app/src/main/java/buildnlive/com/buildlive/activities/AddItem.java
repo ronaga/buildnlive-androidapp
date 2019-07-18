@@ -1,33 +1,23 @@
 package buildnlive.com.buildlive.activities;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.android.volley.Request;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import buildnlive.com.buildlive.App;
-import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
-import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Item;
 import buildnlive.com.buildlive.fragments.AddItemFragment;
-import buildnlive.com.buildlive.fragments.IssueItemFragment;
 import buildnlive.com.buildlive.fragments.ViewItemFragment;
-import buildnlive.com.buildlive.utils.Config;
 import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class AddItem extends AppCompatActivity {

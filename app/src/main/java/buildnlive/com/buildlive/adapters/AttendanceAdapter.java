@@ -1,8 +1,8 @@
 package buildnlive.com.buildlive.adapters;
 
 import android.content.Context;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,19 +13,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.elements.Worker;
 import buildnlive.com.buildlive.utils.PrefernceFile;
-import buildnlive.com.buildlive.utils.Utils;
-import io.realm.OrderedRealmCollection;
-import io.realm.RealmRecyclerViewAdapter;
 
 public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.ViewHolder> {
     public interface OnItemClickListener {
@@ -193,8 +188,10 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.Vi
         int hour= cal.get(Calendar.HOUR_OF_DAY);
         int min= cal.get(Calendar.MINUTE);
 
-        hours.setText("09");
-        minutes.setText("00");
+        String []time= item.getFix_time_in().split(":");
+
+        hours.setText(time[0]);
+        minutes.setText(time[1]);
 
         positive.setText("Done");
         positive.setOnClickListener(new View.OnClickListener() {
@@ -250,8 +247,10 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.Vi
         int hour= cal.get(Calendar.HOUR_OF_DAY);
         int min= cal.get(Calendar.MINUTE);
 
-        hours.setText("20");
-        minutes.setText("00");
+        String []time= item.getFix_time_out().split(":");
+
+        hours.setText(time[0]);
+        minutes.setText(time[1]);
 
         overtime_hours.setText("0");
 

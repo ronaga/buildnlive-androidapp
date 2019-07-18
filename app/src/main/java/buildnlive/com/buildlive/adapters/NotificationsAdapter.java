@@ -2,9 +2,9 @@ package buildnlive.com.buildlive.adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +12,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +33,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         this.context = context;
         this.listener = listener;
     }
+
     @Override
     public long getItemId(int position) {
         return position;
@@ -46,6 +43,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     public int getItemViewType(int position) {
         return position;
     }
+
     @Override
     public NotificationsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.content_notification, parent, false);
@@ -64,15 +62,15 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView title,quantity,label,details,date;
+        private TextView title, quantity, label, details, date;
         private ImageView imageView;
-        private LinearLayout buttons,reply;
-        private Button approve,reject,review,receive,notReceive,read,image;
+        private LinearLayout buttons, reply, issue;
+        private Button approve, reject, review, receive, notReceive, read, image, issued;
         private AlertDialog.Builder builder;
 
         public ViewHolder(View view) {
             super(view);
-            imageView= view.findViewById(R.id.level);
+            imageView = view.findViewById(R.id.level);
             details = view.findViewById(R.id.details);
             label = view.findViewById(R.id.name);
             title = view.findViewById(R.id.title);
@@ -87,26 +85,28 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             notReceive = view.findViewById(R.id.not_receive);
             reply = view.findViewById(R.id.reply);
             read = view.findViewById(R.id.read_notification);
+            issue = view.findViewById(R.id.issue);
+            issued = view.findViewById(R.id.issued);
         }
 
         public void bind(final Context context, final Notification item, final int pos, final OnItemClickListener listener) {
-            if(item.getLevel().equals("urgent"))
-            {
+            if (item.getLevel().equals("urgent")) {
                 imageView.setVisibility(View.VISIBLE);
             }
-            if(!item.getImage().isEmpty()){
+            if (!item.getImage().isEmpty()) {
                 image.setVisibility(View.VISIBLE);
                 image.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        listener.onItemClick(item,pos,view);
+                        listener.onItemClick(item, pos, view);
                     }
                 });
             }
-            switch (item.getType()){
+            switch (item.getType()) {
                 case "update":
                     reply.setVisibility(View.GONE);
                     buttons.setVisibility(View.GONE);
+                    issue.setVisibility(View.GONE);
                     details.setText(item.getUser());
                     title.setText(item.getLabel());
                     label.setText(item.getText());
@@ -114,11 +114,27 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                     read.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            listener.onItemClick(item,pos,view);
+                            listener.onItemClick(item, pos, view);
+                        }
+                    });
+                    break;
+                case "issue":
+                    reply.setVisibility(View.GONE);
+                    read.setVisibility(View.GONE);
+                    buttons.setVisibility(View.GONE);
+                    details.setText(item.getUser());
+                    title.setText(item.getLabel());
+                    label.setText(item.getText());
+                    date.setText(item.getDate());
+                    issued.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            listener.onItemClick(item, pos, view);
                         }
                     });
                     break;
                 case "reply":
+                    issue.setVisibility(View.GONE);
                     read.setVisibility(View.GONE);
                     buttons.setVisibility(View.GONE);
                     details.setText(item.getUser());
@@ -142,6 +158,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                     });
                     break;
                 case "approval":
+                    issue.setVisibility(View.GONE);
                     read.setVisibility(View.GONE);
                     reply.setVisibility(View.GONE);
                     details.setText(item.getUser());

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".activities.DailyWorkProgressActivities"
+    tools:showIn="@layout/activity_create_plan">
+
+
+    <Spinner
+        android:id="@+id/structure"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/border"
+        android:padding="10dp"
+        android:spinnerMode="dialog" />
+
+    <Spinner
+        android:id="@+id/worklist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/structure"
+        android:layout_margin="10dp"
+        android:background="@drawable/border"
+        android:padding="10dp"
+        android:spinnerMode="dialog" />
+
+
+    <LinearLayout
+        android:id="@+id/quantity_container"
+        android:layout_below="@+id/worklist"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/quantity"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/border"
+            android:hint="Quantity"
+            android:inputType="number"
+            android:padding="5dp"
+            android:textAlignment="center" />
+        <TextView
+            android:id="@+id/available"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/border"
+            android:padding="5dp"
+            android:textAlignment="center" />
+        <TextView
+            android:id="@+id/units"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            tools:text="Unit"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textAlignment="center" />
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/quantity_container"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/border"
+            android:text="Date"
+            android:padding="5dp"
+            android:textAlignment="center" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/color3"
+        android:text="Submit"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/no_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="No Content"
+        android:textSize="25sp"
+        android:visibility="gone" />
+
+
+</RelativeLayout>
