@@ -67,7 +67,7 @@ public class PaymentFragment extends Fragment {
     private RadioButton payPrivate,payPublic;
     private ProgressBar progress;
     private boolean val = true;
-    private TextView hider;
+    private TextView hider,balance;
     private EditText amount_edit, overheads_edit, to_edit,reason_edit, details_edit;
     private String amount, details, payment_type, payment_mode,type_of_payment="Public",purpose,to, reason;
 //     overheads,
@@ -152,6 +152,9 @@ public class PaymentFragment extends Fragment {
         paymentModeSpinner=view.findViewById(R.id.paymentMode);
         paymentTypeSpinner=view.findViewById(R.id.paymentType);
         purposeSpinner=view.findViewById(R.id.purpose);
+        balance=view.findViewById(R.id.balance);
+
+
         payPublic.setChecked(true);
         payPrivate.setChecked(false);
 
@@ -201,6 +204,17 @@ public class PaymentFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 payment_mode=paymentModeSpinner.getSelectedItem().toString();
+
+                if(i>0)
+                {
+                    try {
+                        getBalanceAmount(payment_mode);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else
+                    balance.setVisibility(View.GONE);
             }
 
             @Override
@@ -471,6 +485,44 @@ public class PaymentFragment extends Fragment {
                     console.log("ERROR: "+vendorOptions.get(0).getOption_label());
                     purposeAdapter.notifyDataSetChanged();
 
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+  private void getBalanceAmount(String type) throws JSONException {
+
+        App app= ((App)getActivity().getApplication());
+
+        String url = Config.SendBalance;
+
+        url = url.replace("[0]", App.userId);
+        url = url.replace("[1]", App.projectId);
+        url = url.replace("[2]", type);
+
+
+        app.sendNetworkRequest(url, 1, null, new Interfaces.NetworkInterfaceListener() {
+            @Override
+            public void onNetworkRequestStart() {
+            utilityofActivity.showProgressDialog();
+            }
+
+            @Override
+            public void onNetworkRequestError(String error) {
+                utilityofActivity.dismissProgressDialog();
+                Toast.makeText(getContext(),"Something went wrong, Try again later",Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNetworkRequestComplete(String response) {
+                utilityofActivity.dismissProgressDialog();
+                console.log(response);
+
+                try {
+                    balance.setVisibility(View.VISIBLE);
+                    balance.setText(String.format(getString(R.string.balanceAmount),response));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

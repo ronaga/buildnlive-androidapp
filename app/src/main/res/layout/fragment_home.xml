@@ -378,7 +378,7 @@
                             android:layout_height="match_parent"
                             android:breakStrategy="high_quality"
                             android:padding="5dp"
-                            android:text="Local Purchase"
+                            android:text="Purchase"
                             android:textAlignment="center"
                             android:textSize="18dp" />
                     </LinearLayout>

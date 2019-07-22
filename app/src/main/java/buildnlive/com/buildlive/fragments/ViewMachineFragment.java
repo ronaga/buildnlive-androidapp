@@ -85,7 +85,7 @@ public class ViewMachineFragment extends Fragment {
         progress=view.findViewById(R.id.progress);
         hider=view.findViewById(R.id.hider);
         ViewJobSheetAdapter adapter = new ViewJobSheetAdapter(getContext(), itemsList,listner);
-        items.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        items.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         items.setAdapter(adapter);
         refresh();
     }
@@ -129,7 +129,7 @@ public class ViewMachineFragment extends Fragment {
 //                            @Override
 //                            public void execute(Realm realm) {
 //                                try {
-//                                    RequestList request = new RequestList().parseFromJSON(obj);
+//                                    RequestList request = new RequestList().parseFromJSONPlan(obj);
 //                                    realm.copyToRealmOrUpdate(request);
 //                                } catch (JSONException e) {
 //                                    e.printStackTrace();
@@ -144,7 +144,7 @@ public class ViewMachineFragment extends Fragment {
                 }
 
                 ViewJobSheetAdapter adapter = new ViewJobSheetAdapter(getContext(),itemsList,listner);
-                items.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+                items.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
                 items.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
 

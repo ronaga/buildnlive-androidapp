@@ -212,7 +212,7 @@ public class Planning extends AppCompatActivity {
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject par = array.getJSONObject(i);
                         JSONObject sch = par.getJSONObject("work_schedule");
-                        final Work work = new Work().parseFromJSON(sch.getJSONObject("work_details"), par.getString("planned_id"), par.getString("planned_detail_id"),
+                        final Work work = new Work().parseFromJSONPlan(sch.getJSONObject("work_details"), par.getString("planned_id"), par.getString("planned_detail_id"),
                                 sch.getString("work_duration"), sch.getString("qty"), sch.getString("schedule_start_date"), sch.getString("schedule_finish_date")
                                 , sch.getString("current_status"), sch.getString("qty_completed"), sch.getString("percent_compl"), par.getString("assign_qty"), "Plan",sch.getString("status_color"));
                         workslist.add(work);

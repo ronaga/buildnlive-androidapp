@@ -84,16 +84,16 @@ public class WorkProgress extends AppCompatActivity {
     private UtilityofActivity utilityofActivity;
     private AppCompatActivity appCompatActivity=this;
     public static final int REQUEST_GALLERY_IMAGE = 7191;
-    private StructureSpinAdapter structureSpinAdapter;
+  /*  private StructureSpinAdapter structureSpinAdapter;
     private ArrayList<Structure> structureList = new ArrayList<>();
     private Spinner structureSpinner;
-    private String structureId;
-
+    private String structureId;*/
+    private String projectWorkId;
 
     @Override
     protected void onStart() {
         super.onStart();
-        setStructureSpinner();
+        loadWorks(projectWorkId);
 
     }
 
@@ -105,6 +105,10 @@ public class WorkProgress extends AppCompatActivity {
         context = this;
         utilityofActivity=new UtilityofActivity(appCompatActivity);
         utilityofActivity.configureToolbar(appCompatActivity);
+
+        projectWorkId = getIntent().getStringExtra("project_work_id");
+
+        console.log("ID: "+projectWorkId);
 
         TextView toolbar_title=findViewById(R.id.toolbar_title);
         TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
@@ -118,12 +122,12 @@ public class WorkProgress extends AppCompatActivity {
         no_content = findViewById(R.id.no_content);
 
 
-        structureSpinner = findViewById(R.id.structure);
+   /*     structureSpinner = findViewById(R.id.structure);
         structureSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 structureId = structureSpinAdapter.getStructureId(i);
-                loadWorks(structureId);
+                loadWorks(projectWorkId);
             }
 
             @Override
@@ -135,7 +139,7 @@ public class WorkProgress extends AppCompatActivity {
         structureSpinAdapter = new StructureSpinAdapter(context, R.layout.custom_spinner, structureList);
         structureSpinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         structureSpinner.setAdapter(structureSpinAdapter);
-
+*/
 
         if (LOADING) {
             progress.setVisibility(View.VISIBLE);
@@ -258,23 +262,26 @@ public class WorkProgress extends AppCompatActivity {
                 hider.setVisibility(View.GONE);
                 utilityofActivity.dismissProgressDialog();
                 console.log("Response:" + response);
+
+/*
+
+                Type vendorType = new TypeToken<ArrayList<Work>>() {
+                }.getType();
+                workslist = new Gson().fromJson(response, vendorType);
+
+*/
+
                 try {
                     JSONArray array = new JSONArray(response);
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject par = array.getJSONObject(i);
                         JSONObject sch = par.getJSONObject("work_schedule");
-                        final Work work = new Work().parseFromJSON(sch.getJSONObject("work_details"), par.getString("work_list_id"), par.getString("master_work_id"),
+                        final Work work = new Work().parseFromJSONPlan(sch.getJSONObject("work_details"), par.getString("work_list_id"), par.getString("master_work_id"),
                                 sch.getString("work_duration"), sch.getString("qty"), sch.getString("schedule_start_date"), sch.getString("schedule_finish_date")
-                                , sch.getString("current_status"), sch.getString("qty_completed"), sch.getString("percent_compl"), "Work",sch.getString("status_color"));
+                                , sch.getString("current_status"), sch.getString("qty_completed"), sch.getString("percent_compl"), "Work",sch.getString("status_color"),par.getString("layouttype"));
                         workslist.add(work);
-//                        , par.getString("completed_activities"), par.getString("total_activities")
-                        //                        realm.executeTransaction(new Realm.Transaction() {
-//                            @Override
-//                            public void execute(Realm realm) {
-//                                realm.copyToRealmOrUpdate(work);
-//                            }
-//                        });
-                        console.log("Worklist" + workslist.get(i));
+
+                        console.log("WorklistCOLOR" + workslist.get(i).getStatus_color());
                     }
                     if (workslist.isEmpty()) {
                         no_content.setVisibility(View.VISIBLE);
@@ -303,12 +310,12 @@ public class WorkProgress extends AppCompatActivity {
         });
     }
 
-    private void loadWorks(String structureId) {
+    private void loadWorks(String projectWorkId) {
         workslist.clear();
         String url = Config.REQ_DAILY_WORK;
         url = url.replace("[0]", App.userId);
         url = url.replace("[1]", App.projectId);
-        url = url.replace("[2]", structureId);
+        url = url.replace("[2]", projectWorkId);
         console.log("URL:" + url);
         app.sendNetworkRequest(url, 0, null, new Interfaces.NetworkInterfaceListener() {
             @Override
@@ -335,17 +342,25 @@ public class WorkProgress extends AppCompatActivity {
                         JSONObject sch = par.getJSONObject("work_schedule");
                         final Work work = new Work().parseFromJSON(sch.getJSONObject("work_details"), par.getString("work_list_id"), par.getString("master_work_id"),
                                 sch.getString("work_duration"), sch.getString("qty"), sch.getString("schedule_start_date"), sch.getString("schedule_finish_date")
-                                , sch.getString("current_status"), sch.getString("qty_completed"), sch.getString("percent_compl"), "Work",sch.getString("status_color"));
+                                , sch.getString("current_status"), sch.getString("qty_completed"), sch.getString("percent_compl"), "Work",sch.getString("status_color"),par.getString("layouttype"));
                         workslist.add(work);
-//                        , par.getString("completed_activities"), par.getString("total_activities")
-                        //                        realm.executeTransaction(new Realm.Transaction() {
-//                            @Override
-//                            public void execute(Realm realm) {
-//                                realm.copyToRealmOrUpdate(work);
-//                            }
-//                        });
+
+                        console.log("WorklistCOLOR" + workslist.get(i).getStatus_color());
                     }
-                    if (workslist.isEmpty()) {
+
+         /*       Type vendorType = new TypeToken<ArrayList<Work>>() {
+                }.getType();
+                workslist = new Gson().fromJson(response, vendorType);
+*/
+
+/*
+                for (Work i:
+                        workslist) {
+                    console.log("COLOR: "+i.getStatus_color());
+                }
+*/
+
+                if (workslist.isEmpty()) {
                         no_content.setVisibility(View.VISIBLE);
                     } else no_content.setVisibility(View.GONE);
                     adapter = new DailyWorkAdapter(context, workslist, "Work", new DailyWorkAdapter.OnItemClickListener() {
@@ -607,7 +622,7 @@ public class WorkProgress extends AppCompatActivity {
                     if (response.equals("1")) {
                         Toast.makeText(context, "Status Updated", Toast.LENGTH_SHORT).show();
                         alertDialog.dismiss();
-                        loadWorks(structureId);
+                        loadWorks(projectWorkId);
 //                        finish();
                     }
                 }
@@ -616,53 +631,7 @@ public class WorkProgress extends AppCompatActivity {
             Toast.makeText(context, "Put right quantity", Toast.LENGTH_SHORT).show();
         }
     }
-
-//    private void changeScreen() {
-//        getSupportFragmentManager()
-//                .beginTransaction()
-//                .replace(R.id.attendance_content, fragment)
-//                .commit();
-//    }
-//
-//    private void disableView() {
-//        int sdk = android.os.Build.VERSION.SDK_INT;
-//        if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-//            view.setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.round_left, null));
-//        } else {
-//            view.setBackground(ContextCompat.getDrawable(context, R.drawable.round_left));
-//        }
-//        view.setTextColor(getResources().getColor(R.color.color2));
-//    }
-//
-//    private void enableView() {
-//        int sdk = android.os.Build.VERSION.SDK_INT;
-//        if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-//            view.setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.round_left_selected, null));
-//        } else {
-//            view.setBackground(ContextCompat.getDrawable(context, R.drawable.round_left_selected));
-//        }
-//        view.setTextColor(getResources().getColor(R.color.white));
-//    }
-//
-//    private void disableEdit() {
-//        int sdk = android.os.Build.VERSION.SDK_INT;
-//        if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-//            edit.setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.round_right, null));
-//        } else {
-//            edit.setBackground(ContextCompat.getDrawable(context, R.drawable.round_right));
-//        }
-//        edit.setTextColor(getResources().getColor(R.color.color2));
-//    }
-//
-//    private void enableEdit() {
-//        int sdk = android.os.Build.VERSION.SDK_INT;
-//        if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-//            edit.setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.round_right_selected, null));
-//        } else {
-//            edit.setBackground(ContextCompat.getDrawable(context, R.drawable.round_right_selected));
-//        }
-//        edit.setTextColor(getResources().getColor(R.color.white));
-//    }
+/*
 private void setStructureSpinner() {
 
     String requestURl = Config.SendStructures;
@@ -705,5 +674,6 @@ private void setStructureSpinner() {
         }
     });
 }
+*/
 
 }

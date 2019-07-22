@@ -47,10 +47,12 @@ import buildnlive.com.buildlive.activities.RequestItems;
 import buildnlive.com.buildlive.activities.SitePayment;
 import buildnlive.com.buildlive.activities.StoreRequest;
 import buildnlive.com.buildlive.activities.TransferRequest;
+import buildnlive.com.buildlive.activities.WorkListProgress;
 import buildnlive.com.buildlive.activities.WorkProgress;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Project;
 import buildnlive.com.buildlive.elements.ProjectMember;
+import buildnlive.com.buildlive.elements.WorkList;
 import buildnlive.com.buildlive.utils.Config;
 import buildnlive.com.buildlive.utils.PrefernceFile;
 import buildnlive.com.buildlive.utils.UtilityofActivity;
@@ -366,7 +368,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(getContext(), RequestItems.class));
                 break;
             case R.id.work_progress:
-                startActivity(new Intent(getContext(), WorkProgress.class));
+                startActivity(new Intent(getContext(), WorkListProgress.class));
                 break;
             case R.id.purchase:
                 startActivity(new Intent(getContext(), PurchaseOrder.class));

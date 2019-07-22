@@ -186,6 +186,21 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/balance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="end"
+                android:padding="10dp"
+                android:textColor="@color/material_red"
+                android:textSize="14sp"
+                android:visibility="gone"
+                tools:text="Balance: 10,000" />
+
 
             <RadioGroup
                 android:id="@+id/PaymentRadio"

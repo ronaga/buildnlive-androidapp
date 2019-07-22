@@ -22,7 +22,8 @@ public class Config {
     public static final String REQ_LOGIN = "https://buildnlive.com/app/mobileapp/index.php?r=site/UserLogin";
     public static final String SEND_ISSUED_ITEM = "https://buildnlive.com/app/mobileapp/index.php?r=site/GetIssueItem";
     public static final String SEND_STOCK_ITEM = "https://buildnlive.com/app/mobileapp/index.php?r=site/GetStockRequest";
-    public static final String REQ_DAILY_WORK = "https://buildnlive.com/app/mobileapp/index.php?r=site/WorkActivityDaily&user_id=[0]&project_id=[1]&type=Work&structure_id=[2]";
+    public static final String REQ_DAILY_WORK = "https://buildnlive.com/app/mobileapp/index.php?r=site/WorkActivityDaily&user_id=[0]&project_id=[1]&type=Work&project_work_list_id=[2]";
+    public static final String ShowWorkList = "https://buildnlive.com/app/mobileapp/index.php?r=site/ShowWorkList&user_id=[0]&project_id=[1]&structure_id=[2]";
     public static final String REQ_DAILY_WORK_ACTIVITY = "https://buildnlive.com/app/mobileapp/index.php?r=site/ActivityByWork&user_id=[0]&project_work_list_id=[1]";
     public static final String INVENTORY_ITEM_REQUEST = "https://buildnlive.com/app/mobileapp/index.php?r=site/InventoryItemRequest";
     public static final String REQ_DAILY_WORK_ACTIVITY_UPDATE = "https://buildnlive.com/app/mobileapp/index.php?r=site/GetWorkActivityUpdate";
@@ -105,5 +106,6 @@ public class Config {
     public static final String FreeLabour ="https://buildnlive.com/app/mobileapp/index.php?r=Site/FreeLabour&user_id=[0]&project_id=[1]";
     public static final String SendWorkList ="https://buildnlive.com/app/mobileapp/index.php?r=Site/SendWorkList&&user_id=[0]&project_id=[1]&structure_id=[2]";
     public static final String GetDailyPlanning ="https://buildnlive.com/app/mobileapp/index.php?r=Site/GetDailyPlanning";
+    public static final String SendBalance ="https://buildnlive.com/app/mobileapp/index.php?r=Site/SendBalance&user_id=[0]&project_id=[1]&type=[2]";
 
 }

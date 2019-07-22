@@ -7,7 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -17,7 +20,7 @@ import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Work;
 
-public class DailyWorkAdapter extends RecyclerView.Adapter<DailyWorkAdapter.ViewHolder> {
+public class DailyWorkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public interface OnItemClickListener {
         void onItemClick(int pos, View view);
@@ -34,8 +37,16 @@ public class DailyWorkAdapter extends RecyclerView.Adapter<DailyWorkAdapter.View
 
     @Override
     public int getItemViewType(int position) {
-        return position;
+        switch (items.get(position).getLayouttype()) {
+            case "0":
+                return 0;
+            case "1":
+                return 1;
+            default:
+                return -1;
+        }
     }
+
 
     private final List<Work> items;
     private Context context;
@@ -43,7 +54,6 @@ public class DailyWorkAdapter extends RecyclerView.Adapter<DailyWorkAdapter.View
     private final OnButtonClickListener buttonClickListener;
     private String identifier;
 
-//    public DailyWorkAdapter(Context context, OrderedRealmCollection<Work> works, OnItemClickListener listener,OnButtonClickListener buttonClickListener) {
 
     public DailyWorkAdapter(Context context, ArrayList<Work> works, String identifier, OnItemClickListener listener, OnButtonClickListener buttonClickListener) {
         this.items = works;
@@ -54,14 +64,39 @@ public class DailyWorkAdapter extends RecyclerView.Adapter<DailyWorkAdapter.View
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_daily_work_new, parent, false);
-        return new ViewHolder(v);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view;
+
+        switch (viewType) {
+            case 0: {
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_daily_work_new, parent, false);
+                return new DataViewHolder(view);
+            }
+            case 1: {
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_title, parent, false);
+                return new TitleViewHolder(view);
+            }
+        }
+
+        return null;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(context, items.get(position), position, listener, buttonClickListener, identifier);
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+
+        Work workdata = items.get(position);
+
+        switch (workdata.getLayouttype()) {
+            case "0": {
+                ((DataViewHolder) (holder)).bind(context, workdata, position, listener, buttonClickListener, identifier);
+                break;
+            }
+            case "1": {
+                ((TitleViewHolder) (holder)).bindTitle(context, workdata, position);
+                break;
+            }
+        }
+
     }
 
     @Override
@@ -69,12 +104,26 @@ public class DailyWorkAdapter extends RecyclerView.Adapter<DailyWorkAdapter.View
         return items.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    class TitleViewHolder extends RecyclerView.ViewHolder {
+        private TextView title;
+
+        TitleViewHolder(View view) {
+            super(view);
+            title = view.findViewById(R.id.name);
+        }
+
+        void bindTitle(final Context context, final Work item, final int pos) {
+            title.setText(item.getWorkName());
+        }
+
+    }
+
+    class DataViewHolder extends RecyclerView.ViewHolder {
         private TextView name, status, duration, quantity, start, end;
         private TextView update, activity, progressPercentage;
         private ProgressBar progressBar;
 
-        public ViewHolder(View view) {
+        DataViewHolder(View view) {
             super(view);
             name = view.findViewById(R.id.name);
             quantity = view.findViewById(R.id.quantity);
@@ -83,7 +132,6 @@ public class DailyWorkAdapter extends RecyclerView.Adapter<DailyWorkAdapter.View
             status = view.findViewById(R.id.status);
             update = view.findViewById(R.id.update_progress_button);
             duration = view.findViewById(R.id.duration);
-            update = view.findViewById(R.id.update_progress_button);
             activity = view.findViewById(R.id.update_activity_button);
             duration = view.findViewById(R.id.duration);
             progressBar = view.findViewById(R.id.progressBarHorizontal);
@@ -94,8 +142,6 @@ public class DailyWorkAdapter extends RecyclerView.Adapter<DailyWorkAdapter.View
             if (identifier.equals("Work")) {
 
                 status.setBackgroundColor(Color.parseColor(item.getStatus_color()));
-
-
                 name.setText(" " + item.getWorkName());
                 status.setText(item.getStatus());
                 quantity.setText("Quantity: " + item.getQuantity());
@@ -104,7 +150,7 @@ public class DailyWorkAdapter extends RecyclerView.Adapter<DailyWorkAdapter.View
                 end.setText("End Date: " + item.getEnd());
                 int progress = Integer.valueOf(item.getPercent_compl());
                 progressBar.setProgress(progress);
-                progressPercentage.setText(item.getPercent_compl());
+                progressPercentage.setText(String.format(context.getString(R.string.percentComplete),item.getPercent_compl()));
 
                 update.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -112,6 +158,14 @@ public class DailyWorkAdapter extends RecyclerView.Adapter<DailyWorkAdapter.View
                         buttonClickListener.onButtonClick(pos, view);
                     }
                 });
+
+                if (!item.getPercent_compl().equals("100")) {
+                    update.setEnabled(true);
+                    update.setBackground(ContextCompat.getDrawable(context,R.drawable.home_button));
+                } else {
+                    update.setEnabled(false);
+                    update.setBackground(ContextCompat.getDrawable(context,R.drawable.negative_button));
+                }
                 activity.setVisibility(View.VISIBLE);
                 activity.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -141,16 +195,7 @@ public class DailyWorkAdapter extends RecyclerView.Adapter<DailyWorkAdapter.View
                     }
                 });
             }
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    listener.onItemClick(pos, itemView);
-//                }
-//            });
-//            float total = Float.parseFloat(item.getQuantity());
-//            float com = Float.parseFloat(item.getQty_completed());
-//            status.setText(item.getStatus());
-//            status.setText((com / total * 100) + "% Completed");
+
         }
     }
 }

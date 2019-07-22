@@ -86,7 +86,7 @@ public class ViewItemFragment extends Fragment {
         itemsList=new ArrayList<>();
 
         adapter = new ViewItemAdapter(getContext(), itemsList);
-        items.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        items.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         items.setAdapter(adapter);
 
 
@@ -179,7 +179,7 @@ public class ViewItemFragment extends Fragment {
 //                            @Override
 //                            public void execute(Realm realm) {
 //                                try {
-//                                    RequestList request = new RequestList().parseFromJSON(obj);
+//                                    RequestList request = new RequestList().parseFromJSONPlan(obj);
 //                                    realm.copyToRealmOrUpdate(request);
 //                                } catch (JSONException e) {
 //                                    e.printStackTrace();

@@ -121,7 +121,7 @@ public class ViewRequestsFragment extends Fragment {
 //                            @Override
 //                            public void execute(@NonNull Realm realm) {
 //                                try {
-//                                    Request request = new Request().parseFromJSON(obj);
+//                                    Request request = new Request().parseFromJSONPlan(obj);
 //                                    realm.copyToRealmOrUpdate(request);
 //                                } catch (JSONException e) {
 //                                    e.printStackTrace();

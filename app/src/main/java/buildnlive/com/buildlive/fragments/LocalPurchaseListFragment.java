@@ -149,7 +149,7 @@ public class LocalPurchaseListFragment extends Fragment {
 
 
         localPurchaseListAdapter=new LocalPurchaseListAdapter(context,inventory,listener);
-        LinearLayoutManager linearLayoutManager= new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false);
+        LinearLayoutManager linearLayoutManager= new LinearLayoutManager(context,RecyclerView.VERTICAL,false);
         DividerItemDecoration dividerItemDecoration= new DividerItemDecoration(context, LinearLayoutManager.VERTICAL);
         recyclerView.setAdapter(localPurchaseListAdapter);
         recyclerView.setLayoutManager(linearLayoutManager);

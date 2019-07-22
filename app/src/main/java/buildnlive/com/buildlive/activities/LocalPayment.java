@@ -65,7 +65,7 @@ public class LocalPayment extends AppCompatActivity {
     private RadioButton payPrivate, payPublic;
     private ProgressBar progress;
     private boolean val = true;
-    private TextView hider,title;
+    private TextView hider,title,balance;
     private EditText amount_edit, overheads_edit, to_edit, reason_edit, details_edit;
     private String amount, details, payment_type, payment_mode, type_of_payment = "Public", purpose, to, reason,local_purchase_id,type,display;
     //     overheads,
@@ -149,6 +149,7 @@ public class LocalPayment extends AppCompatActivity {
 
         payPrivate = findViewById(R.id.payPrivate);
         payPublic = findViewById(R.id.paypublic);
+        balance=findViewById(R.id.balance);
 
         progress = findViewById(R.id.progress);
 
@@ -207,7 +208,18 @@ public class LocalPayment extends AppCompatActivity {
         paymentModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                payment_mode = paymentModeSpinner.getSelectedItem().toString();
+                payment_mode=paymentModeSpinner.getSelectedItem().toString();
+
+                if(i>0)
+                {
+                    try {
+                        getBalanceAmount(payment_mode);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else
+                    balance.setVisibility(View.GONE);
             }
 
             @Override
@@ -481,7 +493,43 @@ public class LocalPayment extends AppCompatActivity {
             }
         });
     }
+    private void getBalanceAmount(String type) throws JSONException {
 
+        App app= ((App)getApplication());
+
+        String url = Config.SendBalance;
+
+        url = url.replace("[0]", App.userId);
+        url = url.replace("[1]", App.projectId);
+        url = url.replace("[2]", type);
+
+
+        app.sendNetworkRequest(url, 1, null, new Interfaces.NetworkInterfaceListener() {
+            @Override
+            public void onNetworkRequestStart() {
+                utilityofActivity.showProgressDialog();
+            }
+
+            @Override
+            public void onNetworkRequestError(String error) {
+                utilityofActivity.dismissProgressDialog();
+                Toast.makeText(context,"Something went wrong, Try again later",Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNetworkRequestComplete(String response) {
+                utilityofActivity.dismissProgressDialog();
+                console.log(response);
+
+                try {
+                    balance.setVisibility(View.VISIBLE);
+                    balance.setText(String.format(getString(R.string.balanceAmount),response));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());

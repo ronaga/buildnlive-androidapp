@@ -137,7 +137,7 @@ public class ImpressFragment extends Fragment {
 //                            @Override
 //                            public void execute(Realm realm) {
 //                                try {
-//                                    RequestList request = new RequestList().parseFromJSON(obj);
+//                                    RequestList request = new RequestList().parseFromJSONPlan(obj);
 //                                    realm.copyToRealmOrUpdate(request);
 //                                } catch (JSONException e) {
 //                                    e.printStackTrace();

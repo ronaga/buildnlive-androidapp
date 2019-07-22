@@ -237,10 +237,10 @@
         <activity android:name=".activities.LabourDeployment"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".activities.DelpoyLabour" />
         <activity android:name=".activities.DeployLabour" />
         <activity android:name=".activities.CreateLabourDeploy" />
         <activity android:name=".activities.CreatePlan" />
+        <activity android:name=".activities.WorkListProgress" />
 
 
         <service android:name=".Notifications.FirebaseMessagingService">

@@ -217,7 +217,7 @@
 //                    for (int i=0; i<array.length(); i++){
 //                        JSONObject par = array.getJSONObject(i);
 //                        JSONObject sch = par.getJSONObject("work_schedule");
-//                        final Work work = new Work().parseFromJSON(sch.getJSONObject("work_details"), par.getString("work_list_id"),
+//                        final Work work = new Work().parseFromJSONPlan(sch.getJSONObject("work_details"), par.getString("work_list_id"),
 //                                sch.getString("work_duration"), sch.getString("qty"), sch.getString("schedule_start_date"), sch.getString("schedule_finish_date")
 //                                , sch.getString("current_status"),sch.getString("qty_completed"),sch.getString("percent_compl"));
 //                        workslist.add(work);
@@ -283,7 +283,7 @@
 //                    for (int i=0; i<array.length(); i++){
 //                        JSONObject par = array.getJSONObject(i);
 //                        JSONObject sch = par.getJSONObject("work_schedule");
-//                        final Work work = new Work().parseFromJSON(sch.getJSONObject("work_details"), par.getString("work_list_id"),
+//                        final Work work = new Work().parseFromJSONPlan(sch.getJSONObject("work_details"), par.getString("work_list_id"),
 //                                sch.getString("work_duration"), sch.getString("qty"), sch.getString("schedule_start_date"), sch.getString("schedule_finish_date")
 //                                , sch.getString("current_status"),sch.getString("qty_completed"),sch.getString("percent_compl"));
 //                        workslist.add(work);

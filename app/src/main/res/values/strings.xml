@@ -123,6 +123,8 @@
     <string name="address_found">Address Found</string>
     <string name="no_geocoder_available">No Geocoder Available</string>
     <string name="receive_impress">Receive Impress</string>
+    <string name="balanceAmount">Balance: \u20B9 %1$s</string>
+    <string name="percentComplete">%1$s %%</string>
 
 </resources>
 

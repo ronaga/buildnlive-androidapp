@@ -100,7 +100,7 @@ public class LocalPurchaseForm extends AppCompatActivity {
         TextView toolbar_title = findViewById(R.id.toolbar_title);
         TextView toolbar_subtitle = findViewById(R.id.toolbar_subtitle);
         toolbar_subtitle.setText(App.projectName);
-        toolbar_title.setText("Local Purchase");
+        toolbar_title.setText("Purchase");
 
         Bundle bundle = getIntent().getExtras();
 
@@ -241,12 +241,11 @@ public class LocalPurchaseForm extends AppCompatActivity {
                 details = details_edit.getText().toString();
                 gst=vendor_gst.getText().toString();
 
-                builder.setMessage("Are you sure?").setTitle("Payment");
 
                 //Setting message manually and performing action on button click
                 builder.setMessage("Do you want to Submit?")
                         .setCancelable(false)
-                        .setPositiveButton("Yes, Submit", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 if (validate(quantity, total, vendor_details)) {
                                     console.log("From Validate");
@@ -258,13 +257,13 @@ public class LocalPurchaseForm extends AppCompatActivity {
                                 }
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 //  Action for 'NO' Button
                                 dialog.cancel();
 
                             }
-                        }).setNeutralButton("Yes, Continue", new DialogInterface.OnClickListener() {
+                        }).setNeutralButton("Submit & Add Payment", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (validate(quantity, total, vendor_details)) {
@@ -280,7 +279,7 @@ public class LocalPurchaseForm extends AppCompatActivity {
                 //Creating dialog box
                 AlertDialog alert = builder.create();
                 //Setting the title manually
-                alert.setTitle("Local Purchase");
+                alert.setTitle("Purchase");
                 alert.show();
 
 

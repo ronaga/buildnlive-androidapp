@@ -89,7 +89,7 @@ public class ViewStockRequestFragment extends Fragment {
         progress = view.findViewById(R.id.progress);
         hider = view.findViewById(R.id.hider);
         ViewIssueAdapter adapter = new ViewIssueAdapter(getContext(), itemsList, listner);
-        items.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        items.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         items.setAdapter(adapter);
         refresh();
     }
@@ -132,7 +132,7 @@ public class ViewStockRequestFragment extends Fragment {
 //                            @Override
 //                            public void execute(Realm realm) {
 //                                try {
-//                                    RequestList request = new RequestList().parseFromJSON(obj);
+//                                    RequestList request = new RequestList().parseFromJSONPlan(obj);
 //                                    realm.copyToRealmOrUpdate(request);
 //                                } catch (JSONException e) {
 //                                    e.printStackTrace();
@@ -145,7 +145,7 @@ public class ViewStockRequestFragment extends Fragment {
                 } catch (JSONException e) {
                 }
                 ViewIssueAdapter adapter = new ViewIssueAdapter(getContext(), itemsList, listner);
-                items.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+                items.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
                 items.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
 //                for(ViewIssue i: itemsList){
