@@ -9,19 +9,25 @@ public class LabourModel extends RealmObject {
 
     private String name;
     private String quantity;
+    private String labour_type_id;
     private boolean isUpdated;
 
 
     public LabourModel() {
     }
 
-    public LabourModel(String name, String quantity) {
-        this.name = name;
-        this.quantity=quantity;
+    public String getLabour_type_id() {
+        return labour_type_id;
     }
+
+    public void setLabour_type_id(String labour_type_id) {
+        this.labour_type_id = labour_type_id;
+    }
+
     public LabourModel parseFromJSON(JSONObject obj) throws JSONException {
         setName(obj.getString("labour_type"));
         setQuantity(obj.getString("labour_count"));
+        setLabour_type_id(obj.getString("labour_type_id"));
         return this;
     }
 

@@ -43,6 +43,7 @@ import buildnlive.com.buildlive.fragments.CheckAttendanceLoc;
 import buildnlive.com.buildlive.fragments.HomeFragment;
 import buildnlive.com.buildlive.fragments.PlansFragment;
 import buildnlive.com.buildlive.fragments.ProfileFragment;
+import buildnlive.com.buildlive.fragments.TakeLeave;
 import buildnlive.com.buildlive.utils.Config;
 import buildnlive.com.buildlive.utils.UtilityofActivity;
 import io.realm.Realm;
@@ -165,6 +166,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_attendance:
                 fragment = CheckAttendanceLoc.Companion.newInstance(app);
+                break;
+            case R.id.take_leave:
+                fragment = TakeLeave.Companion.newInstance(app);
                 break;
             case R.id.nav_plans:
                 fragment = PlansFragment.newInstance((App) getApplication());

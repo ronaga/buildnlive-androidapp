@@ -12,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -96,15 +99,17 @@ public class MarkAttendanceNew extends Fragment {
         submit = view.findViewById(R.id.submit);
         progress = view.findViewById(R.id.progress);
         hider = view.findViewById(R.id.hider);
-        fab = view.findViewById(R.id.fab);
+        /*fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), CreateLabour.class));
             }
-        });
+        });*/
 
-        attendees.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        setHasOptionsMenu(true);
+
+        attendees.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
 
 
         submit.setOnClickListener(new View.OnClickListener() {
@@ -145,9 +150,11 @@ public class MarkAttendanceNew extends Fragment {
                                 if (AttendanceAdapter.ViewHolder.changedUsers.get(s)) {
                                     checkingOutWorkers.add(u);
                                     if (!PrefernceFile.Companion.getInstance(context).getString("CheckoutTime" + u.getId()).equals("")) {
-                                        checkOut.put(new JSONObject().put("starttime", u.getCheckInTimeSelected()).put("finishtime", PrefernceFile.Companion.getInstance(context).getString("CheckoutTime" + u.getId())).put("attendence_id", PrefernceFile.Companion.getInstance(context).getString("attendence_id" + u.getId()))
+//                                        checkOut.put(new JSONObject().put("starttime", u.getCheckInTimeSelected()).put("finishtime", PrefernceFile.Companion.getInstance(context).getString("CheckoutTime" + u.getId())).put("attendence_id", PrefernceFile.Companion.getInstance(context).getString("attendence_id" + u.getId()))
+                                        checkOut.put(new JSONObject().put("starttime", u.getCheckInTimeSelected()).put("finishtime", PrefernceFile.Companion.getInstance(context).getString("CheckoutTime" + u.getId())).put("attendence_id", u.getAttendanceId())
                                                 .put("overtime_hours", PrefernceFile.Companion.getInstance(context).getString("OvertimeHours" + u.getId()))
                                                 .put("overtime_work", PrefernceFile.Companion.getInstance(context).getString("OvertimeWork" + u.getId())));
+                                        console.log("Checkout LabourList"+checkOut);
                                     } else {
                                         Toast.makeText(context, "Please Enter Checkout Time", Toast.LENGTH_LONG).show();
                                     }
@@ -208,8 +215,8 @@ public class MarkAttendanceNew extends Fragment {
                                                 u.setStart_time(obj.getString("starttime"));
                                                 u.setCheckInTimeSelected(PrefernceFile.Companion.getInstance(context).getString("CheckinTime" + u.getId()));
                                                 u.setCheckInTime(System.currentTimeMillis());
-                                                u.setAttendanceId(obj.getString("attendence_id"));
-                                                PrefernceFile.Companion.getInstance(context).setString("attendence_id" + u.getId(), obj.getString("attendence_id"));
+//                                                u.setAttendanceId(obj.getString("attendence_id"));
+//                                                PrefernceFile.Companion.getInstance(context).setString("attendence_id" + u.getId(), obj.getString("attendence_id"));
 
                                             } catch (JSONException e) {
                                             }
@@ -411,4 +418,20 @@ public class MarkAttendanceNew extends Fragment {
         });
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.add, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.id.add)
+        {
+            startActivity(new Intent(getActivity(), CreateLabour.class));
+
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
 }

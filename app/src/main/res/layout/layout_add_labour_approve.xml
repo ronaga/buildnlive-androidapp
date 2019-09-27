@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <CheckBox
+            android:id="@+id/check"
+            android:layout_width="28dp"
+            android:layout_height="28dp" />
+
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:breakStrategy="high_quality"
+            android:padding="10dp"
+            android:text="lorem ipsum" />
+
+
+        <TextView
+            android:id="@+id/labourRequested"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="0.3"
+            android:background="@drawable/border"
+            tools:hint="6"
+            android:inputType="number"
+            android:padding="3dp"
+            android:textAlignment="center" />
+  <EditText
+            android:id="@+id/labourApproved"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="0.3"
+            android:background="@drawable/border"
+            tools:hint="5"
+            android:inputType="number"
+            android:padding="3dp"
+            android:textAlignment="center" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

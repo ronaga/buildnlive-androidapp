@@ -73,6 +73,13 @@ public class IssueItemListFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        refresh();
+
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
@@ -154,7 +161,6 @@ public class IssueItemListFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-        refresh();
 
 
     }

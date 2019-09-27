@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+    <LinearLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_gravity="center"
+            android:gravity="start"
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.1"
+            android:breakStrategy="high_quality"
+            android:padding="10dp"
+            android:text="@string/user" />
+
+        <TextView
+            android:layout_gravity="center"
+            android:gravity="start"
+            android:id="@+id/workName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.1"
+            android:breakStrategy="high_quality"
+            android:padding="10dp"
+            android:text="@string/work" />
+
+        <TextView
+            android:layout_gravity="center"
+            android:gravity="start"
+            android:id="@+id/quantity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:breakStrategy="high_quality"
+            android:padding="10dp"
+            android:text="@string/labour_requested" />
+
+
+        <TextView
+            android:layout_gravity="center"
+            android:gravity="start"
+            android:id="@+id/date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:breakStrategy="high_quality"
+            android:paddingTop="10dp"
+            android:textAlignment="center"
+            android:paddingBottom="10dp"
+            android:text="@string/date" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/separator2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/top_bar"
+        android:layout_marginTop="5dp"
+        android:background="@color/light_grey"/>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/items"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/separator2"
+        android:layout_marginTop="10dp" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:indeterminate="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/hider"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top_bar"
+        android:alpha="0.6"
+        android:background="#ffffff"
+        android:visibility="gone" />
+
+
+</RelativeLayout>

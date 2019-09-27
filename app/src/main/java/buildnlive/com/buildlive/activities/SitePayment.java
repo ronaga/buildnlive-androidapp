@@ -52,7 +52,7 @@ public class SitePayment extends AppCompatActivity {
         TextView toolbar_title=findViewById(R.id.toolbar_title);
         TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
         toolbar_subtitle.setText(App.projectName);
-        toolbar_title.setText("Puchase & Payments");
+        toolbar_title.setText("Payments");
         changeScreen();
         edit = findViewById(R.id.edit);
         edit.setOnClickListener(new View.OnClickListener() {

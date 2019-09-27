@@ -53,9 +53,11 @@ import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.adapters.ActivityImagesAdapter;
 import buildnlive.com.buildlive.adapters.DailyWorkAdapter;
+import buildnlive.com.buildlive.adapters.ShowWorkListAdapter;
 import buildnlive.com.buildlive.adapters.StructureSpinAdapter;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Packet;
+import buildnlive.com.buildlive.elements.ShowWorkListItem;
 import buildnlive.com.buildlive.elements.Structure;
 import buildnlive.com.buildlive.elements.Work;
 import buildnlive.com.buildlive.utils.AdvancedRecyclerView;
@@ -72,9 +74,9 @@ public class Planning extends AppCompatActivity {
     private RecyclerView items;
     private ProgressBar progress;
     private TextView hider, no_content;
-    private DailyWorkAdapter adapter;
+    private ShowWorkListAdapter adapter;
     private static RealmResults<Work> works;
-    private static ArrayList<Work> workslist = new ArrayList<>();
+    private static ArrayList<ShowWorkListItem> workslist = new ArrayList<>();
     private Realm realm;
     private boolean LOADING = true;
     public static final int QUALITY = 10;
@@ -89,6 +91,16 @@ public class Planning extends AppCompatActivity {
 
     private UtilityofActivity utilityofActivity;
     private AppCompatActivity appCompatActivity = this;
+
+    private ShowWorkListAdapter.OnItemClickListener listener = new ShowWorkListAdapter.OnItemClickListener() {
+        @Override
+        public void onItemClick(String id) {
+            Intent intent = new Intent(Planning.this, DailyWorkProgressActivities.class);
+            intent.putExtra("project_work_id", id);
+            startActivity(intent);
+        }
+    };
+
 
     @Override
     protected void onStart() {
@@ -176,7 +188,7 @@ public class Planning extends AppCompatActivity {
 
     private void loadWorks(String structureId) {
         workslist.clear();
-        String url = Config.GET_PLANNED_LIST;
+        String url = Config.ShowWorkList;
         url = url.replace("[0]", App.userId);
         url = url.replace("[1]", App.projectId);
         url = url.replace("[2]", structureId);
@@ -199,7 +211,6 @@ public class Planning extends AppCompatActivity {
                 progress.setVisibility(View.GONE);
                 hider.setVisibility(View.GONE);
                 console.log("Response:" + response);
-                try {
 
 /*
                     Type approvalListType = new TypeToken<ArrayList<Work>>() {
@@ -208,7 +219,7 @@ public class Planning extends AppCompatActivity {
 */
 
 
-                    JSONArray array = new JSONArray(response);
+                 /*   JSONArray array = new JSONArray(response);
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject par = array.getJSONObject(i);
                         JSONObject sch = par.getJSONObject("work_schedule");
@@ -216,17 +227,30 @@ public class Planning extends AppCompatActivity {
                                 sch.getString("work_duration"), sch.getString("qty"), sch.getString("schedule_start_date"), sch.getString("schedule_finish_date")
                                 , sch.getString("current_status"), sch.getString("qty_completed"), sch.getString("percent_compl"), par.getString("assign_qty"), "Plan",sch.getString("status_color"));
                         workslist.add(work);
+*/
 
-//                        , par.getString("completed_activities"), par.getString("total_activities")
-                        //                        realm.executeTransaction(new Realm.Transaction() {
-//                            @Override
-//                            public void execute(Realm realm) {
-//                                realm.copyToRealmOrUpdate(work);
-//                            }
-//                        });
-                        console.log("Plan" + work.getPlanned_id());
-                    }
-                    if (workslist.isEmpty()) {
+                workslist.clear();
+                utilityofActivity.dismissProgressDialog();
+
+
+                Type vendorType = new TypeToken<ArrayList<ShowWorkListItem>>() {
+                }.getType();
+                workslist = new Gson().fromJson(response, vendorType);
+
+
+                if (workslist.isEmpty()) {
+                    no_content.setVisibility(View.VISIBLE);
+                } else no_content.setVisibility(View.GONE);
+
+
+                adapter = new ShowWorkListAdapter(context, workslist, listener);
+                items.setLayoutManager(new LinearLayoutManager(context));
+                items.setAdapter(adapter);
+
+
+//                        console.log("Plan" + work.getPlanned_id());
+//                    }
+                  /*  if (workslist.isEmpty()) {
                         no_content.setVisibility(View.VISIBLE);
                     } else no_content.setVisibility(View.GONE);
                     adapter = new DailyWorkAdapter(context, workslist, "Plan", new DailyWorkAdapter.OnItemClickListener() {
@@ -244,10 +268,7 @@ public class Planning extends AppCompatActivity {
                     });
                     items.setLayoutManager(new LinearLayoutManager(context));
                     items.setAdapter(adapter);
-
-                } catch (JSONException e) {
-
-                }
+*/
             }
         });
     }
@@ -513,7 +534,7 @@ public class Planning extends AppCompatActivity {
 
             @Override
             public void onNetworkRequestError(String error) {
-                utilityofActivity.showProgressDialog();
+                utilityofActivity.dismissProgressDialog();
                 console.error("Network request failed with error :" + error);
                 Toast.makeText(context, "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
 

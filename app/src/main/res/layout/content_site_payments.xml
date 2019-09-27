@@ -50,7 +50,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:singleLine="true"
-                android:text="Receive Impress"
+                android:text="Receive Imprest"
                 android:textAlignment="center"
                 android:textColor="@color/color2"
                 android:textSize="20dp" />

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:layout_height="wrap_content">
 
@@ -19,7 +20,7 @@
             android:layout_weight="6"
             android:breakStrategy="high_quality"
             android:padding="10dp"
-            android:text="lorem ipsum" />
+            tools:text="lorem ipsum" />
 
         <TextView
             android:id="@+id/extra"
@@ -27,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="6"
             android:padding="5dp"
-            android:text="105A"></TextView>
+            tools:text="105A"/>
 
     </LinearLayout>
 
@@ -36,6 +37,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/container"
-        android:background="#e8e8e8"></View>
+        android:background="#e8e8e8"/>
 
 </RelativeLayout>

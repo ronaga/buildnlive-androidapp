@@ -40,8 +40,6 @@ import com.google.android.gms.location.*
 import org.json.JSONException
 import org.json.JSONObject
 import kotlinx.android.synthetic.main.content_check_attendance.*
-import kotlinx.android.synthetic.main.content_labour.view.*
-import kotlin.math.abs
 
 class CheckAttendanceLoc : Fragment() {
 
@@ -275,11 +273,25 @@ class CheckAttendanceLoc : Fragment() {
         email.text = e
 
         checkin.setOnClickListener {
-            Checkin()
+            if(lastLocation!=null)
+            {
+                Checkin(lastLocation!!.latitude.toString(),lastLocation!!.longitude.toString())
+            }
+            else
+            {
+                utilityofActivity!!.toast("Error fetching location please try again")
+            }
         }
 
         checkout.setOnClickListener {
-            CheckOut()
+            if(lastLocation!=null)
+            {
+                CheckOut(lastLocation!!.latitude.toString(),lastLocation!!.longitude.toString())
+            }
+            else
+            {
+                utilityofActivity!!.toast("Error fetching location please try again")
+            }
         }
 
         absent.setOnClickListener {
@@ -300,8 +312,16 @@ class CheckAttendanceLoc : Fragment() {
 
             positive.text = "Done"
             positive.setOnClickListener {
-                MarkAbsent(status.selectedItem.toString())
-                alertDialog.dismiss()
+                if(lastLocation!=null)
+                {
+                    MarkAbsent(status.selectedItem.toString(),lastLocation!!.latitude.toString(),lastLocation!!.longitude.toString())
+                    alertDialog.dismiss()
+                }
+                else
+                {
+                    utilityofActivity!!.toast("Error fetching location please try again")
+                }
+
             }
             negative.setOnClickListener {
                 alertDialog.dismiss()
@@ -340,30 +360,27 @@ class CheckAttendanceLoc : Fragment() {
     }
 
 
-    private fun Checkin() {
+    private fun Checkin(latitude:String,longitude:String) {
         var requestUrl = Config.CHECK_IN
         requestUrl = requestUrl.replace("[0]", App.userId)
-        requestUrl = requestUrl.replace("[1]", lastLocation!!.latitude.toString())
-        requestUrl = requestUrl.replace("[2]", lastLocation!!.longitude.toString())
+        requestUrl = requestUrl.replace("[1]", latitude)
+        requestUrl = requestUrl.replace("[2]",longitude)
 
         console.log("CheckIn: " + requestUrl)
         app!!.sendNetworkRequest(requestUrl, Request.Method.GET, null, object : Interfaces.NetworkInterfaceListener {
             override fun onNetworkRequestStart() {
-                progress.visibility = View.VISIBLE
-                hider.visibility = View.VISIBLE
+                utilityofActivity!!.showProgressDialog()
             }
 
             override fun onNetworkRequestError(error: String) {
-                progress.visibility = View.GONE
-                hider.visibility = View.GONE
+                utilityofActivity!!.dismissProgressDialog()
                 console.error("Network request failed with error :$error")
                 Toast.makeText(context, "Check Network, Something went wrong", Toast.LENGTH_LONG).show()
             }
 
             override fun onNetworkRequestComplete(response: String) {
                 console.log(response)
-                progress.visibility = View.GONE
-                hider.visibility = View.GONE
+                utilityofActivity!!.dismissProgressDialog()
                 try {
 
                     if (response == "0") {
@@ -371,6 +388,8 @@ class CheckAttendanceLoc : Fragment() {
                     } else if (response == "-1") {
                         Toast.makeText(context!!, "Invalid User, Please contact admin", Toast.LENGTH_LONG).show()
                     } else {
+
+                        utilityofActivity!!.toast("Checked In Successfully")
                         val jsonObject = JSONObject(response)
                         status.text = "You checked in at : " + jsonObject.get("start_time")
                         attendenceId = jsonObject.getString("attendence_id")
@@ -389,41 +408,33 @@ class CheckAttendanceLoc : Fragment() {
         })
     }
 
-    private fun CheckOut() {
+    private fun CheckOut(latitude: String, longitude: String) {
         var requestUrl = Config.CHECK_OUT
         try {
             requestUrl = requestUrl.replace("[0]", App.userId)
 //        attendenceId=PrefernceFile.getInstance(mContext!!).getString("attendence_id")
             requestUrl = requestUrl.replace("[1]", PrefernceFile.getInstance(mContext!!).getString("attendence_id")!!)
-            requestUrl = requestUrl.replace("[2]", lastLocation!!.latitude.toString())
-            requestUrl = requestUrl.replace("[3]", lastLocation!!.longitude.toString())
+            requestUrl = requestUrl.replace("[2]", latitude)
+            requestUrl = requestUrl.replace("[3]", longitude)
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
         }
         console.log("CheckOut: " + requestUrl)
         app!!.sendNetworkRequest(requestUrl, Request.Method.GET, null, object : Interfaces.NetworkInterfaceListener {
             override fun onNetworkRequestStart() {
-                progress.visibility = View.VISIBLE
-                hider.visibility = View.VISIBLE
+                utilityofActivity!!.showProgressDialog()
             }
 
             override fun onNetworkRequestError(error: String) {
-                progress.visibility = View.GONE
-                hider.visibility = View.GONE
+                utilityofActivity!!.dismissProgressDialog()
                 console.error("Network request failed with error :$error")
                 Toast.makeText(context, "Check Network, Something went wrong", Toast.LENGTH_LONG).show()
             }
 
             override fun onNetworkRequestComplete(response: String) {
                 console.log(response)
-                progress.visibility = View.GONE
-                hider.visibility = View.GONE
+                utilityofActivity!!.dismissProgressDialog()
                 try {
-//                    if(response == "1")
-//                    {
-
-//                    }
-//                    else if(response == "0")
                     if (response == "0") {
                         Toast.makeText(context!!, "Checkout Failure Please try again", Toast.LENGTH_LONG).show()
                     } else if (response == "-1") {
@@ -431,8 +442,9 @@ class CheckAttendanceLoc : Fragment() {
                     } else {
                         val jsonObject = JSONObject(response)
 
-                        Toast.makeText(context!!, "Checkout Successful", Toast.LENGTH_LONG).show()
-                        status.text = "You checked in at : " + jsonObject.get("start_time")
+
+                        utilityofActivity!!.toast("Checked Out Successfully")
+                        status.text = "You checked out at : " + jsonObject.get("end_time")
                         checkout.background = ContextCompat.getDrawable(context!!, R.drawable.inactive_home_button)
                         checkout.isEnabled = false
                         absent.visibility=View.GONE
@@ -447,13 +459,13 @@ class CheckAttendanceLoc : Fragment() {
     }
 
 
-    private fun MarkAbsent(leaveStatus:String) {
+    private fun MarkAbsent(leaveStatus:String,latitude: String, longitude: String) {
         var requestUrl = Config.MARK_ABSENT_USER
         try {
             requestUrl = requestUrl.replace("[0]", App.userId)
 //        attendenceId=PrefernceFile.getInstance(mContext!!).getString("attendence_id")
-            requestUrl = requestUrl.replace("[1]", lastLocation!!.latitude.toString())
-            requestUrl = requestUrl.replace("[2]", lastLocation!!.longitude.toString())
+            requestUrl = requestUrl.replace("[1]", latitude)
+            requestUrl = requestUrl.replace("[2]", longitude)
             requestUrl = requestUrl.replace("[3]", leaveStatus)
 
         } catch (e: java.lang.Exception) {
@@ -462,21 +474,18 @@ class CheckAttendanceLoc : Fragment() {
         console.log("CheckOut: " + requestUrl)
         app!!.sendNetworkRequest(requestUrl, Request.Method.GET, null, object : Interfaces.NetworkInterfaceListener {
             override fun onNetworkRequestStart() {
-                progress.visibility = View.VISIBLE
-                hider.visibility = View.VISIBLE
+                utilityofActivity!!.showProgressDialog()
             }
 
             override fun onNetworkRequestError(error: String) {
-                progress.visibility = View.GONE
-                hider.visibility = View.GONE
+                utilityofActivity!!.dismissProgressDialog()
                 console.error("Network request failed with error :$error")
                 Toast.makeText(context, "Check Network, Something went wrong", Toast.LENGTH_LONG).show()
             }
 
             override fun onNetworkRequestComplete(response: String) {
                 console.log(response)
-                progress.visibility = View.GONE
-                hider.visibility = View.GONE
+                utilityofActivity!!.dismissProgressDialog()
                 try {
 //                    if(response == "1")
 //                    {
@@ -490,8 +499,9 @@ class CheckAttendanceLoc : Fragment() {
                     } else {
                         val jsonObject = JSONObject(response)
 
-                        Toast.makeText(context!!, "Checkout Successful", Toast.LENGTH_LONG).show()
-                        status.text = "You marked a leave at : " + jsonObject.get("start_time")
+                        Toast.makeText(context!!, "Successfully Requested", Toast.LENGTH_LONG).show()
+
+                        status.text = "Status: " + jsonObject.get("leave_status")
                         checkin.background = ContextCompat.getDrawable(context!!, R.drawable.inactive_home_button)
                         checkin.isEnabled = false
                         absent.background = ContextCompat.getDrawable(context!!, R.drawable.inactive_home_button)
@@ -514,21 +524,18 @@ class CheckAttendanceLoc : Fragment() {
         console.log("CheckOut: " + requestUrl)
         app!!.sendNetworkRequest(requestUrl, Request.Method.GET, null, object : Interfaces.NetworkInterfaceListener {
             override fun onNetworkRequestStart() {
-                progress.visibility = View.VISIBLE
-                hider.visibility = View.VISIBLE
+                utilityofActivity!!.showProgressDialog()
             }
 
             override fun onNetworkRequestError(error: String) {
-                progress.visibility = View.GONE
-                hider.visibility = View.GONE
+                utilityofActivity!!.dismissProgressDialog()
                 console.error("Network request failed with error :$error")
                 Toast.makeText(context, "Check Network, Something went wrong", Toast.LENGTH_LONG).show()
             }
 
             override fun onNetworkRequestComplete(response: String) {
                 console.log(response)
-                progress.visibility = View.GONE
-                hider.visibility = View.GONE
+                utilityofActivity!!.dismissProgressDialog()
                 try {
 //                    if(response == "1")
 //                    {

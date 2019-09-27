@@ -20,8 +20,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_buildnlive_logo_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".activities.HomeActivity"
             android:screenOrientation="portrait"
@@ -29,7 +28,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -241,6 +239,9 @@
         <activity android:name=".activities.CreateLabourDeploy" />
         <activity android:name=".activities.CreatePlan" />
         <activity android:name=".activities.WorkListProgress" />
+        <activity android:name=".activities.CreateLabourDeployList" />
+        <activity android:name=".activities.LabourRequest" />
+        <activity android:name=".activities.LabourRequestForm" />
 
 
         <service android:name=".Notifications.FirebaseMessagingService">

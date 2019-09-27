@@ -29,11 +29,12 @@ import java.util.List;
 import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
-import buildnlive.com.buildlive.adapters.ListAdapter;
+import buildnlive.com.buildlive.adapters.WorkerHistoryAdapter;
 import buildnlive.com.buildlive.adapters.ViewLiveAttendanceAdapter;
 import buildnlive.com.buildlive.console;
-import buildnlive.com.buildlive.elements.Packet;
+import buildnlive.com.buildlive.elements.WorkerHistory;
 import buildnlive.com.buildlive.elements.ViewAttendance;
+import buildnlive.com.buildlive.elements.WorkerHistory;
 import buildnlive.com.buildlive.utils.Config;
 import buildnlive.com.buildlive.utils.UtilityofActivity;
 
@@ -69,7 +70,7 @@ public class ViewEmployeeAttendanceFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_view_attendance, container, false);
+        return inflater.inflate(R.layout.fragment_view_emp_attendance, container, false);
     }
 
     @Override
@@ -138,7 +139,7 @@ public class ViewEmployeeAttendanceFragment extends Fragment {
                             showUser(worker);
                         }
                     });
-                    attendees.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+                    attendees.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
                     attendees.setAdapter(adapter);
 
 //                    adapter.notifyDataSetChanged();
@@ -154,7 +155,7 @@ public class ViewEmployeeAttendanceFragment extends Fragment {
 
     private void showUser(final ViewAttendance worker) {
         LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.alert_dialog, null);
+        View dialogView = inflater.inflate(R.layout.alert_show_user, null);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity(), R.style.PinDialog);
         final AlertDialog alertDialog = dialogBuilder.setCancelable(true).setView(dialogView).create();
         alertDialog.show();
@@ -163,11 +164,11 @@ public class ViewEmployeeAttendanceFragment extends Fragment {
         final RecyclerView list = dialogView.findViewById(R.id.list);
 //        list.setmMaxHeight(400);
         TextView title = dialogView.findViewById(R.id.alert_title);
-        title.setText("Worker Details");
+        title.setText(context.getString(R.string.worker_details));
         TextView message = dialogView.findViewById(R.id.alert_message);
-        message.setText(worker.getLabour_name() + " (" + worker.getLabour_role() + ")");
+        message.setText(String.format(context.getString(R.string.workerHolder),worker.getLabour_name(),worker.getLabour_role()));
         Button positive = dialogView.findViewById(R.id.positive);
-        positive.setText("Close");
+        positive.setText(context.getString(R.string.close));
         positive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,7 +177,7 @@ public class ViewEmployeeAttendanceFragment extends Fragment {
         });
         Button negative = dialogView.findViewById(R.id.negative);
         negative.setVisibility(View.GONE);
-        String requestUrl = Config.REQ_GET_USER_ATTENDANCE;
+        String requestUrl = Config.REQ_GET_STAFF_ATTENDANCE;
         requestUrl = requestUrl.replace("[0]", App.userId);
         requestUrl = requestUrl.replace("[1]", worker.getLabour_id());
         requestUrl = requestUrl.replace("[2]", App.projectId);
@@ -197,11 +198,11 @@ public class ViewEmployeeAttendanceFragment extends Fragment {
                 console.log("Request :" + response);
                 utilityofActivity.dismissProgressDialog();
                 try {
-                    List<Packet> packets = parseRequest(response);
-                    ListAdapter adapter = new ListAdapter(getContext(), packets, new ListAdapter.OnItemClickListener() {
+                    List<WorkerHistory> packets = parseRequest(response);
+                    WorkerHistoryAdapter adapter = new WorkerHistoryAdapter(getContext(), packets, new WorkerHistoryAdapter.OnItemClickListener() {
                         @Override
-                        public void onItemClick(Packet packet, int pos, View view) {
-
+                        public void onItemClick(WorkerHistory packet, int pos, View view) {
+                            
                         }
                     });
                     disable.setVisibility(View.GONE);
@@ -217,12 +218,12 @@ public class ViewEmployeeAttendanceFragment extends Fragment {
         });
     }
 
-    private List<Packet> parseRequest(String response) throws JSONException {
+    private List<WorkerHistory> parseRequest(String response) throws JSONException {
         JSONArray array = new JSONArray(response);
-        List<Packet> packets = new ArrayList<>();
+        List<WorkerHistory> packets = new ArrayList<>();
         for (int i = 0; i < array.length(); i++) {
             JSONObject obj = array.getJSONObject(i);
-            packets.add(new Packet(obj.getString("start_date_time"), obj.getString("end_date_time"), 7190));
+            packets.add(new WorkerHistory(obj.getString("end_time"), obj.getString("start_time"), obj.getString("start_date_time")));
         }
         return packets;
     }

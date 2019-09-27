@@ -23,17 +23,18 @@ class FirebaseMessagingService : com.google.firebase.messaging.FirebaseMessaging
         super.onCreate()
     }
 
-    override fun onMessageReceived(remoteMessage: RemoteMessage?) {
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
 
 
 //        if(remoteMessage!!.notification==null) {
-        if (remoteMessage!!.data.isNotEmpty()) {
+        if (remoteMessage.data.isNotEmpty()) {
 
 //                if (remoteMessage.data["notification_type"].equals("Reminder")) {
 
             sendNotification(remoteMessage.data["body"], remoteMessage.data["title"],
-                    remoteMessage.data["click_action"], remoteMessage.data["notification_type"], remoteMessage.data["user_id"], remoteMessage.data["project_id"])
+                    remoteMessage.data["click_action"], remoteMessage.data["user_id"],
+                    remoteMessage.data["project_id"])
 
 //                }
 //                else {
@@ -83,9 +84,9 @@ class FirebaseMessagingService : com.google.firebase.messaging.FirebaseMessaging
         super.onDeletedMessages()
     }
 
-    override fun onNewToken(s: String?) {
+    override fun onNewToken(s: String) {
         console.log("FCM Token $s")
-        getSharedPreferences("Token", MODE_PRIVATE).edit().putString("FcmToken", s).apply();
+        getSharedPreferences("Token", MODE_PRIVATE).edit().putString("FcmToken", s).apply()
     }
 
     fun getToken(context: Context): String? {
@@ -93,11 +94,10 @@ class FirebaseMessagingService : com.google.firebase.messaging.FirebaseMessaging
     }
 
 
-    private fun sendNotification(message: String?, title: String?, clickAction: String?, notificationType: String?, user_id: String?, project_id: String?) {
+    private fun sendNotification(message: String?, title: String?, clickAction: String?, user_id: String?, project_id: String?) {
         id += 1
         val intent = Intent(clickAction)
         intent.putExtra("title", title)
-        intent.putExtra("notification_type", notificationType)
         intent.putExtra("body", message)
         intent.putExtra("user_id", user_id)
         intent.putExtra("project_id", project_id)

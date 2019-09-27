@@ -36,6 +36,7 @@ import buildnlive.com.buildlive.activities.IssuedItems;
 import buildnlive.com.buildlive.activities.LabourActivity;
 import buildnlive.com.buildlive.activities.LabourDeployment;
 import buildnlive.com.buildlive.activities.LabourReportActivity;
+import buildnlive.com.buildlive.activities.LabourRequest;
 import buildnlive.com.buildlive.activities.LocalPurchase;
 import buildnlive.com.buildlive.activities.MachineList;
 import buildnlive.com.buildlive.activities.MarkAttendance;
@@ -63,7 +64,7 @@ import static buildnlive.com.buildlive.utils.Config.PREF_NAME;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
     //    private TextView title;
-    private LinearLayout labour_deployment,sitePayment, approval, repairRequest, transferRequest, markAttendance, markEmployeeAttendance, manageInventory, issuedItems, requestItems, workProgress, purchaseOrder, siteRequest, localPurchase, labour, labourReport, planning, machine, storeRequest;
+    private LinearLayout labour_deployment, labourRequest, sitePayment, approval, repairRequest, transferRequest, markAttendance, markEmployeeAttendance, manageInventory, issuedItems, requestItems, workProgress, purchaseOrder, siteRequest, localPurchase, labour, labourReport, planning, machine, storeRequest;
     private SharedPreferences pref;
     private Spinner projects;
     private static App app;
@@ -125,6 +126,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         approval = view.findViewById(R.id.approve);
         storeRequest = view.findViewById(R.id.storeRequest);
         labour_deployment = view.findViewById(R.id.labour_deployment);
+        labourRequest = view.findViewById(R.id.labour_request);
 
         badge = getActivity().findViewById(R.id.badge_notification);
 
@@ -174,6 +176,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         storeRequest.setOnClickListener(this);
         sitePayment.setOnClickListener(this);
         labour_deployment.setOnClickListener(this);
+        labourRequest.setOnClickListener(this);
 
 
         ArrayList<String> permissionList = PrefernceFile.Companion.getInstance(context).getArrayList("Perm");
@@ -244,8 +247,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     transferRequest.setVisibility(View.VISIBLE);
                     break;
                 }
-                case "Attendance": {
+                case "Labour Attendance": {
                     markAttendance.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case "Staff Attendance": {
                     markEmployeeAttendance.setVisibility(View.VISIBLE);
                     break;
                 }
@@ -408,6 +414,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.labour_deployment:
                 startActivity(new Intent(getContext(), LabourDeployment.class));
+                break;
+            case R.id.labour_request:
+                startActivity(new Intent(getContext(), LabourRequest.class));
                 break;
 
         }

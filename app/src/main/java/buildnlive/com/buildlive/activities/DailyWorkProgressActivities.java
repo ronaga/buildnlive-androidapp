@@ -1,5 +1,6 @@
 package buildnlive.com.buildlive.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,12 +9,15 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import androidx.core.content.FileProvider;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
+
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +34,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,9 +47,9 @@ import buildnlive.com.buildlive.BuildConfig;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.adapters.ActivityImagesAdapter;
-import buildnlive.com.buildlive.adapters.DailyWorkActivityAdapter;
+import buildnlive.com.buildlive.adapters.WorkPlanningAdapter;
 import buildnlive.com.buildlive.console;
-import buildnlive.com.buildlive.elements.Activity;
+import buildnlive.com.buildlive.elements.ActivityItem;
 import buildnlive.com.buildlive.elements.Packet;
 import buildnlive.com.buildlive.utils.AdvancedRecyclerView;
 import buildnlive.com.buildlive.utils.Config;
@@ -53,8 +58,8 @@ import buildnlive.com.buildlive.utils.UtilityofActivity;
 public class DailyWorkProgressActivities extends AppCompatActivity {
     private App app;
     private RecyclerView items;
-    private DailyWorkActivityAdapter adapter;
-    private List<Activity> activities;
+    private WorkPlanningAdapter adapter;
+    private List<ActivityItem> activities;
     private String id;
     public static final int QUALITY = 10;
     private TextView no_content;
@@ -62,6 +67,7 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
     private String masterWorkId;
     private UtilityofActivity utilityofActivity;
     private AppCompatActivity appCompatActivity=this;
+    private Context context;
 
 
     @Override
@@ -82,6 +88,8 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
         setContentView(R.layout.activity_daily_work_activities);
         app = (App) getApplication();
 
+        context=this;
+
         utilityofActivity=new UtilityofActivity(appCompatActivity);
 
         utilityofActivity.configureToolbar(appCompatActivity);
@@ -95,7 +103,7 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
 
-        id = bundle.getString("id");
+        id = bundle.getString("project_work_id");
         masterWorkId = bundle.getString("masterWorkId");
 
         items = findViewById(R.id.items);
@@ -113,15 +121,34 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
         });
 
         activities = new ArrayList<>();
-        adapter = new DailyWorkActivityAdapter(getApplicationContext(), activities, new DailyWorkActivityAdapter.OnItemClickListener() {
+        /*adapter = new DailyWorkActivityAdapter(getApplicationContext(), activities, new DailyWorkActivityAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int pos, View view) {
 
                 menuUpdate(activities.get(pos));
             }
         });
+        */
+
+        adapter= new WorkPlanningAdapter(context,activities,"Plan", new WorkPlanningAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int pos, View view) {
+                Intent intent = new Intent(context, DailyWorkProgressActivities.class);
+                intent.putExtra("id", activities.get(pos).getPlannedId());
+                intent.putExtra("masterWorkId", activities.get(pos).getPlannedDetailId());
+                startActivity(intent);
+            }
+        }, new WorkPlanningAdapter.OnButtonClickListener() {
+            @Override
+            public void onButtonClick(int pos, View view) {
+                menuUpdate(activities.get(pos));
+            }
+        });
+
         items.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         items.setAdapter(adapter);
+
+
 //        if(adapter.getItemCount()==0)
 //        {
 //            Toast.makeText(this,"Nothing to Display",Toast.LENGTH_LONG).show();
@@ -134,7 +161,7 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
     private ActivityImagesAdapter imagesAdapter;
     private String imagePath;
 
-    private void menuUpdate(final Activity activity) {
+    private void menuUpdate(final ActivityItem activity) {
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.alert_dialog_activity, null);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.PinDialog);
@@ -142,7 +169,7 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
         alertDialog.show();
         final TextView disable = dialogView.findViewById(R.id.disableView);
         final TextView max = dialogView.findViewById(R.id.max);
-        max.setText("Total: " + activity.getQuantity() + " " + activity.getUnits());
+        max.setText("Total: " + activity.getWorkSchedule().getQty() + " " + activity.getWorkSchedule().getUnits());
         final ProgressBar progress = dialogView.findViewById(R.id.progress);
         final EditText message = dialogView.findViewById(R.id.message);
         final EditText quantity = dialogView.findViewById(R.id.quantity);
@@ -175,7 +202,7 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
         list.setAdapter(imagesAdapter);
         list.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
         list.setmMaxHeight(400);
-        completed.setText("Completed: " + activity.getQty_completed() + " " + activity.getUnits());
+        completed.setText("Completed: " + activity.getWorkSchedule().getQtyCompleted() + " " + activity.getWorkSchedule().getUnits());
         TextView title = dialogView.findViewById(R.id.alert_title);
         title.setText("Activity Status");
         final TextView alert_message = dialogView.findViewById(R.id.alert_message);
@@ -233,18 +260,18 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
         return image;
     }
 
-    private void submit(Activity activity, String message, String quantity, ArrayList<Packet> images, final AlertDialog alertDialog) throws JSONException {
+    private void submit(ActivityItem activity, String message, String quantity, ArrayList<Packet> images, final AlertDialog alertDialog) throws JSONException {
         float q = Float.parseFloat(quantity);
-        float c = Float.parseFloat(activity.getQty_completed());
-        float qo = Float.parseFloat(activity.getQuantity());
+        float c = Float.parseFloat(activity.getWorkSchedule().getQtyCompleted());
+        float qo = Float.parseFloat(activity.getWorkSchedule().getQty());
         if (q <= (qo - c)) {
             HashMap<String, String> params = new HashMap<>();
             params.put("work_update", new JSONObject()
-                    .put("activity_list_id", activity.getActivityListId())
+                    .put("activity_list_id", activity.getPlannedId())
                     .put("type", "activity")
                     .put("project_comment", message)
                     .put("quantity_done", quantity)
-                    .put("units", activity.getUnits())
+                    .put("units", activity.getWorkSchedule().getUnits())
                     .put("user_id", App.userId)
                     .put("project_id", App.projectId)
                     .put("percentage_work", q / qo).toString());
@@ -287,6 +314,63 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
         }
     }
 
+    private void fetchActivities(String id) {
+        String url = Config.WorkActivityPlanning;
+        url = url.replace("[0]", App.userId);
+        url = url.replace("[1]", App.projectId);
+        url = url.replace("[2]", "Plan");
+        url = url.replace("[3]", id);
+        console.log(url);
+        app.sendNetworkRequest(url, 0, null, new Interfaces.NetworkInterfaceListener() {
+            @Override
+            public void onNetworkRequestStart() {
+                utilityofActivity.showProgressDialog();
+            }
+
+            @Override
+            public void onNetworkRequestError(String error) {
+                utilityofActivity.dismissProgressDialog();
+            }
+
+            @Override
+            public void onNetworkRequestComplete(String response) {
+                console.log("Response:" + response);
+                utilityofActivity.dismissProgressDialog();
+
+                Type vendorType = new TypeToken<ArrayList<ActivityItem>>() {
+                }.getType();
+                activities = new Gson().fromJson(response, vendorType);
+
+
+                if (activities.isEmpty()) {
+                    no_content.setVisibility(View.VISIBLE);
+                } else {
+                    no_content.setVisibility(View.GONE);
+                }
+
+                adapter= new WorkPlanningAdapter(context,activities,"Plan", new WorkPlanningAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int pos, View view) {
+                        Intent intent = new Intent(context, DailyWorkProgressActivities.class);
+                        intent.putExtra("id", activities.get(pos).getPlannedId());
+                        intent.putExtra("masterWorkId", activities.get(pos).getPlannedDetailId());
+                        startActivity(intent);
+                    }
+                }, new WorkPlanningAdapter.OnButtonClickListener() {
+                    @Override
+                    public void onButtonClick(int pos, View view) {
+                        menuUpdate(activities.get(pos));
+                    }
+                });
+
+                items.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                items.setAdapter(adapter);
+
+            }
+        });
+    }
+
+    /*
     private void fetchActivities(String id) {
         String url = Config.REQ_DAILY_WORK_ACTIVITY;
         url = url.replace("[0]", App.userId);
@@ -350,5 +434,5 @@ public class DailyWorkProgressActivities extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         });
-    }
+    }*/
 }

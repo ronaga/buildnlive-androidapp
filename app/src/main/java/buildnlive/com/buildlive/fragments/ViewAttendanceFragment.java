@@ -3,12 +3,6 @@ package buildnlive.com.buildlive.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +10,13 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 
@@ -29,11 +30,11 @@ import java.util.List;
 import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
-import buildnlive.com.buildlive.adapters.ListAdapter;
 import buildnlive.com.buildlive.adapters.ViewLiveAttendanceAdapter;
+import buildnlive.com.buildlive.adapters.WorkerHistoryAdapter;
 import buildnlive.com.buildlive.console;
-import buildnlive.com.buildlive.elements.Packet;
 import buildnlive.com.buildlive.elements.ViewAttendance;
+import buildnlive.com.buildlive.elements.WorkerHistory;
 import buildnlive.com.buildlive.utils.Config;
 import buildnlive.com.buildlive.utils.UtilityofActivity;
 
@@ -41,7 +42,7 @@ public class ViewAttendanceFragment extends Fragment {
     private RecyclerView attendees;
     private ProgressBar progress;
     private TextView hider;
-    private ArrayList<ViewAttendance> attendanceList= new ArrayList<>();
+    private ArrayList<ViewAttendance> attendanceList = new ArrayList<>();
     private ViewLiveAttendanceAdapter adapter;
     private boolean LOADING;
     private Context context;
@@ -88,7 +89,7 @@ public class ViewAttendanceFragment extends Fragment {
                 showUser(worker);
             }
         });
-        attendees.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        attendees.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         attendees.setAdapter(adapter);
         if (LOADING)
             progress.setVisibility(View.VISIBLE);
@@ -138,7 +139,7 @@ public class ViewAttendanceFragment extends Fragment {
                             showUser(worker);
                         }
                     });
-                    attendees.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+                    attendees.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
                     attendees.setAdapter(adapter);
 
 //                    adapter.notifyDataSetChanged();
@@ -151,10 +152,9 @@ public class ViewAttendanceFragment extends Fragment {
     }
 
 
-
     private void showUser(final ViewAttendance worker) {
         LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.alert_dialog, null);
+        View dialogView = inflater.inflate(R.layout.alert_show_user, null);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity(), R.style.PinDialog);
         final AlertDialog alertDialog = dialogBuilder.setCancelable(true).setView(dialogView).create();
         alertDialog.show();
@@ -163,17 +163,18 @@ public class ViewAttendanceFragment extends Fragment {
         final RecyclerView list = dialogView.findViewById(R.id.list);
 //        list.setmMaxHeight(400);
         TextView title = dialogView.findViewById(R.id.alert_title);
-        title.setText("Worker Details");
+        title.setText(context.getString(R.string.worker_details));
         TextView message = dialogView.findViewById(R.id.alert_message);
-        message.setText(worker.getLabour_name() + " (" + worker.getLabour_role() + ")");
+        message.setText(String.format(context.getString(R.string.workerHolder), worker.getLabour_name(), worker.getLabour_role()));
         Button positive = dialogView.findViewById(R.id.positive);
-        positive.setText("Close");
+        positive.setText(context.getString(R.string.close));
         positive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
             }
         });
+
         Button negative = dialogView.findViewById(R.id.negative);
         negative.setVisibility(View.GONE);
         String requestUrl = Config.REQ_GET_USER_ATTENDANCE;
@@ -197,10 +198,10 @@ public class ViewAttendanceFragment extends Fragment {
                 console.log("Request :" + response);
                 utilityofActivity.dismissProgressDialog();
                 try {
-                    List<Packet> packets = parseRequest(response);
-                    ListAdapter adapter = new ListAdapter(getContext(), packets, new ListAdapter.OnItemClickListener() {
+                    List<WorkerHistory> packets = parseRequest(response);
+                    WorkerHistoryAdapter adapter = new WorkerHistoryAdapter(getContext(), packets, new WorkerHistoryAdapter.OnItemClickListener() {
                         @Override
-                        public void onItemClick(Packet packet, int pos, View view) {
+                        public void onItemClick(WorkerHistory packet, int pos, View view) {
 
                         }
                     });
@@ -217,16 +218,15 @@ public class ViewAttendanceFragment extends Fragment {
         });
     }
 
-    private List<Packet> parseRequest(String response) throws JSONException {
+    private List<WorkerHistory> parseRequest(String response) throws JSONException {
         JSONArray array = new JSONArray(response);
-        List<Packet> packets = new ArrayList<>();
+        List<WorkerHistory> packets = new ArrayList<>();
         for (int i = 0; i < array.length(); i++) {
             JSONObject obj = array.getJSONObject(i);
-            packets.add(new Packet(obj.getString("start_date_time"), obj.getString("end_date_time"), 7190));
+            packets.add(new WorkerHistory(obj.getString("end_time"), obj.getString("start_time"), obj.getString("start_date_time")));
         }
         return packets;
     }
-
 
 
 }

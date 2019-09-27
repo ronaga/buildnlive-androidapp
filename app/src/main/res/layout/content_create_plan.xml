@@ -29,62 +29,86 @@
         android:padding="10dp"
         android:spinnerMode="dialog" />
 
+    <Spinner
+        android:id="@+id/arealist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/worklist"
+        android:layout_margin="10dp"
+        android:background="@drawable/border"
+        android:padding="10dp"
+        android:spinnerMode="dialog" />
+
+
+    <Spinner
+        android:id="@+id/work"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/arealist"
+        android:layout_margin="10dp"
+        android:background="@drawable/border"
+        android:padding="10dp"
+        android:spinnerMode="dialog" />
+
 
     <LinearLayout
         android:id="@+id/quantity_container"
-        android:layout_below="@+id/worklist"
-        android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/work"
+        android:layout_margin="10dp"
         android:orientation="horizontal">
 
         <EditText
             android:id="@+id/quantity"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:layout_weight="1"
             android:background="@drawable/border"
             android:hint="Quantity"
             android:inputType="number"
             android:padding="5dp"
             android:textAlignment="center" />
+
         <TextView
             android:id="@+id/available"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:layout_weight="1"
             android:background="@drawable/border"
             android:padding="5dp"
             android:textAlignment="center" />
+
         <TextView
             android:id="@+id/units"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:layout_weight="1"
             android:padding="5dp"
-            tools:text="Unit"
-            android:textStyle="bold"
+            android:textAlignment="center"
             android:textSize="14sp"
-            android:textAlignment="center" />
-        </LinearLayout>
+            android:textStyle="bold"
+            tools:text="Unit" />
+    </LinearLayout>
 
     <LinearLayout
-        android:layout_below="@+id/quantity_container"
-        android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/quantity_container"
+        android:layout_margin="10dp"
         android:orientation="horizontal">
+
         <TextView
             android:id="@+id/date"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:background="@drawable/border"
-            android:text="Date"
             android:padding="5dp"
+            android:text="Date"
             android:textAlignment="center" />
     </LinearLayout>
 

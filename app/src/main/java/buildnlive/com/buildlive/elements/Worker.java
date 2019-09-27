@@ -31,6 +31,16 @@ public class Worker extends RealmObject {
     private String end_time;
     private String fix_time_in;
     private String fix_time_out;
+    private boolean absentStatus;
+
+    public boolean getAbsentStatus() {
+        return absentStatus;
+    }
+
+    public void setAbsentStatus(boolean absentStatus) {
+        this.absentStatus = absentStatus;
+    }
+
     @Index
     private String belongsTo;
 
@@ -57,9 +67,12 @@ public class Worker extends RealmObject {
         setEnd_time(obj.getString("end_time"));
         setFix_time_in(obj.getString("fix_time_in"));
         setFix_time_out(obj.getString("fix_time_out"));
+        setAttendanceId(obj.getString("attendence_id"));
         setBelongsTo(App.belongsTo);
         return this;
     }
+
+
 
     public String getFix_time_in() {
         return fix_time_in;

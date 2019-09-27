@@ -24,7 +24,7 @@
 //
 //import java.util.ArrayList;
 //import java.util.HashMap;
-//import java.util.List;
+//import java.util.LabourList;
 //
 //import buildnlive.com.buildlive.App;
 //import buildnlive.com.buildlive.Interfaces;
@@ -264,7 +264,7 @@
 //            public void onNetworkRequestComplete(String response) {
 //                console.log("Request :" + response);
 //                try {
-//                    List<Packet> packets = parseRequest(response);
+//                    LabourList<Packet> packets = parseRequest(response);
 //                    ListAdapter adapter = new ListAdapter(getContext(), packets, new ListAdapter.OnItemClickListener() {
 //                        @Override
 //                        public void onItemClick(Packet packet, int pos, View view) {
@@ -284,9 +284,9 @@
 //        });
 //    }
 //
-//    private List<Packet> parseRequest(String response) throws JSONException {
+//    private LabourList<Packet> parseRequest(String response) throws JSONException {
 //        JSONArray array = new JSONArray(response);
-//        List<Packet> packets = new ArrayList<>();
+//        LabourList<Packet> packets = new ArrayList<>();
 //        for (int i = 0; i < array.length(); i++) {
 //            JSONObject obj = array.getJSONObject(i);
 //            packets.add(new Packet(obj.getString("start_date_time"), obj.getString("end_date_time"), 7190));

@@ -282,7 +282,7 @@ public class ManageLabour extends AppCompatActivity {
 //        params.put("date",date);
         JSONArray array = new JSONArray();
         for (LabourModel i : items) {
-            array.put(new JSONObject().put("labour_type", i.getName()).put("labour_count", i.getQuantity()));
+            array.put(new JSONObject().put("labour_type", i.getName()).put("labour_count", i.getQuantity()).put("labour_type_id",i.getLabour_type_id()));
         }
         params.put("labour", array.toString());
         console.log("Res:" + params);

@@ -157,7 +157,7 @@ public class ViewLabourFragment extends Fragment{
                         final JSONObject obj = array.getJSONObject(i);
                         console.log("OBject"+obj.toString());
                         viewLabourList.add(new ViewLabour().parseFromJSON(obj));
-                        console.log("List:"+viewLabourList);
+                        console.log("LabourList:"+viewLabourList);
                         if(viewLabourList.isEmpty()){
                             no_content.setVisibility(View.VISIBLE);
                         }

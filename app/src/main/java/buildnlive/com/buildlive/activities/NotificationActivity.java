@@ -255,7 +255,7 @@ public class NotificationActivity extends AppCompatActivity {
                     }
                     adapter = new NotificationsAdapter(getApplicationContext(), notificationList, listener);
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-                    linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                    linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
                     recyclerView.setLayoutManager(linearLayoutManager);
                     recyclerView.hasFixedSize();
                     recyclerView.setAdapter(adapter);

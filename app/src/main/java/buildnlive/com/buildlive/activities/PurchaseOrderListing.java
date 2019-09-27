@@ -10,12 +10,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+
 import androidx.core.content.FileProvider;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
+
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,7 +56,7 @@ import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class PurchaseOrderListing extends AppCompatActivity {
     private App app;
-    private String id,type_id;
+    private String id, type_id;
     private RecyclerView list;
     private PurchaseOrderListingAdapter adapter;
     private List<OrderItem> itemList;
@@ -203,7 +205,7 @@ public class PurchaseOrderListing extends AppCompatActivity {
                                     }*/
 
 //                                    if (flag[0]) {
-                                        pushOrders(images);
+                                    pushOrders(images);
 //                                    } else {
 //                                        Toast.makeText(context, "Enter Proper Quantity", Toast.LENGTH_LONG).show();
 //                                    }

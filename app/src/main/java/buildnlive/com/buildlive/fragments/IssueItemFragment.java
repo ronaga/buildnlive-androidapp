@@ -390,7 +390,7 @@ public class IssueItemFragment extends Fragment {
 
             @Override
             public void onNetworkRequestError(String error) {
-                utilityofActivity.showProgressDialog();
+                utilityofActivity.dismissProgressDialog();
                 console.error("Network request failed with error :" + error);
                 Toast.makeText(getContext(), "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
 

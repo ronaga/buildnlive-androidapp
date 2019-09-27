@@ -110,7 +110,7 @@ public class CreateLabour extends AppCompatActivity {
         trade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                labourTradeName=labourTradeAdapter.getName(i);
+                labourTradeName=labourTradeAdapter.getLabourTrade_id(i);
             }
 
             @Override

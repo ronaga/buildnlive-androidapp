@@ -9,19 +9,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import androidx.fragment.app.Fragment;
-import androidx.core.content.FileProvider;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -30,9 +22,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.android.volley.Request;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,7 +38,6 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,10 +50,8 @@ import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.adapters.ActivityImagesAdapter;
 import buildnlive.com.buildlive.adapters.DailyWorkAdapter;
-import buildnlive.com.buildlive.adapters.StructureSpinAdapter;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Packet;
-import buildnlive.com.buildlive.elements.Structure;
 import buildnlive.com.buildlive.elements.Work;
 import buildnlive.com.buildlive.utils.AdvancedRecyclerView;
 import buildnlive.com.buildlive.utils.Config;
@@ -82,12 +76,12 @@ public class WorkProgress extends AppCompatActivity {
     private ImageButton back;
     private Context context;
     private UtilityofActivity utilityofActivity;
-    private AppCompatActivity appCompatActivity=this;
+    private AppCompatActivity appCompatActivity = this;
     public static final int REQUEST_GALLERY_IMAGE = 7191;
-  /*  private StructureSpinAdapter structureSpinAdapter;
-    private ArrayList<Structure> structureList = new ArrayList<>();
-    private Spinner structureSpinner;
-    private String structureId;*/
+    /*  private StructureSpinAdapter structureSpinAdapter;
+      private ArrayList<Structure> structureList = new ArrayList<>();
+      private Spinner structureSpinner;
+      private String structureId;*/
     private String projectWorkId;
 
     @Override
@@ -103,15 +97,15 @@ public class WorkProgress extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_progress);
         context = this;
-        utilityofActivity=new UtilityofActivity(appCompatActivity);
+        utilityofActivity = new UtilityofActivity(appCompatActivity);
         utilityofActivity.configureToolbar(appCompatActivity);
 
         projectWorkId = getIntent().getStringExtra("project_work_id");
 
-        console.log("ID: "+projectWorkId);
+        console.log("ID: " + projectWorkId);
 
-        TextView toolbar_title=findViewById(R.id.toolbar_title);
-        TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
+        TextView toolbar_title = findViewById(R.id.toolbar_title);
+        TextView toolbar_subtitle = findViewById(R.id.toolbar_subtitle);
         toolbar_title.setText("Work Progress");
         toolbar_subtitle.setText(App.projectName);
 
@@ -278,7 +272,7 @@ public class WorkProgress extends AppCompatActivity {
                         JSONObject sch = par.getJSONObject("work_schedule");
                         final Work work = new Work().parseFromJSONPlan(sch.getJSONObject("work_details"), par.getString("work_list_id"), par.getString("master_work_id"),
                                 sch.getString("work_duration"), sch.getString("qty"), sch.getString("schedule_start_date"), sch.getString("schedule_finish_date")
-                                , sch.getString("current_status"), sch.getString("qty_completed"), sch.getString("percent_compl"), "Work",sch.getString("status_color"),par.getString("layouttype"));
+                                , sch.getString("current_status"), sch.getString("qty_completed"), sch.getString("percent_compl"), "Work", sch.getString("status_color"), par.getString("layouttype"));
                         workslist.add(work);
 
                         console.log("WorklistCOLOR" + workslist.get(i).getStatus_color());
@@ -342,25 +336,12 @@ public class WorkProgress extends AppCompatActivity {
                         JSONObject sch = par.getJSONObject("work_schedule");
                         final Work work = new Work().parseFromJSON(sch.getJSONObject("work_details"), par.getString("work_list_id"), par.getString("master_work_id"),
                                 sch.getString("work_duration"), sch.getString("qty"), sch.getString("schedule_start_date"), sch.getString("schedule_finish_date")
-                                , sch.getString("current_status"), sch.getString("qty_completed"), sch.getString("percent_compl"), "Work",sch.getString("status_color"),par.getString("layouttype"));
+                                , sch.getString("current_status"), sch.getString("qty_completed"), sch.getString("percent_compl"), "Work", sch.getString("status_color"), par.getString("layouttype"));
                         workslist.add(work);
 
-                        console.log("WorklistCOLOR" + workslist.get(i).getStatus_color());
                     }
 
-         /*       Type vendorType = new TypeToken<ArrayList<Work>>() {
-                }.getType();
-                workslist = new Gson().fromJson(response, vendorType);
-*/
-
-/*
-                for (Work i:
-                        workslist) {
-                    console.log("COLOR: "+i.getStatus_color());
-                }
-*/
-
-                if (workslist.isEmpty()) {
+                    if (workslist.isEmpty()) {
                         no_content.setVisibility(View.VISIBLE);
                     } else no_content.setVisibility(View.GONE);
                     adapter = new DailyWorkAdapter(context, workslist, "Work", new DailyWorkAdapter.OnItemClickListener() {
@@ -649,7 +630,7 @@ private void setStructureSpinner() {
 
         @Override
         public void onNetworkRequestError(String error) {
-            utilityofActivity.showProgressDialog();
+            utilityofActivity.dismissProgressDialog();
             console.error("Network request failed with error :" + error);
             Toast.makeText(context, "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
 

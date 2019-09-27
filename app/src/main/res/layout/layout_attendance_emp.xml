@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
@@ -22,24 +23,24 @@
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:ellipsize="end"
                 android:padding="10dp"
                 android:text="lorem ipsum"
                 android:textColor="@color/black"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/role"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/container"
                 android:maxLines="1"
                 android:paddingBottom="10dp"
                 android:paddingLeft="10dp"
                 android:text="Helper"
                 android:textColor="@color/grey"
-                android:textSize="18dp" />
+                android:textSize="18sp"
+                android:paddingStart="10dp"
+                tools:ignore="RtlSymmetry" />
 
         </LinearLayout>
 
@@ -72,7 +73,6 @@
         android:id="@+id/separator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/role"
-        android:background="#e8e8e8"></View>
+        android:background="#e8e8e8"/>
 
 </LinearLayout>

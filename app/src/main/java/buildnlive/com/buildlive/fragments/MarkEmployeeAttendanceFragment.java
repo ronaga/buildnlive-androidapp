@@ -96,6 +96,7 @@ public class MarkEmployeeAttendanceFragment extends Fragment {
         progress = view.findViewById(R.id.progress);
         hider = view.findViewById(R.id.hider);
 
+
 /*
         fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -149,7 +150,7 @@ public class MarkEmployeeAttendanceFragment extends Fragment {
                                     if (!PrefernceFile.Companion.getInstance(context).getString("CheckoutTimeEmployee" + u.getId()).equals("")) {
                                         checkOut.put(new JSONObject().put("starttime", u.getCheckInTimeSelected())
                                                 .put("finishtime", PrefernceFile.Companion.getInstance(context).getString("CheckoutTimeEmployee" + u.getId()))
-                                                .put("attendence_id", PrefernceFile.Companion.getInstance(context).getString("attendence_id" + u.getId()))
+                                                .put("attendence_id", u.getAttendanceId())
                                                 .put("overtime_hours", PrefernceFile.Companion.getInstance(context).getString("OvertimeHoursEmployee" + u.getId()))
                                                 .put("overtime_work", PrefernceFile.Companion.getInstance(context).getString("OvertimeWorkEmployee" + u.getId())));
                                     } else {
@@ -209,12 +210,11 @@ public class MarkEmployeeAttendanceFragment extends Fragment {
                                                 }
                                             }
                                             try {
-
                                                 u.setStart_time(obj.getString("starttime"));
                                                 u.setCheckInTimeSelected(PrefernceFile.Companion.getInstance(context).getString("CheckinTimeEmployee" + u.getId()));
                                                 u.setCheckInTime(System.currentTimeMillis());
-                                                u.setAttendanceId(obj.getString("attendence_id"));
-                                                PrefernceFile.Companion.getInstance(context).setString("attendence_id" + u.getId(), obj.getString("attendence_id"));
+//                                                u.setAttendanceId(obj.getString("attendence_id"));
+//                                                PrefernceFile.Companion.getInstance(context).setString("attendence_id" + u.getId(), obj.getString("attendence_id"));
 
                                             } catch (JSONException e) {
                                             }
@@ -292,7 +292,7 @@ public class MarkEmployeeAttendanceFragment extends Fragment {
 
 //                        <-------------------------- Network Request------------------------------->
 
-                        final ArrayList<Worker> checkingOutWorkers = new ArrayList<>();
+                        final ArrayList<Worker> absentWorkers = new ArrayList<>();
                         final JSONArray absent = new JSONArray();
 
                         Worker u = new Worker();
@@ -306,10 +306,10 @@ public class MarkEmployeeAttendanceFragment extends Fragment {
                                     break;
                                 }
                             }
-//                            Worker u = realm.where(Worker.class).equalTo("id", s).findFirst();
+
                             try {
                                 if (EmployeeAttendanceAdapter.ViewHolder.changedUsers.get(s)) {
-                                    checkingOutWorkers.add(u);
+                                    absentWorkers.add(u);
                                         absent.put(new JSONObject().put("leave_status", PrefernceFile.Companion.getInstance(context).getString("status" + u.getId())).put("labour_id", u.getWorkerId()));
                                 }
 
@@ -359,13 +359,13 @@ public class MarkEmployeeAttendanceFragment extends Fragment {
                                             }
                                             try {
 
-                                                u.setStart_time(obj.getString("starttime"));
+                                              /*  u.setStart_time(obj.getString("starttime"));
                                                 u.setCheckInTimeSelected(PrefernceFile.Companion.getInstance(context).getString("CheckinTimeEmployee" + u.getId()));
                                                 u.setCheckInTime(System.currentTimeMillis());
                                                 u.setAttendanceId(obj.getString("attendence_id"));
                                                 PrefernceFile.Companion.getInstance(context).setString("attendence_id" + u.getId(), obj.getString("attendence_id"));
-
-                                            } catch (JSONException e) {
+*/
+                                            } catch (Exception e) {
                                             }
                                         }
                                         appCompatActivity.finish();

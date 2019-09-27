@@ -53,14 +53,14 @@ public class IssuedItemsForm extends AppCompatActivity {
     private static App app;
     private Realm realm;
     private ArrayAdapter item_adapter, receiver_adapter;
-    private String selectedItem, selectedReceiver, itemName, receiverName, item_rent_id, vendor_id, user_type="", item_type="", asset_id;
+    private String selectedItem, selectedReceiver, itemName, receiverName, item_rent_id, vendor_id, user_type="", item_type="",issue_type="", asset_id;
     private AlertDialog.Builder builder;
     private static ArrayList<IssueVendor> IssueVendorList = new ArrayList<>();
     private IssueVendorSpinAdapter IssueVendorAdapter;
     private Spinner vendorSpinner;
     private static ArrayList<Assets> assetsList = new ArrayList<>();
     private AssetsSpinAdapter assetsAdapter;
-    private Spinner assetsSpinner;
+    private Spinner assetsSpinner,issueTypeSpinner;
     private Context context;
     private Item itemList;
     private EditText receiver_person;
@@ -118,6 +118,7 @@ public class IssuedItemsForm extends AppCompatActivity {
         unit2 = findViewById(R.id.unit2);
         receiver = findViewById(R.id.receiver);
         receiver_person = findViewById(R.id.receiver_edittext);
+        issueTypeSpinner = findViewById(R.id.issue_type);
 
         realm = Realm.getDefaultInstance();
         items = new ArrayList<>();
@@ -189,6 +190,20 @@ public class IssuedItemsForm extends AppCompatActivity {
             }
         });
 
+        issueTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i > 0) {
+                    issue_type = adapterView.getSelectedItem().toString();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+
+        });
 
         receiver.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -275,7 +290,7 @@ public class IssuedItemsForm extends AppCompatActivity {
                     .put("comments", comments.getText().toString())
                     .put("item_rent_id", item_rent_id).put("slip_no", slip_no.getText().toString())
                     .put("user_type", user_type).put("item_type", item_type).put("asset_id", asset_id)
-                    .put("reciver", receiver_person.getText().toString());
+                    .put("reciver", receiver_person.getText().toString()).put("issue_type",issue_type);
         if (user_type.equals("user")) {
             obj.put("receiver_id", selectedReceiver);
         }

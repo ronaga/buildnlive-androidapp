@@ -44,7 +44,7 @@ class PrefernceFile private constructor(context: Context) {
     }
 
 
-/*    fun setEmailsList(key: String, value: List<String>) {
+/*    fun setEmailsList(key: String, value: LabourList<String>) {
         val gson = Gson()
         val json = gson.toJson(value)
         ed!!.putString(key, json)
@@ -110,7 +110,7 @@ class PrefernceFile private constructor(context: Context) {
     }
 
 
-    public void setlist1(String key, List<CartList> value) {
+    public void setlist1(String key, LabourList<CartList> value) {
         Gson gson = new Gson();
         String json = gson.toJson(value);
         ed.putString(key, json);
@@ -178,7 +178,7 @@ class PrefernceFile private constructor(context: Context) {
         return gson.fromJson<ArrayList<String>>(json, type)
     }
 
-    /*   fun setCategoriesList(key: String, value: List<HomeResponseCategories>) {
+    /*   fun setCategoriesList(key: String, value: LabourList<HomeResponseCategories>) {
            val gson = Gson()
            val json = gson.toJson(value)
            ed?.putString(key, json)

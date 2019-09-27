@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.6"
+            android:breakStrategy="high_quality"
+            android:padding="10dp"
+            tools:text="Varun Singh" />
+
+        <TextView
+            android:id="@+id/workName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.6"
+            android:breakStrategy="high_quality"
+            android:padding="10dp"
+            tools:text="RCC Work" />
+
+        <TextView
+            android:id="@+id/quantity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:breakStrategy="high_quality"
+            android:padding="10dp"
+            tools:text="5" />
+
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:breakStrategy="high_quality"
+            android:paddingTop="10dp"
+            tools:textAlignment="center"
+            android:paddingBottom="10dp"
+            tools:text="29/05" />
+
+        <ImageView
+            android:id="@+id/enter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:breakStrategy="high_quality"
+            android:paddingTop="10dp"
+            tools:textColor="@color/white"
+            tools:textAlignment="center"
+            android:paddingBottom="10dp"
+            android:src="@drawable/ic_enter" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/container"
+        android:background="#e8e8e8" />
+
+</RelativeLayout>

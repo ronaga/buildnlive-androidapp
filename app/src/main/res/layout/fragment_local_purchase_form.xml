@@ -71,7 +71,7 @@
                     android:layout_margin="10dp"
                     android:background="@drawable/border"
                     android:hint="Quantity"
-                    android:layout_weight="0.25"
+                    android:layout_weight="0.30"
                     android:inputType="numberDecimal"
                     android:padding="5dp"
                     android:textSize="16dp" />
@@ -105,9 +105,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:layout_weight="0.25"
+                    android:layout_weight="0.30"
                     android:background="@drawable/border"
-                    android:hint="Tax %"
+                    android:hint="Tax Amount"
                     android:inputType="numberDecimal"
                     android:padding="5dp"
                     android:textSize="16dp" />
@@ -141,7 +141,7 @@
                     android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/border"
-                    android:hint="Overheads"
+                    android:hint="Transportation"
                     android:inputType="numberDecimal"
                     android:padding="5dp"
                     android:textSize="16dp" />
@@ -222,7 +222,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:background="@drawable/border"
-                    android:hint="Vendor Details"
+                    android:hint="Vendor Name"
                     android:padding="5dp"
                     android:textSize="16dp" />
 

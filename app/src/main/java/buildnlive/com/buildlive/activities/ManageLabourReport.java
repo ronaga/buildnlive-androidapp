@@ -115,6 +115,7 @@ BreakUpAdapter.OnItemClickListener listener= new BreakUpAdapter.OnItemClickListe
         String requestUrl = Config.VIEW_DETAILED_LABOUR_REPORT;
         requestUrl = requestUrl.replace("[0]", App.userId);
         requestUrl = requestUrl.replace("[1]", ViewLabourReportFragment.daily_report_id_s);
+        requestUrl = requestUrl.replace("[2]", App.projectId);
         console.log(requestUrl);
         app.sendNetworkRequest(requestUrl, Request.Method.GET, null, new Interfaces.NetworkInterfaceListener() {
             @Override
@@ -155,7 +156,7 @@ BreakUpAdapter.OnItemClickListener listener= new BreakUpAdapter.OnItemClickListe
                     adapter = new BreakUpAdapter(context, labourModelList, listener);
                     DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(items.getContext(),LinearLayoutManager.VERTICAL);
                     items.addItemDecoration(dividerItemDecoration);
-                    items.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+                    items.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
                     items.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
 

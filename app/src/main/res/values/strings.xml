@@ -18,6 +18,7 @@
     <string name="unit">Select Unit</string>
     <string name="Contractor">Select Contractor</string>
     <string-array name="payment_type"><item>Select Payment Type</item><item>Credit</item><item>Debit</item></string-array>
+    <string-array name="issue_type"><item>Select Issue Type</item><item>Chargeable</item><item>Free</item><item>Return</item></string-array>
     <string-array name="payment_mode"><item>Select Payment Mode</item><item>Cash</item><item>Draft</item><item>Cheque</item><item>RTGS</item></string-array>
     <string-array name="units">
         <item>Unit</item>
@@ -125,6 +126,32 @@
     <string name="receive_impress">Receive Impress</string>
     <string name="balanceAmount">Balance: \u20B9 %1$s</string>
     <string name="percentComplete">%1$s %%</string>
+    <string name="receive_imprest">Receive Imprest</string>
+    <string name="add">Add</string>
+    <string name="date">Date</string>
+    <string name="next">Next</string>
+    <string name="user">User</string>
+    <string name="work">Work</string>
+    <string name="labour_requested">Labour Requested</string>
+    <string name="home">Home</string>
+    <string name="checkin_checkout">Checkin/Checkout</string>
+    <string name="take_leave">Take Leave</string>
+    <string name="profile">Profile</string>
+    <string name="plans">Plans</string>
+    <string name="logout">Logout</string>
+    <string name="communicate">Communicate</string>
+
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
+    <string name="reason_for_leave">Reason for leave.</string>
+    <string name="request_leave">Request Leave</string>
+    <string name="leave_dates">Leave Dates</string>
+    <string name="status">Status</string>
+    <string name="previous_leave_requests">Previous Leave Requests</string>
+    <string name="worker_details">Worker Details</string>
+    <string name="workerHolder" >%1$s (%2$s)</string>
+    <string name="close">Close</string>
+    <string name="cancel_leave">Cancel Leave</string>>
 
 </resources>
 

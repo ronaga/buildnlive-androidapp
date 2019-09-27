@@ -62,7 +62,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView title, quantity, label, details, date;
+        private TextView title, quantity, label, details, date,projectName;
         private ImageView imageView;
         private LinearLayout buttons, reply, issue;
         private Button approve, reject, review, receive, notReceive, read, image, issued;
@@ -87,6 +87,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             read = view.findViewById(R.id.read_notification);
             issue = view.findViewById(R.id.issue);
             issued = view.findViewById(R.id.issued);
+            projectName = view.findViewById(R.id.project_name);
         }
 
         public void bind(final Context context, final Notification item, final int pos, final OnItemClickListener listener) {
@@ -102,6 +103,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                     }
                 });
             }
+
+            projectName.setText(String.format("Project: %s", item.getProjectName()));
+
             switch (item.getType()) {
                 case "update":
                     reply.setVisibility(View.GONE);

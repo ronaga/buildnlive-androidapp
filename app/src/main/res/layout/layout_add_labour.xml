@@ -40,17 +40,6 @@
             android:padding="3dp"
             android:textAlignment="center" />
 
-        <TextView
-            android:id="@+id/maxQuantity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="6"
-            android:background="@drawable/border"
-            android:hint="Available"
-            android:inputType="numberDecimal"
-            android:padding="3dp"
-            android:textAlignment="center" />
     </LinearLayout>
 
 

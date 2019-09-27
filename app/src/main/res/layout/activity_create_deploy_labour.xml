@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:id="@+id/coordinatorLayout"
-    tools:context=".activities.DailyWorkProgressActivities">
+    tools:context=".activities.CreateLabourDeploy">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

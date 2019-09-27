@@ -73,7 +73,7 @@ public class ViewLiveAttendanceAdapter extends RecyclerView.Adapter<ViewLiveAtte
 
         public void bind(final Context context, final ViewAttendance item, final int pos, OnItemClickListener listener) {
             name.setText(item.getLabour_name());
-            role.setText(item.getLabour_role() + "(" + item.getLabour_type() + ")");
+            role.setText(String.format(context.getString(R.string.workerHolder),item.getLabour_role(),item.getLabour_type()));
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

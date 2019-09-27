@@ -92,6 +92,7 @@
                     android:textSize="16dp"
                     android:textStyle="bold" />
 
+
             </LinearLayout>
 
             <LinearLayout
@@ -151,6 +152,16 @@
                     android:padding="5dp" />
 
             </LinearLayout>
+
+            <Spinner
+                android:id="@+id/issue_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:spinnerMode="dialog"
+                android:padding="10dp"
+                android:entries="@array/issue_type"
+                android:layout_weight="1" />
 
 
             <Spinner

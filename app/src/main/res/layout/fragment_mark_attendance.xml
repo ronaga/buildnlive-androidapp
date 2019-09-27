@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:paddingLeft="5dp"
-            android:text="Employee"
+            android:text="Labour"
             android:textSize="15dp" />
 
         <TextView
@@ -40,7 +40,7 @@
         android:layout_height="1dp"
         android:layout_below="@+id/top_bar"
         android:layout_marginTop="5dp"
-        android:background="@color/grey"></View>
+        android:background="@color/grey"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/attendees"
@@ -79,7 +79,7 @@
         android:textColor="@color/white"
         android:textSize="20dp" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+  <!--  <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_margin="15dp"
         android:src="@drawable/ic_add_black_24dp"
@@ -89,5 +89,5 @@
         android:layout_above="@id/submit"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true" />
-
+-->
 </RelativeLayout>

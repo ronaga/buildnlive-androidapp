@@ -110,6 +110,8 @@ public class Approval extends AppCompatActivity {
         requestUrl = requestUrl.replace("[0]", App.userId);
         requestUrl = requestUrl.replace("[1]", App.projectId);
 
+        console.log(requestUrl);
+
         app.sendNetworkRequest(requestUrl, Request.Method.POST, null, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {

@@ -65,7 +65,7 @@ public class FreeLabourAdapter extends RecyclerView.Adapter<FreeLabourAdapter.Vi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView name,maxQuantity;
+        private TextView name;
         private EditText quantity;
         private CheckBox check;
         public static boolean CHECKOUT = false;
@@ -74,7 +74,6 @@ public class FreeLabourAdapter extends RecyclerView.Adapter<FreeLabourAdapter.Vi
         public ViewHolder(View view) {
             super(view);
             name= view.findViewById(R.id.name);
-            maxQuantity= view.findViewById(R.id.maxQuantity);
             quantity= view.findViewById(R.id.quantity);
             check= view.findViewById(R.id.check);
 
@@ -82,13 +81,12 @@ public class FreeLabourAdapter extends RecyclerView.Adapter<FreeLabourAdapter.Vi
 
         public void bind(final Context context, final FreeLabour item, final int pos, final OnItemClickListener listener) {
             name.setText(item.getLabour_type());
-            maxQuantity.setText(item.getLabour_available());
 
             check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                     if (isChecked) {
-                        if (quantity.getText().toString().length() > 0&& (Integer.parseInt(quantity.getText().toString())<=Integer.parseInt(item.getLabour_available()))) {
+                        if (quantity.getText().toString().length() > 0) {
                             checkCount++;
                             listener.onItemCheck(true);
                             item.setUpdated(true);
