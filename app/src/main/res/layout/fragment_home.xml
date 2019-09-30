@@ -888,12 +888,61 @@
 
                 </LinearLayout>
 
+
+                <LinearLayout
+                    android:id="@+id/eleven"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/agenda"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/border"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:focusable="true">
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/border_round"
+                            android:backgroundTint="@color/c3"
+                            android:backgroundTintMode="src_atop"
+                            android:padding="10dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/ic_receipt_black_24dp"
+                            android:tint="@color/c3" />
+
+                        <TextView
+                            android:id="@+id/agenda_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:breakStrategy="high_quality"
+                            android:padding="5dp"
+                            android:text="Agenda"
+                            android:textAlignment="center"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+
+
+
+                </LinearLayout>
+
             </LinearLayout>
 
 
         </RelativeLayout>
 
-        <LinearLayout
+      <!--  <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -912,6 +961,6 @@
                 android:textAlignment="center"
                 android:textSize="15dp" />
         </LinearLayout>
-
+-->
     </RelativeLayout>
 </ScrollView>

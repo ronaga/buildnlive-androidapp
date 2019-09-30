@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import buildnlive.com.buildlive.Agenda.Agenda;
 import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
@@ -64,7 +65,7 @@ import static buildnlive.com.buildlive.utils.Config.PREF_NAME;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
     //    private TextView title;
-    private LinearLayout labour_deployment, labourRequest, sitePayment, approval, repairRequest, transferRequest, markAttendance, markEmployeeAttendance, manageInventory, issuedItems, requestItems, workProgress, purchaseOrder, siteRequest, localPurchase, labour, labourReport, planning, machine, storeRequest;
+    private LinearLayout labour_deployment, labourRequest, sitePayment, approval, repairRequest, transferRequest, markAttendance, markEmployeeAttendance, manageInventory, issuedItems, requestItems, workProgress, purchaseOrder, siteRequest, localPurchase, labour, labourReport, planning, machine, storeRequest, agenda;
     private SharedPreferences pref;
     private Spinner projects;
     private static App app;
@@ -127,6 +128,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         storeRequest = view.findViewById(R.id.storeRequest);
         labour_deployment = view.findViewById(R.id.labour_deployment);
         labourRequest = view.findViewById(R.id.labour_request);
+        agenda = view.findViewById(R.id.agenda);
 
         badge = getActivity().findViewById(R.id.badge_notification);
 
@@ -177,6 +179,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         sitePayment.setOnClickListener(this);
         labour_deployment.setOnClickListener(this);
         labourRequest.setOnClickListener(this);
+        agenda.setOnClickListener(this);
 
 
         ArrayList<String> permissionList = PrefernceFile.Companion.getInstance(context).getArrayList("Perm");
@@ -417,6 +420,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.labour_request:
                 startActivity(new Intent(getContext(), LabourRequest.class));
+                break;
+            case R.id.agenda:
+                startActivity(new Intent(getContext(), Agenda.class));
                 break;
 
         }
