@@ -15,7 +15,7 @@
 
         <TextView
             android:id="@+id/date"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4.5"
             android:breakStrategy="high_quality"
@@ -25,18 +25,28 @@
         <TextView
             android:gravity="center"
             android:id="@+id/checkinTime"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="6"
+            android:layout_weight="5.5"
             android:padding="5dp"
             tools:text="105A"/>
 
         <TextView
             android:gravity="center"
             android:id="@+id/checkOutTime"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="6"
+            android:layout_weight="5.5"
+            android:padding="5dp"
+            tools:text="105A" />
+
+        <ImageView
+            android:src="@drawable/ic_close"
+            android:gravity="center"
+            android:id="@+id/delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:padding="5dp"
             tools:text="105A" />
 

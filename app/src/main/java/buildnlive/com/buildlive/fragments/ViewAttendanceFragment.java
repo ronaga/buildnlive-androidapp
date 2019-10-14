@@ -2,6 +2,7 @@ package buildnlive.com.buildlive.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +51,7 @@ public class ViewAttendanceFragment extends Fragment {
     private AppCompatActivity appCompatActivity;
     private static App app;
 
+    private android.app.AlertDialog.Builder builder;
 
     public static ViewAttendanceFragment newInstance() {
         return new ViewAttendanceFragment();
@@ -83,6 +85,8 @@ public class ViewAttendanceFragment extends Fragment {
         progress = view.findViewById(R.id.progress);
         hider = view.findViewById(R.id.hider);
 
+
+        builder = new android.app.AlertDialog.Builder(context);
         adapter = new ViewLiveAttendanceAdapter(getContext(), attendanceList, new ViewLiveAttendanceAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(ViewAttendance worker, int pos, View view) {
@@ -152,6 +156,57 @@ public class ViewAttendanceFragment extends Fragment {
     }
 
 
+    private void deleteAttedance(String id, DialogInterface dialog) {
+        String requestUrl = Config.DeleteLabourAttendance;
+        requestUrl = requestUrl.replace("[1]", App.userId);
+        requestUrl = requestUrl.replace("[0]", id);
+        console.log(requestUrl);
+        attendanceList.clear();
+        app.sendNetworkRequest(requestUrl, Request.Method.GET, null, new Interfaces.NetworkInterfaceListener() {
+            @Override
+            public void onNetworkRequestStart() {
+
+                utilityofActivity.showProgressDialog();
+            }
+
+            @Override
+            public void onNetworkRequestError(String error) {
+                utilityofActivity.dismissProgressDialog();
+                console.error("Network request failed with error :" + error);
+                Toast.makeText(getContext(), "Check Network, Something went wrong", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNetworkRequestComplete(String response) {
+                console.log(response);
+                progress.setVisibility(View.GONE);
+                hider.setVisibility(View.GONE);
+                utilityofActivity.dismissProgressDialog();
+                try {
+                    if(response.equals("1"))
+                    {
+                     utilityofActivity.toast("Successfully deleted");
+                     dialog.dismiss();
+
+                    }
+                    else if(response.equals("-1"))
+                    {
+                        utilityofActivity.toast("You do not have permission to delete");
+                        dialog.dismiss();
+                    }
+                    else
+                    {
+                        utilityofActivity.toast("Something went wrong");
+                        dialog.dismiss();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+
     private void showUser(final ViewAttendance worker) {
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.alert_show_user, null);
@@ -202,7 +257,25 @@ public class ViewAttendanceFragment extends Fragment {
                     WorkerHistoryAdapter adapter = new WorkerHistoryAdapter(getContext(), packets, new WorkerHistoryAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(WorkerHistory packet, int pos, View view) {
+                            builder.setMessage("Are you sure you want to delete this entry?") .setTitle("Delete Attendance");
 
+                            //Setting message manually and performing action on button click
+                            builder.setCancelable(false)
+                                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            deleteAttedance(packet.getDailyAttendenceId(),dialog);
+                                        }
+                                    })
+                                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            //  Action for 'NO' Button
+                                            dialog.cancel();
+
+                                        }
+                                    });
+                            //Creating dialog box
+                            android.app.AlertDialog alert = builder.create();
+                            alert.show();
                         }
                     });
                     disable.setVisibility(View.GONE);
@@ -223,7 +296,7 @@ public class ViewAttendanceFragment extends Fragment {
         List<WorkerHistory> packets = new ArrayList<>();
         for (int i = 0; i < array.length(); i++) {
             JSONObject obj = array.getJSONObject(i);
-            packets.add(new WorkerHistory(obj.getString("end_time"), obj.getString("start_time"), obj.getString("start_date_time")));
+            packets.add(new WorkerHistory(obj.getString("daily_attendence_id"),obj.getString("end_time"), obj.getString("start_time"), obj.getString("start_date_time")));
         }
         return packets;
     }

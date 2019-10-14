@@ -69,6 +69,14 @@ public class ViewJobSheetAdapter extends RecyclerView.Adapter<ViewJobSheetAdapte
         }
 
         public void bind(final Context context, final ViewJobSheet item, final int pos,final OnItemClickListener listener) {
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onItemClick(item,pos,itemView);
+                }
+            });
+
             if(item.getName()!=null)
             name.setText(item.getName());
             if(item.getLog_in_time()!=null)

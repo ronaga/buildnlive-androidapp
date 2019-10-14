@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -58,10 +59,12 @@ public class WorkerHistoryAdapter extends RecyclerView.Adapter<WorkerHistoryAdap
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView date, checkinTime, checkOutTime;
+        private ImageView delete;
 
         public ViewHolder(View view) {
             super(view);
             date = view.findViewById(R.id.date);
+            delete = view.findViewById(R.id.delete);
             checkinTime = view.findViewById(R.id.checkinTime);
             checkOutTime = view.findViewById(R.id.checkOutTime);
         }
@@ -82,6 +85,13 @@ public class WorkerHistoryAdapter extends RecyclerView.Adapter<WorkerHistoryAdap
             else {
                 checkOutTime.setText(item.getEndTime());
             }
+
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onItemClick(item,pos,delete);
+                }
+            });
         }
 
     }

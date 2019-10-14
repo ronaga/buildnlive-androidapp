@@ -4,6 +4,7 @@ package buildnlive.com.buildlive.fragments
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -15,18 +16,16 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.ResultReceiver
 import android.provider.Settings
-import androidx.core.app.ActivityCompat
-import androidx.fragment.app.Fragment
-import androidx.core.content.ContextCompat
-import androidx.appcompat.app.AppCompatActivity
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.Spinner
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import buildnlive.com.buildlive.*
 import buildnlive.com.buildlive.R
 import buildnlive.com.buildlive.activities.LoginActivity
@@ -37,9 +36,10 @@ import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
 import com.android.volley.Request
 import com.google.android.gms.location.*
+import kotlinx.android.synthetic.main.content_check_attendance.*
 import org.json.JSONException
 import org.json.JSONObject
-import kotlinx.android.synthetic.main.content_check_attendance.*
+import java.util.*
 
 class CheckAttendanceLoc : Fragment() {
 
@@ -49,6 +49,10 @@ class CheckAttendanceLoc : Fragment() {
     private var mContext: Context? = null
     private var appCompatActivity: AppCompatActivity? = null
     var utilityofActivity: UtilityofActivity? = null
+
+    private var mYear: Int? = null
+    private var mMonth: Int? = null
+    private var mDay: Int? = null
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     var outputLocation: String? = null
@@ -273,23 +277,17 @@ class CheckAttendanceLoc : Fragment() {
         email.text = e
 
         checkin.setOnClickListener {
-            if(lastLocation!=null)
-            {
-                Checkin(lastLocation!!.latitude.toString(),lastLocation!!.longitude.toString())
-            }
-            else
-            {
+            if (lastLocation != null) {
+                Checkin(lastLocation!!.latitude.toString(), lastLocation!!.longitude.toString())
+            } else {
                 utilityofActivity!!.toast("Error fetching location please try again")
             }
         }
 
         checkout.setOnClickListener {
-            if(lastLocation!=null)
-            {
-                CheckOut(lastLocation!!.latitude.toString(),lastLocation!!.longitude.toString())
-            }
-            else
-            {
+            if (lastLocation != null) {
+                CheckOut(lastLocation!!.latitude.toString(), lastLocation!!.longitude.toString())
+            } else {
                 utilityofActivity!!.toast("Error fetching location please try again")
             }
         }
@@ -305,20 +303,64 @@ class CheckAttendanceLoc : Fragment() {
 
             val title = dialogView.findViewById<TextView>(R.id.alert_title)
             val status = dialogView.findViewById<Spinner>(R.id.status)
-            title.text = "Status"
+            title.text = getString(R.string.status)
 
             val positive = dialogView.findViewById<Button>(R.id.positive)
             val negative = dialogView.findViewById<Button>(R.id.negative)
 
-            positive.text = "Done"
+            positive.text = getString(R.string.done)
             positive.setOnClickListener {
-                if(lastLocation!=null)
-                {
-                    MarkAbsent(status.selectedItem.toString(),lastLocation!!.latitude.toString(),lastLocation!!.longitude.toString())
+                if (lastLocation != null) {
+                    MarkAbsent(status.selectedItem.toString(), lastLocation!!.latitude.toString(), lastLocation!!.longitude.toString())
                     alertDialog.dismiss()
+                } else {
+                    utilityofActivity!!.toast("Error fetching location please try again")
                 }
-                else
-                {
+
+            }
+            negative.setOnClickListener {
+                alertDialog.dismiss()
+            }
+        }
+
+        outDuty.setOnClickListener {
+
+            val inflater = context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val dialogView = inflater.inflate(R.layout.alert_dialog_outduty, null)
+            val dialogBuilder = AlertDialog.Builder(context!!, R.style.PinDialog)
+
+            val alertDialog = dialogBuilder.setCancelable(false).setView(dialogView).create()
+            alertDialog.show()
+
+            val title = dialogView.findViewById<TextView>(R.id.alert_title)
+            title.text = getString(R.string.outduty)
+
+            val positive = dialogView.findViewById<Button>(R.id.positive)
+            val negative = dialogView.findViewById<Button>(R.id.negative)
+            val date = dialogView.findViewById<TextView>(R.id.date)
+            val reason = dialogView.findViewById<EditText>(R.id.reason)
+
+            date.setOnClickListener {
+                // Get Current Date
+                val c = Calendar.getInstance()
+                mYear = c.get(Calendar.YEAR)
+                mMonth = c.get(Calendar.MONTH)
+                mDay = c.get(Calendar.DAY_OF_MONTH)
+
+
+                val datePickerDialog = DatePickerDialog(context,
+                        DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth -> date.text = dayOfMonth.toString() + "-" + (monthOfYear + 1) + "-" + year }, mYear!!, mMonth!!, mDay!!)
+                datePickerDialog.show()
+            }
+
+            reason.movementMethod = ScrollingMovementMethod()
+
+            positive.text = getString(R.string.done)
+            positive.setOnClickListener {
+                if (lastLocation != null) {
+                    MarkOutDuty(date.text.toString(), reason.text.toString(), lastLocation!!.latitude.toString(), lastLocation!!.longitude.toString())
+                    alertDialog.dismiss()
+                } else {
                     utilityofActivity!!.toast("Error fetching location please try again")
                 }
 
@@ -360,11 +402,11 @@ class CheckAttendanceLoc : Fragment() {
     }
 
 
-    private fun Checkin(latitude:String,longitude:String) {
+    private fun Checkin(latitude: String, longitude: String) {
         var requestUrl = Config.CHECK_IN
         requestUrl = requestUrl.replace("[0]", App.userId)
         requestUrl = requestUrl.replace("[1]", latitude)
-        requestUrl = requestUrl.replace("[2]",longitude)
+        requestUrl = requestUrl.replace("[2]", longitude)
 
         console.log("CheckIn: " + requestUrl)
         app!!.sendNetworkRequest(requestUrl, Request.Method.GET, null, object : Interfaces.NetworkInterfaceListener {
@@ -396,7 +438,7 @@ class CheckAttendanceLoc : Fragment() {
                         PrefernceFile.getInstance(mContext!!).setString("attendence_id", attendenceId!!)
 
                         checkout.visibility = View.VISIBLE
-                        absent.visibility=View.GONE
+                        absent.visibility = View.GONE
                         checkin.visibility = View.GONE
 
                     }
@@ -445,9 +487,9 @@ class CheckAttendanceLoc : Fragment() {
 
                         utilityofActivity!!.toast("Checked Out Successfully")
                         status.text = "You checked out at : " + jsonObject.get("end_time")
-                        checkout.background = ContextCompat.getDrawable(context!!, R.drawable.inactive_home_button)
-                        checkout.isEnabled = false
-                        absent.visibility=View.GONE
+//                        checkout.background = ContextCompat.getDrawable(context!!, R.drawable.inactive_home_button)
+                        checkout.visibility = View.GONE
+                        absent.visibility = View.GONE
                     }
 
                 } catch (e: JSONException) {
@@ -459,7 +501,7 @@ class CheckAttendanceLoc : Fragment() {
     }
 
 
-    private fun MarkAbsent(leaveStatus:String,latitude: String, longitude: String) {
+    private fun MarkAbsent(leaveStatus: String, latitude: String, longitude: String) {
         var requestUrl = Config.MARK_ABSENT_USER
         try {
             requestUrl = requestUrl.replace("[0]", App.userId)
@@ -502,10 +544,67 @@ class CheckAttendanceLoc : Fragment() {
                         Toast.makeText(context!!, "Successfully Requested", Toast.LENGTH_LONG).show()
 
                         status.text = "Status: " + jsonObject.get("leave_status")
-                        checkin.background = ContextCompat.getDrawable(context!!, R.drawable.inactive_home_button)
-                        checkin.isEnabled = false
-                        absent.background = ContextCompat.getDrawable(context!!, R.drawable.inactive_home_button)
-                        absent.isEnabled = false
+//                        checkin.background = ContextCompat.getDrawable(context!!, R.drawable.inactive_home_button)
+                        checkin.visibility = View.GONE
+//                        absent.background = ContextCompat.getDrawable(context!!, R.drawable.inactive_home_button)
+                        absent.visibility = View.GONE
+//                        absent.isEnabled = false
+                    }
+
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+
+            }
+        })
+    }
+
+
+    private fun MarkOutDuty(date: String, reason: String, latitude: String, longitude: String) {
+        val requestUrl = Config.MarkOutDuty
+
+        val params = HashMap<String, String>()
+        params["user_id"] = App.userId
+        params["latitude"] = latitude
+        params["longitude"] = longitude
+        params["comments"] = reason
+        params["to_date"] = date
+
+        console.log("MarkOutDuty: " + requestUrl)
+        app!!.sendNetworkRequest(requestUrl, Request.Method.POST, params, object : Interfaces.NetworkInterfaceListener {
+            override fun onNetworkRequestStart() {
+                utilityofActivity!!.showProgressDialog()
+            }
+
+            override fun onNetworkRequestError(error: String) {
+                utilityofActivity!!.dismissProgressDialog()
+                console.error("Network request failed with error :$error")
+                Toast.makeText(context, "Check Network, Something went wrong", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onNetworkRequestComplete(response: String) {
+                console.log(response)
+                utilityofActivity!!.dismissProgressDialog()
+                try {
+//                    if(response == "1")
+//                    {
+
+//                    }
+//                    else if(response == "0")
+                    if (response == "0") {
+                        Toast.makeText(context!!, "Already On Duty", Toast.LENGTH_LONG).show()
+                    } else if (response == "-1") {
+                        Toast.makeText(context!!, "System Error, Please contact admin", Toast.LENGTH_LONG).show()
+                    } else {
+                        val jsonObject = JSONObject(response)
+
+                        Toast.makeText(context!!, "Successfully Requested", Toast.LENGTH_LONG).show()
+                        status.text = "Status: " + jsonObject.get("leave_status")
+//                        checkin.background = ContextCompat.getDrawable(context!!, R.drawable.inactive_home_button)
+                        checkin.visibility = View.GONE
+//                        absent.background = ContextCompat.getDrawable(context!!, R.drawable.inactive_home_button)
+                        absent.visibility = View.GONE
+//                        absent.isEnabled = false
                     }
 
                 } catch (e: JSONException) {
@@ -552,28 +651,31 @@ class CheckAttendanceLoc : Fragment() {
                         if ((jsonObject.getString("start_time") == "0" && jsonObject.getString("end_time") == "0")) {
                             checkin.visibility = View.VISIBLE
                             absent.visibility = View.VISIBLE
-                            checkin.isEnabled = true
-                            checkin.background = ContextCompat.getDrawable(context!!, R.drawable.home_button)
+                            outDuty.visibility = View.VISIBLE
+                            status.text = ""
+//                            checkin.isEnabled = true
+//                            checkin.background = ContextCompat.getDrawable(context!!, R.drawable.home_button)
                             checkout.visibility = View.GONE
                         } else if ((jsonObject.getString("start_time").isNotEmpty() && jsonObject.getString("end_time") == "null")) {
                             checkin.visibility = View.GONE
                             absent.visibility = View.GONE
-                            checkout.isEnabled = true
-                            checkout.background = ContextCompat.getDrawable(context!!, R.drawable.home_button)
+                            outDuty.visibility = View.GONE
+//                            checkout.isEnabled = true
+//                            checkout.background = ContextCompat.getDrawable(context!!, R.drawable.home_button)
                             checkout.visibility = View.VISIBLE
-                        }else if((jsonObject.getString("start_time") == "-1" && jsonObject.getString("end_time") == "-1"))
-                        {
-                            absent.visibility=View.VISIBLE
+                        } else if ((jsonObject.getString("start_time") == "-1" && jsonObject.getString("end_time") == "-1")) {
+                            absent.visibility = View.VISIBLE
+                            outDuty.visibility = View.VISIBLE
                             checkin.visibility = View.GONE
                             checkout.visibility = View.GONE
-                            absent.background = ContextCompat.getDrawable(context!!, R.drawable.inactive_home_button)
+//                            absent.background = ContextCompat.getDrawable(context!!, R.drawable.inactive_home_button)
                             absent.isEnabled = false
-                        }
-                        else {
+                        } else {
                             checkin.visibility = View.GONE
                             absent.visibility = View.GONE
+                            outDuty.visibility = View.GONE
                             checkout.visibility = View.VISIBLE
-                            checkout.background = ContextCompat.getDrawable(context!!, R.drawable.inactive_home_button)
+//                            checkout.background = ContextCompat.getDrawable(context!!, R.drawable.inactive_home_button)
                             checkout.isEnabled = false
                         }
 

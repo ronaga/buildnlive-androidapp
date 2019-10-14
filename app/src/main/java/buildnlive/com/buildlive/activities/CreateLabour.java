@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,6 +12,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.google.gson.Gson;
@@ -35,19 +36,19 @@ import buildnlive.com.buildlive.utils.Config;
 import buildnlive.com.buildlive.utils.UtilityofActivity;
 
 public class CreateLabour extends AppCompatActivity {
-    private EditText name, mobile, referenceNo;
-    private Spinner skill,workHours,gender,type,trade;
+    private EditText name, mobile, referenceNo, vendorName;
+    private Spinner skill, workHours, gender, type, trade;
     private Button submit, add;
     private AlertDialog.Builder builder;
     private Boolean val = true;
     private Context context;
     private UtilityofActivity utilityofActivity;
-    private AppCompatActivity appCompatActivity=this;
-    private LabourTradeSpinAdapter labourTradeAdapter,labourTypeAdapter;
-    private ArrayList<LabourTrade> labourTradeList=new ArrayList<>();
-    private ArrayList<LabourTrade> labourTypeList=new ArrayList<>();
-    private String labourTradeName="0";
-    private String labourTypeName="0";
+    private AppCompatActivity appCompatActivity = this;
+    private LabourTradeSpinAdapter labourTradeAdapter, labourTypeAdapter;
+    private ArrayList<LabourTrade> labourTradeList = new ArrayList<>();
+    private ArrayList<LabourTrade> labourTypeList = new ArrayList<>();
+    private String labourTradeName = "0";
+    private String labourTypeName = "0";
 
 
     @Override
@@ -79,13 +80,13 @@ public class CreateLabour extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_labour);
 
-        context=this;
+        context = this;
 
-        utilityofActivity=new UtilityofActivity(appCompatActivity);
+        utilityofActivity = new UtilityofActivity(appCompatActivity);
         utilityofActivity.configureToolbar(appCompatActivity);
 
-        TextView toolbar_title=findViewById(R.id.toolbar_title);
-        TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
+        TextView toolbar_title = findViewById(R.id.toolbar_title);
+        TextView toolbar_subtitle = findViewById(R.id.toolbar_subtitle);
         toolbar_subtitle.setText(App.projectName);
         toolbar_title.setText("Create Labour");
 
@@ -94,6 +95,7 @@ public class CreateLabour extends AppCompatActivity {
         skill = findViewById(R.id.skill);
         workHours = findViewById(R.id.workingHours);
         gender = findViewById(R.id.gender);
+        vendorName = findViewById(R.id.vendorName);
 
         type = findViewById(R.id.type);
         trade = findViewById(R.id.trade);
@@ -104,18 +106,18 @@ public class CreateLabour extends AppCompatActivity {
         submit = findViewById(R.id.submit);
 
 
-        labourTradeAdapter  = new LabourTradeSpinAdapter(context, R.layout.custom_spinner, labourTradeList);
+        labourTradeAdapter = new LabourTradeSpinAdapter(context, R.layout.custom_spinner, labourTradeList);
         trade.setAdapter(labourTradeAdapter);
 
         trade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                labourTradeName=labourTradeAdapter.getLabourTrade_id(i);
+                labourTradeName = labourTradeAdapter.getLabourTrade_id(i);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                labourTradeName="0";
+                labourTradeName = "0";
             }
         });
 
@@ -126,6 +128,12 @@ public class CreateLabour extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 labourTypeName = labourTypeAdapter.getName(i);
+
+                if (labourTypeName.equals("PRW")||labourTypeName.equals("PC")) {
+                    vendorName.setVisibility(View.VISIBLE);
+                } else {
+                    vendorName.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -148,9 +156,9 @@ public class CreateLabour extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
 
-                                if (validate(name.getText().toString(), "", skill.getSelectedItem().toString(),gender.getSelectedItem().toString(),workHours.getSelectedItem().toString())) {
+                                if (validate(name.getText().toString(), skill.getSelectedItem().toString(), gender.getSelectedItem().toString(), workHours.getSelectedItem().toString(), labourTypeName)) {
                                     try {
-                                        sendRequest(name.getText().toString(), "", skill.getSelectedItem().toString(),gender.getSelectedItem().toString(),workHours.getSelectedItem().toString(),labourTradeName,labourTypeName);
+                                        sendRequest(name.getText().toString(), "", skill.getSelectedItem().toString(), gender.getSelectedItem().toString(), workHours.getSelectedItem().toString(), labourTradeName, labourTypeName, vendorName.getText().toString());
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -212,7 +220,9 @@ public class CreateLabour extends AppCompatActivity {
 
     }
 
-    private boolean validate(String name_text, String mobile_text, String skill,String gender,String workHours) {
+    private boolean validate(String name_text, String skill, String gender, String workHours, String type) {
+
+        val = true;
 
         if (TextUtils.equals(skill, "Select Skill Level")) {
             Toast.makeText(getApplicationContext(), "Please Select Skill Level", Toast.LENGTH_LONG).show();
@@ -222,8 +232,13 @@ public class CreateLabour extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Please Select Gender", Toast.LENGTH_LONG).show();
             val = false;
         }
-        if (TextUtils.equals(gender, "Select Work Hours")) {
+        if (TextUtils.equals(workHours, "Select Work Hours")) {
             Toast.makeText(getApplicationContext(), "Please Select Work Hours", Toast.LENGTH_LONG).show();
+            val = false;
+        }
+
+        if (TextUtils.equals(type, "PRW") && (vendorName.getText().toString().isEmpty() || vendorName.getText().toString().equals(""))) {
+            vendorName.setError("Enter Vendor Name");
             val = false;
         }
 
@@ -241,11 +256,14 @@ public class CreateLabour extends AppCompatActivity {
 //            to_edit.setError("Enter Payee");
 //            val=false;
 //        }
+        console.log("BOOL" + val.toString());
+        console.log("TYPE" + type);
+        console.log("VENDOR NAME" + vendorName.getText().toString());
         return val;
     }
 
 
-    private void sendRequest(String name, String mobile, String skill,String gender,String workHours,String labourTradeName,String labourTypeName) throws JSONException {
+    private void sendRequest(String name, String mobile, String skill, String gender, String workHours, String labourTradeName, String labourTypeName, String vendorName) throws JSONException {
         App app = ((App) getApplication());
         HashMap<String, String> params = new HashMap<>();
         params.put("user_id", App.userId);
@@ -257,6 +275,7 @@ public class CreateLabour extends AppCompatActivity {
         params.put("labour_skill", skill);
         params.put("labour_trade", labourTradeName);
         params.put("labour_type", labourTypeName);
+        params.put("vendor_name", vendorName);
         console.log("Res:" + params);
 
         app.sendNetworkRequest(Config.CREATE_LABOUR, 1, params, new Interfaces.NetworkInterfaceListener() {
@@ -285,7 +304,7 @@ public class CreateLabour extends AppCompatActivity {
 
     private void getLabourTrade() throws JSONException {
 
-        App app= ((App)getApplication());
+        App app = ((App) getApplication());
 
         String url = Config.LABOUR_TRADE;
 
@@ -302,13 +321,13 @@ public class CreateLabour extends AppCompatActivity {
             @Override
             public void onNetworkRequestError(String error) {
                 utilityofActivity.dismissProgressDialog();
-                Toast.makeText(context,"Something went wrong, Try again later",Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Something went wrong, Try again later", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onNetworkRequestComplete(String response) {
                 utilityofActivity.dismissProgressDialog();
-                console.log("LABOUR TRADE"+response);
+                console.log("LABOUR TRADE" + response);
 
                 try {
                     labourTradeList.clear();
@@ -316,7 +335,7 @@ public class CreateLabour extends AppCompatActivity {
                     Type labourTradeType = new TypeToken<ArrayList<LabourTrade>>() {
                     }.getType();
                     labourTradeList = new Gson().fromJson(response, labourTradeType);
-                    labourTradeAdapter  = new LabourTradeSpinAdapter(context, R.layout.custom_spinner, labourTradeList);
+                    labourTradeAdapter = new LabourTradeSpinAdapter(context, R.layout.custom_spinner, labourTradeList);
                     trade.setAdapter(labourTradeAdapter);
 
 
@@ -333,7 +352,7 @@ public class CreateLabour extends AppCompatActivity {
 
     private void getLabourType() throws JSONException {
 
-        App app= ((App)getApplication());
+        App app = ((App) getApplication());
 
         String url = Config.LABOUR_TYPE;
 
@@ -350,13 +369,13 @@ public class CreateLabour extends AppCompatActivity {
             @Override
             public void onNetworkRequestError(String error) {
                 utilityofActivity.dismissProgressDialog();
-                Toast.makeText(context,"Something went wrong, Try again later",Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Something went wrong, Try again later", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onNetworkRequestComplete(String response) {
                 utilityofActivity.dismissProgressDialog();
-                console.log("LABOUR TYPE"+response);
+                console.log("LABOUR TYPE" + response);
 
                 try {
                     labourTypeList.clear();
@@ -364,7 +383,7 @@ public class CreateLabour extends AppCompatActivity {
                     Type labourTradeType = new TypeToken<ArrayList<LabourTrade>>() {
                     }.getType();
                     labourTypeList = new Gson().fromJson(response, labourTradeType);
-                    labourTypeAdapter  = new LabourTradeSpinAdapter(context, R.layout.custom_spinner, labourTypeList);
+                    labourTypeAdapter = new LabourTradeSpinAdapter(context, R.layout.custom_spinner, labourTypeList);
                     type.setAdapter(labourTypeAdapter);
 
 
@@ -376,7 +395,6 @@ public class CreateLabour extends AppCompatActivity {
             }
         });
     }
-
 
 
     private void findByRefLabour(String refNo) throws JSONException {
@@ -410,17 +428,14 @@ public class CreateLabour extends AppCompatActivity {
                 console.log(response);
                 if (response.equals("0")) {
                     Toast.makeText(getApplicationContext(), "Labour already associated with this project", Toast.LENGTH_SHORT).show();
-                }
-                else if (response.equals("-1")) {
+                } else if (response.equals("-1")) {
                     Toast.makeText(getApplicationContext(), "Invalid code, Please Enter Correct Code", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
+                } else {
 
                     builder.setTitle("Labour Created");
 
                     //Setting message manually and performing action on button click
-                    builder.setMessage(response+" Added Successfully")
+                    builder.setMessage(response + " Added Successfully")
                             .setCancelable(false);
 
                     //Creating dialog box

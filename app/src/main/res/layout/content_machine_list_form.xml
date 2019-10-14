@@ -60,6 +60,37 @@
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/kms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <EditText
+                android:layout_weight="1"
+                android:id="@+id/startKms"
+                android:background="@drawable/border"
+                android:layout_margin="10dp"
+                android:padding="10dp"
+                android:hint="@string/start_kms"
+                android:textSize="15sp"
+                android:layout_width="0dp"
+                android:inputType="number"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:layout_weight="1"
+                android:id="@+id/endKms"
+                android:background="@drawable/border"
+                android:layout_margin="10dp"
+                android:padding="10dp"
+                android:hint="@string/end_kms"
+                android:textSize="15sp"
+                android:layout_width="0dp"
+                android:inputType="number"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
             <LinearLayout
             android:id="@+id/service"
             android:layout_width="match_parent"

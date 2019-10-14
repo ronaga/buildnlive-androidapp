@@ -117,5 +117,8 @@ public class Config {
     public static final String ViewLeaveRequest = "https://buildnlive.com/app/mobileapp/index.php?r=site/ViewLeaveRequest&user_id=[0]";
     public static final String SaveLeaveRequest = "https://buildnlive.com/app/mobileapp/index.php?r=site/SaveLeaveRequest";
     public static final String cancelLeaveRequest = "https://buildnlive.com/app/mobileapp/index.php?r=site/cancelLeaveRequest&leave_id=[0]";
+    public static final String MarkOutDuty = "https://buildnlive.com/app/mobileapp/index.php?r=site/MarkOutDuty";
+    public static final String DeleteLabourAttendance = "https://buildnlive.com/app/mobileapp/index.php?r=site/DeleteLabourAttendance&daily_attendence_id=[0]&user_id=[1]";
+    public static final String UpdateJobSheet = "https://buildnlive.com/app/mobileapp/index.php?r=site/UpdateJobSheet";
 
 }

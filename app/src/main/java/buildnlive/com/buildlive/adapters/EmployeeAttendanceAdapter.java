@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import buildnlive.com.buildlive.R;
-import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.elements.Worker;
 import buildnlive.com.buildlive.utils.PrefernceFile;
 
@@ -106,8 +105,8 @@ public class EmployeeAttendanceAdapter extends RecyclerView.Adapter<EmployeeAtte
 //                (CHECK IN AND CHECK OUT)
 
                 Log.e("Inside Case All disable", "true 1");
-                check_in.setBackgroundColor(ContextCompat.getColor(context,R.color.c1));
-                check_out.setBackgroundColor(ContextCompat.getColor(context,R.color.c1));
+                check_in.setBackgroundColor(ContextCompat.getColor(context, R.color.c1));
+                check_out.setBackgroundColor(ContextCompat.getColor(context, R.color.c1));
                 check_in.setChecked(true);
                 check_in.setEnabled(false);
                 check_out.setChecked(true);
@@ -119,9 +118,9 @@ public class EmployeeAttendanceAdapter extends RecyclerView.Adapter<EmployeeAtte
 //                {CHECK IN}
 
                 Log.e("Inside Checked in", "true 1");
-                check_in.setBackgroundColor(ContextCompat.getColor(context,R.color.c1));
-                check_out.setBackgroundColor(ContextCompat.getColor(context,R.color.white));
-                absent.setBackgroundColor(ContextCompat.getColor(context,R.color.white));
+                check_in.setBackgroundColor(ContextCompat.getColor(context, R.color.c1));
+                check_out.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+                absent.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
                 check_in.setChecked(true);
                 check_in.setEnabled(false);
                 check_out.setChecked(false);
@@ -134,9 +133,9 @@ public class EmployeeAttendanceAdapter extends RecyclerView.Adapter<EmployeeAtte
 //                {ABSENT}
 
                 Log.e("Inside Abesnt", "true 1");
-                check_in.setBackgroundColor(ContextCompat.getColor(context,R.color.white));
-                check_out.setBackgroundColor(ContextCompat.getColor(context,R.color.white));
-                absent.setBackgroundColor(ContextCompat.getColor(context,R.color.material_red));
+                check_in.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+                check_out.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+                absent.setBackgroundColor(ContextCompat.getColor(context, R.color.material_red));
                 check_in.setChecked(false);
                 check_in.setEnabled(false);
                 check_out.setChecked(false);
@@ -148,9 +147,9 @@ public class EmployeeAttendanceAdapter extends RecyclerView.Adapter<EmployeeAtte
 
 
                 Log.e("Inside Case All enable", "true 1");
-                check_in.setBackgroundColor(ContextCompat.getColor(context,R.color.white));
-                check_out.setBackgroundColor(ContextCompat.getColor(context,R.color.white));
-                absent.setBackgroundColor(ContextCompat.getColor(context,R.color.white));
+                check_in.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+                check_out.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+                absent.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
 
                 check_in.setChecked(false);
                 check_in.setEnabled(true);
@@ -247,7 +246,6 @@ public class EmployeeAttendanceAdapter extends RecyclerView.Adapter<EmployeeAtte
 
     private static void alertMarkAbsent(Worker item, CheckBox absent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ;
         View dialogView = inflater.inflate(R.layout.alert_dialog_absent, null);
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context, R.style.PinDialog);
 
@@ -266,9 +264,48 @@ public class EmployeeAttendanceAdapter extends RecyclerView.Adapter<EmployeeAtte
             @Override
             public void onClick(View v) {
                 if (!status.getSelectedItem().equals("Select Status")) {
-                    PrefernceFile.Companion.getInstance(context).setString("status" + item.getId(), status.getSelectedItem().toString());
-                    item.setAbsentStatus(true);
-                    alertDialog.dismiss();
+                    if (status.getSelectedItem().equals("Outduty")) {
+                        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        View dialogView = inflater.inflate(R.layout.alert_dialog_outduty_adapter, null);
+                        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context, R.style.PinDialog);
+
+                        final AlertDialog outDutyDialog = dialogBuilder.setCancelable(false).setView(dialogView).create();
+                        outDutyDialog.show();
+
+                        TextView title = dialogView.findViewById(R.id.alert_title);
+                        EditText date = dialogView.findViewById(R.id.date);
+                        EditText reason = dialogView.findViewById(R.id.reason);
+                        title.setText("Outduty");
+
+                        Button positive = dialogView.findViewById(R.id.positive);
+                        Button negative = dialogView.findViewById(R.id.negative);
+
+                        positive.setText("Done");
+                        positive.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                PrefernceFile.Companion.getInstance(context).setString("status" + item.getId(), status.getSelectedItem().toString());
+                                PrefernceFile.Companion.getInstance(context).setString("date" + item.getId(), date.getText().toString());
+                                PrefernceFile.Companion.getInstance(context).setString("reason" + item.getId(), reason.getText().toString());
+                                item.setAbsentStatus(true);
+                                outDutyDialog.dismiss();
+                                alertDialog.dismiss();
+                             }
+                        });
+                        negative.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                outDutyDialog.dismiss();
+                            }
+                        });
+                    }
+                    else {
+                        PrefernceFile.Companion.getInstance(context).setString("status" + item.getId(), status.getSelectedItem().toString());
+                        PrefernceFile.Companion.getInstance(context).setString("date" + item.getId(), "");
+                        PrefernceFile.Companion.getInstance(context).setString("reason" + item.getId(), "");
+                        item.setAbsentStatus(true);
+                        alertDialog.dismiss();
+                    }
                 } else Toast.makeText(context, "Please Select Status", Toast.LENGTH_LONG).show();
             }
         });

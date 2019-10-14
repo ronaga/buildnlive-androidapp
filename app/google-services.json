@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "626808833446",
+    "firebase_url": "https://buildo.firebaseio.com",
+    "project_id": "buildo",
+    "storage_bucket": "buildo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:626808833446:android:38c8cc1e9899139a",
+        "android_client_info": {
+          "package_name": "buildnlive.com.buildlive"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "626808833446-laac5q4a8gjd4igiacur1vdhm7hfrbdv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "buildnlive.com.buildlive",
+            "certificate_hash": "fcac89ded974e286d3cb48c8b3a51d1f6ef40f19"
+          }
+        },
+        {
+          "client_id": "626808833446-get8b8ntp75lj2lkhpnkmmu1rtlabi6o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACwC6beHdKCLPPznMMVLxFwLFjOeup_T0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "626808833446-get8b8ntp75lj2lkhpnkmmu1rtlabi6o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -65,6 +65,7 @@
         <item>Select Status</item>
         <item>Absent</item>
         <item>Leave</item>
+        <item>Outduty</item>
     </string-array>
     <string-array name="tax_paid">
         <item>W/O Tax</item>
@@ -129,7 +130,6 @@
     <string name="receive_imprest">Receive Imprest</string>
     <string name="add">Add</string>
     <string name="date">Date</string>
-    <string name="dateHolder">Date: %1$s</string>
     <string name="next">Next</string>
     <string name="user">User</string>
     <string name="work">Work</string>
@@ -153,18 +153,22 @@
     <string name="workerHolder" >%1$s (%2$s)</string>
     <string name="close">Close</string>
     <string name="cancel_leave">Cancel Leave</string>
-    <string name="agenda">Agendas</string>
-    <string name="past">Past</string>
-    <string name="current">Current</string>
-    <string name="upcoming">Upcoming</string>
-    <string name="view_description" >View Description</string>
-    <string name="topic">Topic:</string>
-    <string name="description">Description</string>
-    <string name="add_users">Add Users</string>
-    <string name="category">Category</string>
-    <string name="subcategory">Sub Category</string>
-    <string name="create_agenda">Create Agenda</string>
-    <string name="create_new_agenda">Create New Agenda</string>
+    <string name="add_new_labour">Add New Labour</string>
+    <string name="name">Name</string>
+    <string name="add_labour">Add Labour</string>
+    <string name="vendor_name">Vendor Name</string>
+    <string name="checkout">Checkout</string>
+    <string name="checkin">Checkin</string>
+    <string name="absent">Absent</string>
+    <string name="outduty">Out Duty</string>
+    <string name="upto">Up to:</string>
+    <string name="select_date">Select Date</string>
+    <string name="reason">Reason</string>
+    <string name="done">Done</string>
+    <string name="mark_ab_od">Mark AB/OD</string>
+    <string name="start_kms">Start Kms</string>
+    <string name="end_kms">End Kms</string>
+    <string name="logout_time">Logout Time</string>
 
 </resources>
 

@@ -10,14 +10,14 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/labour"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="Add New Labour"
+            android:text="@string/add_new_labour"
             android:textSize="15sp"
             android:textColor="#6bb4dd"
             android:padding="7dp" />
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/border"
-            android:hint="Name"
+            android:hint="@string/name"
             android:padding="7dp" />
 
   <!--      <EditText
@@ -78,6 +78,17 @@
             android:layout_margin="10dp"
             android:background="@drawable/border"
             />
+
+        <EditText
+            android:id="@+id/vendorName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/border"
+            android:hint="@string/vendor_name"
+            android:visibility="gone"
+            android:padding="7dp" />
+
         <Spinner
             android:id="@+id/trade"
             android:layout_width="match_parent"
@@ -94,7 +105,7 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:layout_margin="10dp"
-            android:text="Add Labour"
+            android:text="@string/add_labour"
             android:textColor="@color/white"
             android:layout_gravity="center"
             android:background="#6bb4dd"/>

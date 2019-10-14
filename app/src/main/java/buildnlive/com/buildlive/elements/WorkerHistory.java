@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class WorkerHistory {
 
+    @SerializedName("daily_attendence_id")
+    private String dailyAttendenceId;
     @SerializedName("end_time")
     private String endTime;
     @SerializedName("start_time")
@@ -11,12 +13,28 @@ public class WorkerHistory {
     @SerializedName("start_date_time")
     private String startDateTime;
 
-
+/*
     public WorkerHistory(String endTime, String startTime, String startDateTime) {
         this.endTime = endTime;
         this.startTime = startTime;
         this.startDateTime = startDateTime;
+    }*/
+
+    public WorkerHistory(String dailyAttendenceId, String endTime, String startTime, String startDateTime) {
+        this.dailyAttendenceId = dailyAttendenceId;
+        this.endTime = endTime;
+        this.startTime = startTime;
+        this.startDateTime = startDateTime;
     }
+
+    public String getDailyAttendenceId() {
+        return dailyAttendenceId;
+    }
+
+    public void setDailyAttendenceId(String dailyAttendenceId) {
+        this.dailyAttendenceId = dailyAttendenceId;
+    }
+
 
     public String getEndTime() {
         return endTime;

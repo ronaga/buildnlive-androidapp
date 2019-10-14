@@ -223,7 +223,7 @@ public class ViewEmployeeAttendanceFragment extends Fragment {
         List<WorkerHistory> packets = new ArrayList<>();
         for (int i = 0; i < array.length(); i++) {
             JSONObject obj = array.getJSONObject(i);
-            packets.add(new WorkerHistory(obj.getString("end_time"), obj.getString("start_time"), obj.getString("start_date_time")));
+            packets.add(new WorkerHistory(obj.getString("daily_attendence_id"),obj.getString("end_time"), obj.getString("start_time"), obj.getString("start_date_time")));
         }
         return packets;
     }

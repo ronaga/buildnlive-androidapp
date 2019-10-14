@@ -37,7 +37,7 @@ public class MachineListForm extends AppCompatActivity {
     private ProgressBar progress;
     private boolean val = true;
     private TextView hider, name, loginTime, logoutTime;
-    private EditText description, service_time;
+    private EditText description, service_time,startKms,endKms;
 
     private static String loginTimeText, logoutTimeText, serviceTimeText, descriptionText;
 
@@ -98,6 +98,8 @@ public class MachineListForm extends AppCompatActivity {
         service_time = findViewById(R.id.service_time);
         loginTime = findViewById(R.id.login_time);
         logoutTime = findViewById(R.id.logout_time);
+        startKms = findViewById(R.id.startKms);
+        endKms = findViewById(R.id.endKms);
 
 
         name.setText(selectedItem.getName());
@@ -216,7 +218,7 @@ public class MachineListForm extends AppCompatActivity {
                                     console.log("From Validate");
                                     try {
                                         sendRequest(selectedItem.getAsset_id(), selectedItem.getInventory_item_rent_id(), loginTimeText, logoutTimeText
-                                                , service_time.getText().toString(), description.getText().toString());
+                                                , service_time.getText().toString(), description.getText().toString(),startKms.getText().toString(),endKms.getText().toString());
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -266,7 +268,7 @@ public class MachineListForm extends AppCompatActivity {
     }
 
     private void sendRequest(String asset_id, String inventory_item_rent_id, String log_in_time, String log_out_time,
-                             String service_time, String work_description) throws JSONException {
+                             String service_time, String work_description,String start_kms,String end_kms) throws JSONException {
         App app = ((App) getApplication());
         HashMap<String, String> params = new HashMap<>();
         params.put("asset_jobsheet", App.userId);
@@ -275,7 +277,7 @@ public class MachineListForm extends AppCompatActivity {
         jsonObject.put("asset_id", asset_id).put("project_id", App.projectId).put("user_id", App.userId)
                 .put("inventory_item_rent_id", inventory_item_rent_id).put("log_in_time", log_in_time)
                 .put("log_out_time", log_out_time).put("service_time", service_time)
-                .put("work_description", work_description);
+                .put("work_description", work_description).put("log_in_meter",start_kms).put("log_out_meter",end_kms);
 
         params.put("asset_jobsheet", jsonObject.toString());
         console.log("JobSheet " + params);

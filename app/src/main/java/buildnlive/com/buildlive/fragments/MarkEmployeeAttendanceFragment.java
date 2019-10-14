@@ -310,7 +310,8 @@ public class MarkEmployeeAttendanceFragment extends Fragment {
                             try {
                                 if (EmployeeAttendanceAdapter.ViewHolder.changedUsers.get(s)) {
                                     absentWorkers.add(u);
-                                        absent.put(new JSONObject().put("leave_status", PrefernceFile.Companion.getInstance(context).getString("status" + u.getId())).put("labour_id", u.getWorkerId()));
+                                        absent.put(new JSONObject().put("leave_status", PrefernceFile.Companion.getInstance(context).getString("status" + u.getId())).put("labour_id", u.getWorkerId())
+                                        .put("reason",PrefernceFile.Companion.getInstance(context).getString("reason" + u.getId())).put("date",PrefernceFile.Companion.getInstance(context).getString("date" + u.getId())));
                                 }
 
                             } catch (JSONException e) {
