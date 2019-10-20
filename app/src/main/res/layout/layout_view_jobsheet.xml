@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:layout_height="wrap_content">
 
@@ -65,15 +66,79 @@
         android:layout_marginBottom="10dp"
         android:background="@drawable/border"
         android:padding="10dp"
-        android:text="Dummy"
+        tools:text="Dummy"
         android:gravity="start"
         android:textAlignment="textStart" />
+
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:id="@+id/startKmsContainer"
+        android:layout_below="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:padding="10dp"
+            android:text="@string/start_kms"
+            android:gravity="start"
+            android:textAlignment="textStart" />
+
+      <TextView
+            android:id="@+id/startKms"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border"
+            android:padding="10dp"
+            tools:text="1000"
+            android:gravity="start"
+            android:textAlignment="textStart" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/endKmsContainer"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@+id/startKmsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:padding="10dp"
+            android:text="@string/end_kms"
+            android:gravity="start"
+            android:textAlignment="textStart" />
+
+      <TextView
+            android:id="@+id/endKms"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border"
+            android:padding="10dp"
+            tools:text="1000"
+            android:gravity="start"
+            android:textAlignment="textStart" />
+
+    </LinearLayout>
 
     <View
         android:id="@+id/separator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/description"
+        android:layout_below="@+id/endKmsContainer"
         android:background="#e8e8e8"/>
 
 </RelativeLayout>

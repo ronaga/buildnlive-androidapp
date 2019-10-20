@@ -24,20 +24,22 @@ public class ViewJobSheet implements Serializable {
     private String log_out_time;
     private String service_time;
     private String work_description;
+    private String log_out_meter;
+    private String log_in_meter;
 
-    public ViewJobSheet(String inventory_asset_jobsheet_id, String inventory_item_rent_id, String inventory_assets_id, String name,
-                        String log_in_time, String log_out_time,String service_time,String work_description) {
-
-        this.inventory_asset_jobsheet_id=inventory_asset_jobsheet_id;
-        this.inventory_item_rent_id=inventory_item_rent_id;
-        this.inventory_assets_id=inventory_assets_id;
-        this.name=name;
-        this.log_in_time=log_in_time;
-        this.log_out_time=log_out_time;
-        this.service_time=service_time;
-        this.work_description=work_description;
-
+    public ViewJobSheet(String inventory_asset_jobsheet_id, String inventory_item_rent_id, String inventory_assets_id, String name, String log_in_time, String log_out_time, String service_time, String work_description, String log_out_meter, String log_in_meter) {
+        this.inventory_asset_jobsheet_id = inventory_asset_jobsheet_id;
+        this.inventory_item_rent_id = inventory_item_rent_id;
+        this.inventory_assets_id = inventory_assets_id;
+        this.name = name;
+        this.log_in_time = log_in_time;
+        this.log_out_time = log_out_time;
+        this.service_time = service_time;
+        this.work_description = work_description;
+        this.log_out_meter = log_out_meter;
+        this.log_in_meter = log_in_meter;
     }
+
 
     public ViewJobSheet() {
     }
@@ -52,7 +54,25 @@ public class ViewJobSheet implements Serializable {
         setLogoutTime(obj.getString("log_out_time"));
         setServiceTime(obj.getString("service_time"));
         setWorkDescription(obj.getString("work_description"));
+        setLog_out_meter(obj.getString("log_out_meter"));
+        setLog_in_meter(obj.getString("log_in_meter"));
         return this;
+    }
+
+    public String getLog_out_meter() {
+        return log_out_meter;
+    }
+
+    public void setLog_out_meter(String log_out_meter) {
+        this.log_out_meter = log_out_meter;
+    }
+
+    public String getLog_in_meter() {
+        return log_in_meter;
+    }
+
+    public void setLog_in_meter(String log_in_meter) {
+        this.log_in_meter = log_in_meter;
     }
 
     private void setWorkDescription(String work_description) {

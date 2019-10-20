@@ -255,10 +255,10 @@ public class MachineListForm extends AppCompatActivity {
             val = false;
         }
 
-        if (TextUtils.equals(logoutTimeText, "Logout Time")) {
+        /*if (TextUtils.equals(logoutTimeText, "Logout Time")) {
             Toast.makeText(context, "Select Logout Time", Toast.LENGTH_LONG).show();
             val = false;
-        }
+        }*/
         if (TextUtils.isEmpty(descriptionText)) {
             description.setError("Enter Description");
             val = false;
