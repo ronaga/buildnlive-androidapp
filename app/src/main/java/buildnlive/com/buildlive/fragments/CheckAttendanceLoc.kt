@@ -64,12 +64,12 @@ class CheckAttendanceLoc : Fragment() {
     private lateinit var locationCallback: LocationCallback
 
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         this.mContext = context
     }
 
-    override fun onAttach(activity: Activity?) {
+    override fun onAttach(activity: Activity) {
         super.onAttach(activity)
         this.appCompatActivity = activity as AppCompatActivity?
     }
@@ -337,10 +337,10 @@ class CheckAttendanceLoc : Fragment() {
 
             val positive = dialogView.findViewById<Button>(R.id.positive)
             val negative = dialogView.findViewById<Button>(R.id.negative)
-            val date = dialogView.findViewById<TextView>(R.id.date)
+            val date = dialogView.findViewById<TextView>(R.id.time)
             val reason = dialogView.findViewById<EditText>(R.id.reason)
 
-            date.setOnClickListener {
+            /*date.setOnClickListener {
                 // Get Current Date
                 val c = Calendar.getInstance()
                 mYear = c.get(Calendar.YEAR)
@@ -351,7 +351,7 @@ class CheckAttendanceLoc : Fragment() {
                 val datePickerDialog = DatePickerDialog(context,
                         DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth -> date.text = dayOfMonth.toString() + "-" + (monthOfYear + 1) + "-" + year }, mYear!!, mMonth!!, mDay!!)
                 datePickerDialog.show()
-            }
+            }*/
 
             reason.movementMethod = ScrollingMovementMethod()
 

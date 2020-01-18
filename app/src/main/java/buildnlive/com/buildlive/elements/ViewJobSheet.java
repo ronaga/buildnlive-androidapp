@@ -26,8 +26,9 @@ public class ViewJobSheet implements Serializable {
     private String work_description;
     private String log_out_meter;
     private String log_in_meter;
+    private String date;
 
-    public ViewJobSheet(String inventory_asset_jobsheet_id, String inventory_item_rent_id, String inventory_assets_id, String name, String log_in_time, String log_out_time, String service_time, String work_description, String log_out_meter, String log_in_meter) {
+    public ViewJobSheet(String inventory_asset_jobsheet_id, String inventory_item_rent_id, String inventory_assets_id, String name, String log_in_time, String log_out_time, String service_time, String work_description, String log_out_meter, String log_in_meter,String date) {
         this.inventory_asset_jobsheet_id = inventory_asset_jobsheet_id;
         this.inventory_item_rent_id = inventory_item_rent_id;
         this.inventory_assets_id = inventory_assets_id;
@@ -38,6 +39,7 @@ public class ViewJobSheet implements Serializable {
         this.work_description = work_description;
         this.log_out_meter = log_out_meter;
         this.log_in_meter = log_in_meter;
+        this.date = date;
     }
 
 
@@ -56,7 +58,16 @@ public class ViewJobSheet implements Serializable {
         setWorkDescription(obj.getString("work_description"));
         setLog_out_meter(obj.getString("log_out_meter"));
         setLog_in_meter(obj.getString("log_in_meter"));
+        setDate(obj.getString("date"));
         return this;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getLog_out_meter() {

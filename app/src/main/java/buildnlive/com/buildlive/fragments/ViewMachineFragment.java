@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -175,6 +176,7 @@ public class ViewMachineFragment extends Fragment {
         hider=view.findViewById(R.id.hider);
         ViewJobSheetAdapter adapter = new ViewJobSheetAdapter(getContext(), itemsList,listner);
         items.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        items.addItemDecoration(new DividerItemDecoration(context,RecyclerView.VERTICAL));
         items.setAdapter(adapter);
         refresh();
     }

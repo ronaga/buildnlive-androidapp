@@ -91,6 +91,7 @@ public class Config {
     public static final String SEND_LABOUR_ATTENDANCE_LIST = "https://buildnlive.com/app/mobileapp/index.php?r=Site/SendLabourAttendenceList&user_id=[0]&project_id=[1]";
     public static final String SEND_USER_ATTENDANCE_LIST = "https://buildnlive.com/app/mobileapp/index.php?r=Site/SendUserAttendenceList&user_id=[0]&project_id=[1]";
     public static final String UPDATE_FCM_KEY = "https://buildnlive.com/app/mobileapp/index.php?r=Site/UpdateFCMKey";
+    public static final String CheckUID = "https://buildnlive.com/app/mobileapp/index.php?r=Site/CheckUID";
     public static final String APPROVALS = "https://buildnlive.com/app/mobileapp/index.php?r=Site/SendApprovals&user_id=[0]&detail_id=[1]";
     public static final String GET_APPROVALS = "https://buildnlive.com/app/mobileapp/index.php?r=Site/GetApprovals";
     public static final String SITE_PAYMENT_OPTION = "https://buildnlive.com/app/mobileapp/index.php?r=Site/SitePaymentOptions&user_id=[0]&project_id=[1]";

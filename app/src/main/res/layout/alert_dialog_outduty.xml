@@ -48,13 +48,14 @@
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/date"
+            <EditText
+                android:inputType="number"
+                android:id="@+id/time"
                 android:layout_margin="5dp"
                 android:padding="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/select_date"
+                android:hint="@string/hours"
                 android:textSize="18sp"
                 android:background="@drawable/border"/>
 

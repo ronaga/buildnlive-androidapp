@@ -6,16 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.navigation.NavigationView;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -24,9 +14,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.android.volley.Request;
+import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -62,7 +63,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private App app;
     private Context context;
     private UtilityofActivity utilityofActivity;
-    private AppCompatActivity appCompatActivity;
+    private AppCompatActivity appCompatActivity = this;
 
 
     @Override
@@ -70,6 +71,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         super.onStart();
 //
         try {
+            checkUUID(utilityofActivity.getUUID(context));
             sendRequest();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -81,15 +83,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        context=this;
+
         Realm realm = Realm.getDefaultInstance();
-        utilityofActivity = new UtilityofActivity(this);
+        utilityofActivity = new UtilityofActivity(appCompatActivity);
 
         FirebaseMessagingService fire = new FirebaseMessagingService();
 
-        console.log("Token Fcm "+ fire.getToken(this));
+        console.log("Token Fcm " + fire.getToken(this));
 
         try {
-            sendFcmToken(fire.getToken(this));
+            sendFcmToken(fire.getToken(this), utilityofActivity.getUUID(context));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -294,15 +298,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    private void sendFcmToken(String fcmToken) throws JSONException {
-        App app= ((App)getApplication());
+    private void sendFcmToken(String fcmToken, String uuid) throws JSONException {
+        App app = ((App) getApplication());
         HashMap<String, String> params = new HashMap<>();
         params.put("fcm_token", fcmToken);
+        params.put("uuid", uuid);
         params.put("user_id", App.userId);
 
         console.log("Res:" + params);
 
-        app.sendNetworkRequest(Config.UPDATE_FCM_KEY, Request.Method.POST , params, new Interfaces.NetworkInterfaceListener() {
+        app.sendNetworkRequest(Config.UPDATE_FCM_KEY, Request.Method.POST, params, new Interfaces.NetworkInterfaceListener() {
             @Override
             public void onNetworkRequestStart() {
 
@@ -310,12 +315,42 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onNetworkRequestError(String error) {
-                console.log(error+" Fail");
+                console.log(error + " Fail");
             }
 
             @Override
             public void onNetworkRequestComplete(String response) {
-                console.log(response+" Success");
+                console.log(response + " Success");
+            }
+        });
+    }
+
+    private void checkUUID(String uuid) throws JSONException {
+        App app = ((App) getApplication());
+        HashMap<String, String> params = new HashMap<>();
+        params.put("uuid", uuid);
+        params.put("user_id", App.userId);
+
+        console.log("Res:" + params);
+
+        app.sendNetworkRequest(Config.CheckUID, Request.Method.POST, params, new Interfaces.NetworkInterfaceListener() {
+            @Override
+            public void onNetworkRequestStart() {
+
+            }
+
+            @Override
+            public void onNetworkRequestError(String error) {
+                console.log(error + " Fail");
+            }
+
+            @Override
+            public void onNetworkRequestComplete(String response) {
+                if (response.equals("1")) {
+                    console.log(response + " Success");
+                } else if(response.equals("0")) {
+                    logout();
+                }
             }
         });
     }

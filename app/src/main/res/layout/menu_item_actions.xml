@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <View
+  <!--  <View
         android:id="@+id/separator2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -54,5 +54,5 @@
             android:layout_height="wrap_content"
             android:background="@color/transparent"
             android:text="@string/upcoming" />
-    </LinearLayout>
+    </LinearLayout>-->
 </LinearLayout>

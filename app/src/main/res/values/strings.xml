@@ -161,7 +161,7 @@
     <string name="checkin">Checkin</string>
     <string name="absent">Absent</string>
     <string name="outduty">Out Duty</string>
-    <string name="upto">Up to:</string>
+    <string name="upto">Up to(In Hrs):</string>
     <string name="select_date">Select Date</string>
     <string name="reason">Reason</string>
     <string name="done">Done</string>
@@ -169,6 +169,27 @@
     <string name="start_kms">Start Kms</string>
     <string name="end_kms">End Kms</string>
     <string name="logout_time">Logout Time</string>
+    <string name="hours">Hours</string>
+    <string name="login_time">Login Time</string>
+    <string name="service_time">Service Time</string>
+    <string name="update">Update</string>
+    <string name="dateHolder">Date: %1$s</string>
+    <string name="no_internet_connection">NO INTERNET CONNECTION</string>
+    <string name="oh_snap_we_couldn_t_reach_our_servers_please_check_your_internet_settings">Oh snap! We couldn\'t reach
+        our servers, Please check your internet settings.
+    </string>
+    <string name="internal_server_error">Internal Server Error</string>
+    <string name="server_error">Don\'t worry its not your fault. Server may be experiencing some issues, Please contact admin.</string>
+    <string name="unknown_error">Unknown Error has occurred, Please Contact Support.</string>
+    <string name="http_error">%1$s %2$s</string>
+    <string name="error">Request Failed, Please Contact Support.</string>
+    <string name="approvals">Approvals</string>
+    <string name="item">Item</string>
+    <string name="approve">Approve</string>
+    <string name="disapprove">Disapprove</string>
+    <string name="submit">Submit</string>
+    <string name="description">Description</string>
+    <string name="edit">edit</string>
 
 </resources>
 

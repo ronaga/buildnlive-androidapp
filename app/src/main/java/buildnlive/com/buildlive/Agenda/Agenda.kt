@@ -1,3 +1,4 @@
+/*
 package buildnlive.com.buildlive.Agenda
 
 import android.content.Context
@@ -54,13 +55,15 @@ class Agenda : AppCompatActivity() {
         }
 
 
-        /*  val dividerItemDecoration = DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
+        */
+/*  val dividerItemDecoration = DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
 
           items!!.addItemDecoration(dividerItemDecoration)
            items!!.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
            listAdapter = AMCListAdapter(context, ArrayList<AMCItem>(), listener)
-           items!!.adapter = listAdapter*/
+           items!!.adapter = listAdapter*//*
+
         configureRecyclerView()
     }
 
@@ -69,7 +72,8 @@ class Agenda : AppCompatActivity() {
 
         val json = Gson()
 
-        /*
+        */
+/*
    {
   "success": true,
   "message": "Success",
@@ -86,7 +90,8 @@ class Agenda : AppCompatActivity() {
 }
 
 
-  */
+  *//*
+
 
         val data = "{\n" +
                 "  \"success\": true,\n" +
@@ -119,6 +124,7 @@ class Agenda : AppCompatActivity() {
     }
 
 
+*/
 /*    private fun getItems() {
         var requestUrl = Config.ShowAMC
 
@@ -161,7 +167,8 @@ class Agenda : AppCompatActivity() {
 
             }
         })
-    }*/
+    }*//*
+
 
 
     override fun onSupportNavigateUp(): Boolean {
@@ -175,4 +182,4 @@ class Agenda : AppCompatActivity() {
     }
 
 
-}
+}*/

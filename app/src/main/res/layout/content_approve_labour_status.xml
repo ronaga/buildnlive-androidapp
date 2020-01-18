@@ -19,7 +19,7 @@
             android:layout_weight="0.5"
             android:gravity="center"
             android:padding="5dp"
-            android:text="Item"
+            android:text="@string/description"
             android:textColor="@color/black"
             android:textSize="14sp" />
 
@@ -29,7 +29,7 @@
             android:layout_weight="0.25"
             android:gravity="center"
             android:padding="5dp"
-            android:text="Approve"
+            android:text="@string/approve"
             android:textColor="@color/material_green"
             android:textSize="14sp" />
 
@@ -39,18 +39,25 @@
             android:layout_weight="0.25"
             android:gravity="center"
             android:padding="5dp"
-            android:text="Disapprove"
+            android:text="@string/disapprove"
             android:textColor="@color/material_red"
             android:textSize="14sp" />
 
     </LinearLayout>
+
+    <View
+        android:id="@+id/separator"
+        android:layout_below="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/light_grey" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/items"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/submit"
-        android:layout_below="@+id/header" />
+        android:layout_below="@+id/separator" />
 
     <Button
         android:id="@+id/submit"
@@ -58,6 +65,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/inactive_button"
-        android:text="Submit"
+        android:text="@string/submit"
         android:textColor="@color/white" />
 </RelativeLayout>

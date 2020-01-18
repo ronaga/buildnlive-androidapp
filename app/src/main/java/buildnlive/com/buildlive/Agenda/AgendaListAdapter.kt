@@ -1,3 +1,4 @@
+/*
 package buildnlive.com.buildlive.Agenda
 
 import android.content.Context
@@ -70,7 +71,8 @@ class AgendaListAdapter(
         }
 
 
-   /*     holder.navItem.setOnLongClickListener {
+   */
+/*     holder.navItem.setOnLongClickListener {
 
             if (!item.isSelectedStatus) {
                 item.isSelectedStatus = true
@@ -83,7 +85,8 @@ class AgendaListAdapter(
             }
 
             return@setOnLongClickListener true
-        }*/
+        }*//*
+
 
 
     }
@@ -118,3 +121,4 @@ class AgendaListAdapter(
     }
 
 }
+*/

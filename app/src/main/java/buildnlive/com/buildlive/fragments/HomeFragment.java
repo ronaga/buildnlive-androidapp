@@ -26,7 +26,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import buildnlive.com.buildlive.Agenda.Agenda;
+//import buildnlive.com.buildlive.Agenda.Agenda;
 import buildnlive.com.buildlive.App;
 import buildnlive.com.buildlive.Interfaces;
 import buildnlive.com.buildlive.R;
@@ -234,7 +234,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     machine.setVisibility(View.VISIBLE);
                     break;
                 }
-                case "Request": {
+                case "Request Item": {
                     requestItems.setVisibility(View.VISIBLE);
                     break;
                 }
@@ -268,6 +268,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 }
                 case "Labour Deployment": {
                     labour_deployment.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case "Agenda": {
+                    agenda.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case "Labour Request": {
+                    labourRequest.setVisibility(View.VISIBLE);
                     break;
                 }
             }
@@ -422,7 +430,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(getContext(), LabourRequest.class));
                 break;
             case R.id.agenda:
-                startActivity(new Intent(getContext(), Agenda.class));
+//                startActivity(new Intent(getContext(), Agenda.class));
                 break;
 
         }

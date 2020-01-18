@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:background="@color/white"
     android:layout_height="match_parent">
-
+<!--
     <include
         layout="@layout/toolbar"
         android:id="@+id/toolbar"
@@ -175,5 +175,5 @@
         android:text="@string/create_agenda"
         android:textColor="@color/white"
         android:background="@drawable/home_button_rectangle"
-        />
+        />-->
 </RelativeLayout>

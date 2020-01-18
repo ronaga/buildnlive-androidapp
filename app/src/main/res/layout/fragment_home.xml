@@ -76,6 +76,9 @@
 
 
                     <LinearLayout
+                        
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         android:id="@+id/mark_emp_attendance"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -110,6 +113,9 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         android:id="@+id/mark_attendance"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -156,6 +162,9 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
+                        
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         android:id="@+id/site_payment"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -191,6 +200,9 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         android:id="@+id/local_purchase"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -236,6 +248,9 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
+                        
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         android:id="@+id/manage_inventory"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -271,6 +286,9 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         android:id="@+id/issued_items"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -318,6 +336,9 @@
 
 
                     <LinearLayout
+                        
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         android:id="@+id/purchase"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -353,6 +374,9 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         android:id="@+id/storeRequest"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -401,6 +425,9 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
+                        
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         android:id="@+id/manage_labour"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -437,6 +464,9 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         android:id="@+id/labour"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -485,6 +515,9 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
+                        
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         android:id="@+id/planning"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -521,6 +554,9 @@
 
 
                     <LinearLayout
+                        
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         android:id="@+id/work_progress"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -568,6 +604,9 @@
                     android:orientation="horizontal">
                     
                     <LinearLayout
+                        
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         android:id="@+id/machine"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -603,6 +642,9 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         android:id="@+id/request_items"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -649,6 +691,9 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
+                        
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         android:id="@+id/repair"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -684,6 +729,9 @@
                             android:textSize="18sp" />
                     </LinearLayout>
                     <LinearLayout
+                        
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         android:id="@+id/approve"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -734,6 +782,9 @@
 
 
                     <LinearLayout
+                        
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         android:id="@+id/transfer_request"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -770,6 +821,9 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         android:id="@+id/request_list"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -816,6 +870,9 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
+                        
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         android:id="@+id/labour_deployment"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -851,6 +908,9 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         android:id="@+id/labour_request"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -898,6 +958,9 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
+                        
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         android:id="@+id/agenda"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

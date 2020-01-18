@@ -156,7 +156,7 @@ public class ViewAttendanceFragment extends Fragment {
     }
 
 
-    private void deleteAttedance(String id, DialogInterface dialog) {
+    private void deleteAttedance(String id, AlertDialog alertDialog) {
         String requestUrl = Config.DeleteLabourAttendance;
         requestUrl = requestUrl.replace("[1]", App.userId);
         requestUrl = requestUrl.replace("[0]", id);
@@ -186,18 +186,18 @@ public class ViewAttendanceFragment extends Fragment {
                     if(response.equals("1"))
                     {
                      utilityofActivity.toast("Successfully deleted");
-                     dialog.dismiss();
+                        alertDialog.dismiss();
 
                     }
                     else if(response.equals("-1"))
                     {
                         utilityofActivity.toast("You do not have permission to delete");
-                        dialog.dismiss();
+                        alertDialog.dismiss();
                     }
                     else
                     {
                         utilityofActivity.toast("Something went wrong");
-                        dialog.dismiss();
+                        alertDialog.dismiss();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -263,7 +263,7 @@ public class ViewAttendanceFragment extends Fragment {
                             builder.setCancelable(false)
                                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
-                                            deleteAttedance(packet.getDailyAttendenceId(),dialog);
+                                            deleteAttedance(packet.getDailyAttendenceId(),alertDialog);
                                         }
                                     })
                                     .setNegativeButton("No", new DialogInterface.OnClickListener() {

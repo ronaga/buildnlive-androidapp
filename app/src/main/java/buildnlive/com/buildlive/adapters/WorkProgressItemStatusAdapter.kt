@@ -51,8 +51,6 @@ class WorkProgressItemStatusAdapter
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         internal var name: TextView
         internal var inTime: TextView
-        internal var outTime: TextView
-        internal var overtime: TextView
         internal var container: LinearLayout
         internal var approve: RadioButton
         internal var disapprove: RadioButton
@@ -62,8 +60,6 @@ class WorkProgressItemStatusAdapter
             name = itemView.findViewById(R.id.name)
             container = itemView.findViewById(R.id.container)
             inTime = itemView.findViewById(R.id.inTime)
-            outTime = itemView.findViewById(R.id.outTime)
-            overtime = itemView.findViewById(R.id.overtime)
             approve = itemView.findViewById(R.id.approve)
             disapprove = itemView.findViewById(R.id.disapprove)
             check = itemView.findViewById(R.id.check)
@@ -72,8 +68,6 @@ class WorkProgressItemStatusAdapter
         fun bind(context: Context, item: ApproveWorkProgressItem, pos: Int, listener: OnItemClickListener) {
             name.text = item.workName
             inTime.text = "Quantity Achieved: " + item.qtyAchieved
-            outTime.text = "Quantity Planned: " + item.qtyPlanned
-            overtime.text = "Schedule: " + item.schedule
 
 
             var status: String

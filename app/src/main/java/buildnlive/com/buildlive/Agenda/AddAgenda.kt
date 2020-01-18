@@ -1,3 +1,4 @@
+/*
 package buildnlive.com.buildlive.Agenda
 
 import android.content.Context
@@ -31,6 +32,7 @@ class AddAgenda : AppCompatActivity() {
         notification.visibility = View.GONE
         addItem.visibility = View.GONE
 
+*/
 /*
         val data = "{\n" +
                 "  \"success\": true,\n" +
@@ -99,7 +101,8 @@ class AddAgenda : AppCompatActivity() {
                 }
             }
 
-        }*/
+        }*//*
+
 
 
     }
@@ -118,3 +121,4 @@ class AddAgenda : AppCompatActivity() {
 
 
 
+*/

@@ -56,12 +56,12 @@ class TakeLeave : Fragment() {
         showLeaves(item)
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         this.mContext = context
     }
 
-    override fun onAttach(activity: Activity?) {
+    override fun onAttach(activity: Activity) {
         super.onAttach(activity)
         this.appCompatActivity = activity as AppCompatActivity?
     }

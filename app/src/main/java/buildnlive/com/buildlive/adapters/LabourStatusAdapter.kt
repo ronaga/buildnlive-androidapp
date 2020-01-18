@@ -2,25 +2,30 @@ package buildnlive.com.buildlive.adapters
 
 
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.RecyclerView
 import buildnlive.com.buildlive.R
-import buildnlive.com.buildlive.elements.Approval.ApproveLabourItem
+import buildnlive.com.buildlive.Server.Response.ApprovalDataResponseData
+import buildnlive.com.buildlive.utils.ExpandableTextView
 import java.util.*
 
-class LabourStatusAdapter
-(private val context: Context, users: ArrayList<ApproveLabourItem>,private val listener: OnItemClickListener) : RecyclerView.Adapter<LabourStatusAdapter.ViewHolder>() {
+class LabourStatusAdapter(private val context: Context,
+                          users: ArrayList<ApprovalDataResponseData>,
+                          private val listener: OnItemClickListener,
+                          private val type: String) : RecyclerView.Adapter<LabourStatusAdapter.ViewHolder>() {
 
 
     interface OnItemClickListener {
-        fun onItemClick(project: ApproveLabourItem, pos: Int)
-        fun onItemUnchecked(project: ApproveLabourItem, pos: Int)
+        fun onItemClick(project: ApprovalDataResponseData, pos: Int)
+        fun onItemUnchecked(project: ApprovalDataResponseData, pos: Int)
+        fun onEditClicked(type: String)
     }
 
-    private val items: List<ApproveLabourItem>
+    private val items: List<ApprovalDataResponseData>
 
     init {
         this.items = users
@@ -34,13 +39,13 @@ class LabourStatusAdapter
         return position
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LabourStatusAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.layout_approve, parent, false)
         return ViewHolder(v)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(context, items[position], position,listener)
+        holder.bind(context, items[position], position, listener, type)
     }
 
 
@@ -49,54 +54,50 @@ class LabourStatusAdapter
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        internal var name: TextView
-        internal var inTime: TextView
-        internal var outTime: TextView
-        internal var overtime: TextView
-        internal var container: LinearLayout
-        internal var approve: RadioButton
-        internal var disapprove: RadioButton
-        internal var check: CheckBox
+        internal var name: TextView = itemView.findViewById(R.id.name)
+        internal var description: ExpandableTextView = itemView.findViewById(R.id.description)
+        internal var container: CardView = itemView.findViewById(R.id.container)
+        internal var approve: RadioButton = itemView.findViewById(R.id.approve)
+        internal var disapprove: RadioButton = itemView.findViewById(R.id.disapprove)
+        internal var check: CheckBox = itemView.findViewById(R.id.check)
+        internal var edit: ImageView = itemView.findViewById(R.id.edit)
 
-        init {
-            name = itemView.findViewById(R.id.name)
-            container = itemView.findViewById(R.id.container)
-            inTime = itemView.findViewById(R.id.inTime)
-            outTime = itemView.findViewById(R.id.outTime)
-            overtime = itemView.findViewById(R.id.overtime)
-            approve = itemView.findViewById(R.id.approve)
-            disapprove = itemView.findViewById(R.id.disapprove)
-            check = itemView.findViewById(R.id.check)
-        }
+        fun bind(context: Context, item: ApprovalDataResponseData, pos: Int, listener: OnItemClickListener, type: String) {
+            name.text = item.title
 
-        fun bind(context: Context, item: ApproveLabourItem, pos: Int, listener: OnItemClickListener) {
-            name.text = item.labourName
-            inTime.text = "In Time: "+ item.inTime
-            outTime.text ="Out Time: "+ item.outTime
-            overtime.text = "Overtime: "+item.overtime
+            description.text = item.description
 
-            var status:String
+            var status: String
 
-            check.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (type == "staff" || type == "dept_labour") {
+                edit.visibility = View.GONE
+            }
+            else
+            {
+                edit.visibility = View.VISIBLE
+                edit.setOnClickListener {
+                    listener.onEditClicked(item.id)
+                }
+            }
+
+            check.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
                     if ((!(approve.isChecked) && (!disapprove.isChecked))) {
                         Toast.makeText(context, "Choose approve/disapprove", Toast.LENGTH_SHORT).show()
                         check.isChecked = false
 
                     } else {
-                        item.status= if(approve.isChecked) {
+                        item.status = if (approve.isChecked) {
                             "approve"
                         } else {
                             "disapprove"
                         }
 
 
-                        listener.onItemClick(item,pos)
+                        listener.onItemClick(item, pos)
                     }
-                }
-                else
-                {
-                    listener.onItemUnchecked(item,pos)
+                } else {
+                    listener.onItemUnchecked(item, pos)
                 }
             }
 

@@ -33,7 +33,7 @@ public class ViewJobSheetAdapter extends RecyclerView.Adapter<ViewJobSheetAdapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_view_jobsheet, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_asset_sheet, parent, false);
         return new ViewHolder(v);
     }
 
@@ -59,30 +59,34 @@ public class ViewJobSheetAdapter extends RecyclerView.Adapter<ViewJobSheetAdapte
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView name, loginTime, logoutTime, serviceTime, description, startKms, endKms;
+        private TextView name, loginTime, logoutTime, serviceTime, description, startKms, endKms, update, date;
 
         public ViewHolder(View view) {
             super(view);
             name = view.findViewById(R.id.name);
+            date = view.findViewById(R.id.date);
             loginTime = view.findViewById(R.id.login_time);
             logoutTime = view.findViewById(R.id.logout_time);
             serviceTime = view.findViewById(R.id.service_time);
             description = view.findViewById(R.id.description);
             startKms = view.findViewById(R.id.startKms);
             endKms = view.findViewById(R.id.endKms);
+            update = view.findViewById(R.id.update);
         }
 
         public void bind(final Context context, final ViewJobSheet item, final int pos, final OnItemClickListener listener) {
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            update.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    listener.onItemClick(item, pos, itemView);
+                    listener.onItemClick(item, pos, update);
                 }
             });
 
             if (item.getName() != null)
                 name.setText(item.getName());
+            if (item.getDate() != null)
+                date.setText(String.format(context.getString(R.string.dateHolder),item.getDate()));
             if (item.getLog_in_meter() != null)
                 startKms.setText(item.getLog_in_meter());
             if (item.getLog_out_meter() != null)
