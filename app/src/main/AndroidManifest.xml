@@ -277,6 +277,8 @@
             android:name=".activities.LabourRequestForm"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".Approvals.EditSubContractorReport" />
+        <activity android:name=".Approvals.EditStoreDetails" />
         <!--<activity
             android:name=".Agenda.Agenda"
             android:screenOrientation="portrait"

@@ -72,6 +72,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.6.1"
     implementation "com.airbnb.android:lottie:3.0.7"
+    implementation 'com.github.tizisdeepan:eventscalendar:1.6.1'
 }
 repositories {
     mavenCentral()

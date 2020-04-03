@@ -15,7 +15,7 @@ import buildnlive.com.buildlive.Server.Response.ApprovalResponse
 import buildnlive.com.buildlive.Server.RetrofitApiAuthSingleTon
 import buildnlive.com.buildlive.adapters.ApprovalItemAdapter
 import buildnlive.com.buildlive.utils.UtilityofActivity
-import com.webpulse.webpulseclients.Server.TCApi
+import buildnlive.com.buildlive.Server.TCApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver

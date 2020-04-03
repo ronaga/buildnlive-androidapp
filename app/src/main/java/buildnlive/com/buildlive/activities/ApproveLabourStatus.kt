@@ -10,18 +10,22 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import buildnlive.com.buildlive.App
+import buildnlive.com.buildlive.Approvals.EditStoreDetails
+import buildnlive.com.buildlive.Approvals.EditSubContractorReport
 import buildnlive.com.buildlive.Interfaces
 import buildnlive.com.buildlive.R
 import buildnlive.com.buildlive.Server.HTTPResponseError
 import buildnlive.com.buildlive.Server.Request.ApprovalDataRequest
 import buildnlive.com.buildlive.Server.Response.ApprovalDataResponse
 import buildnlive.com.buildlive.Server.Response.ApprovalDataResponseData
+import buildnlive.com.buildlive.Server.Response.DefaultResponse
 import buildnlive.com.buildlive.Server.RetrofitApiAuthSingleTon
+import buildnlive.com.buildlive.Server.TCApi
 import buildnlive.com.buildlive.adapters.LabourStatusAdapter
 import buildnlive.com.buildlive.console
 import buildnlive.com.buildlive.utils.Config
 import buildnlive.com.buildlive.utils.UtilityofActivity
-import com.webpulse.webpulseclients.Server.TCApi
+import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -37,7 +41,6 @@ class ApproveLabourStatus : AppCompatActivity() {
 
     private var tcApi: TCApi? = null
     private var disposable = CompositeDisposable()
-
     private var utilityofActivity: UtilityofActivity? = null
     private val appCompatActivity = this
     private var context: Context? = null
@@ -50,11 +53,18 @@ class ApproveLabourStatus : AppCompatActivity() {
     private var builder: AlertDialog.Builder? = null
 
     private val listener = object : LabourStatusAdapter.OnItemClickListener {
-        override fun onEditClicked(type: String) {
+        override fun onEditClicked(type: String, id: String) {
             when (type) {
                 "staff" -> {
                 }
                 "dept_labour" -> {
+                }
+                "store_request" -> {
+
+                    val intent = Intent(context, EditStoreDetails::class.java)
+                    intent.putExtra("store_request_id", id)
+                    startActivity(intent)
+
                 }
                 "issue_item" -> {
 
@@ -63,6 +73,10 @@ class ApproveLabourStatus : AppCompatActivity() {
 
                 }
                 "sub_labour_report" -> {
+
+                    val intent = Intent(context, EditSubContractorReport::class.java)
+                    intent.putExtra("sub_contract_labour_id", id)
+                    startActivity(intent)
 
                 }
                 "indent_item" -> {
@@ -97,6 +111,7 @@ class ApproveLabourStatus : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_approve_labour_status)
 
+        builder = AlertDialog.Builder(context!!)
 
         context = this
         app = application as App
@@ -124,14 +139,14 @@ class ApproveLabourStatus : AppCompatActivity() {
             //Setting message manually and performing action on button click
             builder!!.setMessage("Do you want to Submit?")
                     .setCancelable(false)
-                    .setPositiveButton("Yes") { dialog, id ->
+                    .setPositiveButton("Yes") { _, _ ->
                         try {
                             sendRequest(resultList)
                         } catch (e: JSONException) {
                             e.printStackTrace()
                         }
                     }
-                    .setNegativeButton("No") { dialog, id ->
+                    .setNegativeButton("No") { dialog, _ ->
                         //  Action for 'NO' Button
                         dialog.cancel()
 
@@ -144,8 +159,6 @@ class ApproveLabourStatus : AppCompatActivity() {
 
 
         }
-
-
     }
 
     private fun getData() {
@@ -165,7 +178,7 @@ class ApproveLabourStatus : AppCompatActivity() {
 
                                     layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
-                                    approvalItemAdapter = LabourStatusAdapter(context!!, response.data, listener,type!!)
+                                    approvalItemAdapter = LabourStatusAdapter(context!!, response.data, listener, type!!)
                                     items!!.layoutManager = layoutManager
                                     items!!.adapter = approvalItemAdapter
 
@@ -182,7 +195,6 @@ class ApproveLabourStatus : AppCompatActivity() {
                             intent.putExtra("errorCode", t.code())
                             startActivity(intent)
                         }
-
                     }
 
                     override fun onError(e: Throwable) {
@@ -206,7 +218,7 @@ class ApproveLabourStatus : AppCompatActivity() {
         }
         params["approval_list"] = array.toString()
         console.log("Res:$params")
-        app!!.sendNetworkRequest(Config.GET_APPROVALS, 1, params, object : Interfaces.NetworkInterfaceListener {
+        app!!.sendNetworkRequest(Config.SUBMIT_APPROVALS, 1, params, object : Interfaces.NetworkInterfaceListener {
             override fun onNetworkRequestStart() {
                 utilityofActivity!!.showProgressDialog()
             }
@@ -218,7 +230,14 @@ class ApproveLabourStatus : AppCompatActivity() {
 
             override fun onNetworkRequestComplete(response: String) {
                 utilityofActivity!!.dismissProgressDialog()
-                finish()
+                val res = Gson().fromJson(response, DefaultResponse::class.java)
+                if (res.success) {
+                    utilityofActivity!!.toast(res.message)
+                    finish()
+                } else {
+                    utilityofActivity!!.toast(res.message)
+                }
+                console.log(response)
             }
         })
     }

@@ -22,6 +22,7 @@ public class Config {
     public static final String GET_PROJECT_PLANS = "https://buildnlive.com/app/mobileapp/index.php?r=site/SendProjectPlans&project_id=[0]&user_id=[1]";
     public static final String REQ_LOGIN = "https://buildnlive.com/app/mobileapp/index.php?r=site/UserLogin";
     public static final String SEND_ISSUED_ITEM = "https://buildnlive.com/app/mobileapp/index.php?r=site/GetIssueItem";
+    public static final String UpdateStoreRequestDetail = "https://buildnlive.com/app/mobileapp/index.php?r=Approvals/UpdateStoreRequestDetail";
     public static final String SEND_STOCK_ITEM = "https://buildnlive.com/app/mobileapp/index.php?r=site/GetStockRequest";
     public static final String REQ_DAILY_WORK = "https://buildnlive.com/app/mobileapp/index.php?r=site/WorkActivityDaily&user_id=[0]&project_id=[1]&type=Work&project_work_list_id=[2]";
     public static final String ShowWorkList = "https://buildnlive.com/app/mobileapp/index.php?r=site/ShowWorkList&user_id=[0]&project_id=[1]&structure_id=[2]";
@@ -60,6 +61,7 @@ public class Config {
     public static final String GET_CONTRACTORS = "https://buildnlive.com/app/mobileapp/index.php?r=site/SendVendors&user_id=[0]&project_id=[1]";
     public static final String VIEW_LABOUR_REPORT = "https://buildnlive.com/app/mobileapp/index.php?r=site/ViewLabourReport&user_id=[0]&project_id=[1]";
     public static final String GET_LABOUR_PROGRESS = "https://buildnlive.com/app/mobileapp/index.php?r=site/GetLabourProgress";
+    public static final String UpdateSubLabourReport = "https://buildnlive.com/app/mobileapp/index.php?r=Approvals/UpdateSubLabourReport";
     public static final String VIEW_DETAILED_LABOUR_REPORT = "https://buildnlive.com/app/mobileapp/index.php?r=site/ViewLabourReportBreakup&user_id=[0]&daily_labour_report_id=[1]&project_id=[2]";
     public static final String LABOUR_TYPE_LIST = "https://buildnlive.com/app/mobileapp/index.php?r=site/GetLabourTypes&user_id=[0]";
     public static final String GET_PLANNED_LIST = "https://buildnlive.com/app/mobileapp/index.php?r=site/GetPlannedWork&user_id=[0]&project_id=[1]&structure_id=[2]";
@@ -94,6 +96,7 @@ public class Config {
     public static final String CheckUID = "https://buildnlive.com/app/mobileapp/index.php?r=Site/CheckUID";
     public static final String APPROVALS = "https://buildnlive.com/app/mobileapp/index.php?r=Site/SendApprovals&user_id=[0]&detail_id=[1]";
     public static final String GET_APPROVALS = "https://buildnlive.com/app/mobileapp/index.php?r=Site/GetApprovals";
+    public static final String SUBMIT_APPROVALS = "https://buildnlive.com/app/mobileapp/index.php?r=Approval/SubmitApprovals";
     public static final String SITE_PAYMENT_OPTION = "https://buildnlive.com/app/mobileapp/index.php?r=Site/SitePaymentOptions&user_id=[0]&project_id=[1]";
     public static final String LABOUR_TRADE = "https://buildnlive.com/app/mobileapp/index.php?r=Site/LabourTrade&user_id=[0]&project_id=[1]";
     public static final String LABOUR_TYPE = "https://buildnlive.com/app/mobileapp/index.php?r=Site/LabourType&user_id=[0]&project_id=[1]";

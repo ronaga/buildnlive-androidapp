@@ -22,7 +22,7 @@ class LabourStatusAdapter(private val context: Context,
     interface OnItemClickListener {
         fun onItemClick(project: ApprovalDataResponseData, pos: Int)
         fun onItemUnchecked(project: ApprovalDataResponseData, pos: Int)
-        fun onEditClicked(type: String)
+        fun onEditClicked(type: String, id: String)
     }
 
     private val items: List<ApprovalDataResponseData>
@@ -76,7 +76,7 @@ class LabourStatusAdapter(private val context: Context,
             {
                 edit.visibility = View.VISIBLE
                 edit.setOnClickListener {
-                    listener.onEditClicked(item.id)
+                    listener.onEditClicked(type,item.id)
                 }
             }
 
