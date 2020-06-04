@@ -105,7 +105,7 @@ public class LocalPurchaseForm extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null) {
-            selectedItem = (Item) bundle.getSerializable("Items");
+            selectedItem = (Item) bundle.getParcelable("Items");
         }
 
 

@@ -100,7 +100,7 @@ public class IssuedItemsForm extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            itemList = (Item) bundle.getSerializable("Items");
+            itemList = (Item) bundle.getParcelable("Items");
         }
 
         app = (App) getApplication();

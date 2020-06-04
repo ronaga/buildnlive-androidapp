@@ -4,11 +4,11 @@ package buildnlive.com.buildlive.fragments
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Location
 import android.location.LocationManager
 import android.os.Build
@@ -27,19 +27,25 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import buildnlive.com.buildlive.*
-import buildnlive.com.buildlive.R
 import buildnlive.com.buildlive.activities.LoginActivity
 import buildnlive.com.buildlive.utils.Config
 import buildnlive.com.buildlive.utils.PrefernceFile
 import buildnlive.com.buildlive.utils.UtilityofActivity
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
+import com.an.biometric.BiometricCallback
+import com.an.biometric.BiometricManager
+import com.an.biometric.BiometricUtils
 import com.android.volley.Request
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.content_check_attendance.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
+import buildnlive.com.buildlive.R
+import buildnlive.com.buildlive.activities.CalendarViewActivity
+import com.applikeysolutions.cosmocalendar.settings.lists.connected_days.ConnectedDays
+
 
 class CheckAttendanceLoc : Fragment() {
 
@@ -53,6 +59,7 @@ class CheckAttendanceLoc : Fragment() {
     private var mYear: Int? = null
     private var mMonth: Int? = null
     private var mDay: Int? = null
+    var mBiometricManager: BiometricManager? = null
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     var outputLocation: String? = null
@@ -262,7 +269,6 @@ class CheckAttendanceLoc : Fragment() {
                 startLocationUpdates()
             }
 
-
         }
 
 
@@ -276,20 +282,149 @@ class CheckAttendanceLoc : Fragment() {
         name.text = n
         email.text = e
 
+/*
+        val weekendDays = HashSet<Int>()
+        weekendDays.add(Calendar.SATURDAY)
+        weekendDays.add(Calendar.SUNDAY)
+        calendarView.weekendDays = weekendDays
+*/
+
+        calendar.setOnClickListener {
+            startActivity(Intent(context, CalendarViewActivity::class.java))
+        }
+
+        if (BiometricUtils.isHardwareSupported(mContext!!) && BiometricUtils.isSdkVersionSupported()) {
+            mBiometricManager = BiometricManager.BiometricBuilder(mContext!!)
+                    .setTitle(getString(R.string.biometric_title))
+                    .setSubtitle(getString(R.string.biometric_subtitle))
+                    .setDescription(getString(R.string.biometric_description))
+                    .setNegativeButtonText(getString(R.string.biometric_negative_button_text))
+                    .build()
+
+
+        } else {
+            if (mBiometricManager != null)
+                mBiometricManager!!.cancelAuthentication()
+        }
+
+
+
         checkin.setOnClickListener {
-            if (lastLocation != null) {
-                Checkin(lastLocation!!.latitude.toString(), lastLocation!!.longitude.toString())
-            } else {
-                utilityofActivity!!.toast("Error fetching location please try again")
-            }
+            mBiometricManager!!.authenticate(object : BiometricCallback {
+                override fun onSdkVersionNotSupported() {
+                    if (lastLocation != null) {
+                        Checkin(lastLocation!!.latitude.toString(), lastLocation!!.longitude.toString())
+                    } else {
+                        utilityofActivity!!.toast("Error fetching location please try again")
+                    }
+                    Toast.makeText(context, getString(R.string.biometric_error_sdk_not_supported), Toast.LENGTH_LONG).show()
+                }
+
+                override fun onBiometricAuthenticationNotSupported() {
+                    if (lastLocation != null) {
+                        Checkin(lastLocation!!.latitude.toString(), lastLocation!!.longitude.toString())
+                    } else {
+                        utilityofActivity!!.toast("Error fetching location please try again")
+                    }
+                    Toast.makeText(context, getString(R.string.biometric_error_hardware_not_supported), Toast.LENGTH_LONG).show()
+                }
+
+                override fun onBiometricAuthenticationNotAvailable() {
+                    Toast.makeText(context, getString(R.string.biometric_error_fingerprint_not_available), Toast.LENGTH_LONG).show()
+                }
+
+                override fun onBiometricAuthenticationPermissionNotGranted() {
+                    Toast.makeText(context, getString(R.string.biometric_error_permission_not_granted), Toast.LENGTH_LONG).show()
+                }
+
+                override fun onBiometricAuthenticationInternalError(error: String?) {
+                    Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+                }
+
+                override fun onAuthenticationFailed() { //        Toast.makeText(getApplicationContext(), getString(R.string.biometric_failure), Toast.LENGTH_LONG).show();
+                }
+
+                override fun onAuthenticationCancelled() {
+                    if (mBiometricManager != null)
+                        mBiometricManager!!.cancelAuthentication()
+                    Toast.makeText(context, getString(R.string.biometric_cancelled), Toast.LENGTH_LONG).show()
+                }
+
+                override fun onAuthenticationSuccessful() {
+                    if (lastLocation != null) {
+                        Checkin(lastLocation!!.latitude.toString(), lastLocation!!.longitude.toString())
+                    } else {
+                        utilityofActivity!!.toast("Error fetching location please try again")
+                    }
+                }
+
+                override fun onAuthenticationHelp(helpCode: Int, helpString: CharSequence?) { //        Toast.makeText(getApplicationContext(), helpString, Toast.LENGTH_LONG).show();
+                }
+
+                override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) { //        Toast.makeText(getApplicationContext(), errString, Toast.LENGTH_LONG).show();
+                }
+
+            })
         }
 
         checkout.setOnClickListener {
-            if (lastLocation != null) {
-                CheckOut(lastLocation!!.latitude.toString(), lastLocation!!.longitude.toString())
-            } else {
-                utilityofActivity!!.toast("Error fetching location please try again")
-            }
+            mBiometricManager!!.authenticate(object : BiometricCallback {
+                override fun onSdkVersionNotSupported() {
+                    if (lastLocation != null) {
+                        CheckOut(lastLocation!!.latitude.toString(), lastLocation!!.longitude.toString())
+                    } else {
+                        utilityofActivity!!.toast("Error fetching location please try again")
+                    }
+                    Toast.makeText(context, getString(R.string.biometric_error_sdk_not_supported), Toast.LENGTH_LONG).show()
+                }
+
+                override fun onBiometricAuthenticationNotSupported() {
+                    if (lastLocation != null) {
+                        CheckOut(lastLocation!!.latitude.toString(), lastLocation!!.longitude.toString())
+                    } else {
+                        utilityofActivity!!.toast("Error fetching location please try again")
+                    }
+                    Toast.makeText(context, getString(R.string.biometric_error_hardware_not_supported), Toast.LENGTH_LONG).show()
+                }
+
+                override fun onBiometricAuthenticationNotAvailable() {
+                    Toast.makeText(context, getString(R.string.biometric_error_fingerprint_not_available), Toast.LENGTH_LONG).show()
+                }
+
+                override fun onBiometricAuthenticationPermissionNotGranted() {
+                    Toast.makeText(context, getString(R.string.biometric_error_permission_not_granted), Toast.LENGTH_LONG).show()
+                }
+
+                override fun onBiometricAuthenticationInternalError(error: String?) {
+                    Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+                }
+
+                override fun onAuthenticationFailed() { //        Toast.makeText(getApplicationContext(), getString(R.string.biometric_failure), Toast.LENGTH_LONG).show();
+                }
+
+                override fun onAuthenticationCancelled() {
+                    if (mBiometricManager != null)
+                        mBiometricManager!!.cancelAuthentication()
+                    Toast.makeText(context, getString(R.string.biometric_cancelled), Toast.LENGTH_LONG).show()
+                }
+
+                override fun onAuthenticationSuccessful() {
+                    if (lastLocation != null) {
+                        CheckOut(lastLocation!!.latitude.toString(), lastLocation!!.longitude.toString())
+                    } else {
+                        utilityofActivity!!.toast("Error fetching location please try again")
+                    }
+                }
+
+                override fun onAuthenticationHelp(helpCode: Int, helpString: CharSequence?) { //        Toast.makeText(getApplicationContext(), helpString, Toast.LENGTH_LONG).show();
+                }
+
+                override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) { //        Toast.makeText(getApplicationContext(), errString, Toast.LENGTH_LONG).show();
+                }
+
+            })
+
+
         }
 
         absent.setOnClickListener {
@@ -310,13 +445,65 @@ class CheckAttendanceLoc : Fragment() {
 
             positive.text = getString(R.string.done)
             positive.setOnClickListener {
-                if (lastLocation != null) {
-                    MarkAbsent(status.selectedItem.toString(), lastLocation!!.latitude.toString(), lastLocation!!.longitude.toString())
-                    alertDialog.dismiss()
-                } else {
-                    utilityofActivity!!.toast("Error fetching location please try again")
-                }
 
+                mBiometricManager!!.authenticate(object : BiometricCallback {
+                    override fun onSdkVersionNotSupported() {
+                        if (lastLocation != null) {
+                            MarkAbsent(status.selectedItem.toString(), lastLocation!!.latitude.toString(), lastLocation!!.longitude.toString())
+                            alertDialog.dismiss()
+                        } else {
+                            utilityofActivity!!.toast("Error fetching location please try again")
+                        }
+                        Toast.makeText(context, getString(R.string.biometric_error_sdk_not_supported), Toast.LENGTH_LONG).show()
+                    }
+
+                    override fun onBiometricAuthenticationNotSupported() {
+                        if (lastLocation != null) {
+                            MarkAbsent(status.selectedItem.toString(), lastLocation!!.latitude.toString(), lastLocation!!.longitude.toString())
+                            alertDialog.dismiss()
+                        } else {
+                            utilityofActivity!!.toast("Error fetching location please try again")
+                        }
+                        Toast.makeText(context, getString(R.string.biometric_error_hardware_not_supported), Toast.LENGTH_LONG).show()
+                    }
+
+                    override fun onBiometricAuthenticationNotAvailable() {
+                        Toast.makeText(context, getString(R.string.biometric_error_fingerprint_not_available), Toast.LENGTH_LONG).show()
+                    }
+
+                    override fun onBiometricAuthenticationPermissionNotGranted() {
+                        Toast.makeText(context, getString(R.string.biometric_error_permission_not_granted), Toast.LENGTH_LONG).show()
+                    }
+
+                    override fun onBiometricAuthenticationInternalError(error: String?) {
+                        Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+                    }
+
+                    override fun onAuthenticationFailed() { //        Toast.makeText(getApplicationContext(), getString(R.string.biometric_failure), Toast.LENGTH_LONG).show();
+                    }
+
+                    override fun onAuthenticationCancelled() {
+                        if (mBiometricManager != null)
+                            mBiometricManager!!.cancelAuthentication()
+                        Toast.makeText(context, getString(R.string.biometric_cancelled), Toast.LENGTH_LONG).show()
+                    }
+
+                    override fun onAuthenticationSuccessful() {
+                        if (lastLocation != null) {
+                            MarkAbsent(status.selectedItem.toString(), lastLocation!!.latitude.toString(), lastLocation!!.longitude.toString())
+                            alertDialog.dismiss()
+                        } else {
+                            utilityofActivity!!.toast("Error fetching location please try again")
+                        }
+                    }
+
+                    override fun onAuthenticationHelp(helpCode: Int, helpString: CharSequence?) { //        Toast.makeText(getApplicationContext(), helpString, Toast.LENGTH_LONG).show();
+                    }
+
+                    override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) { //        Toast.makeText(getApplicationContext(), errString, Toast.LENGTH_LONG).show();
+                    }
+
+                })
             }
             negative.setOnClickListener {
                 alertDialog.dismiss()
@@ -357,12 +544,66 @@ class CheckAttendanceLoc : Fragment() {
 
             positive.text = getString(R.string.done)
             positive.setOnClickListener {
-                if (lastLocation != null) {
-                    MarkOutDuty(date.text.toString(), reason.text.toString(), lastLocation!!.latitude.toString(), lastLocation!!.longitude.toString())
-                    alertDialog.dismiss()
-                } else {
-                    utilityofActivity!!.toast("Error fetching location please try again")
-                }
+
+
+                mBiometricManager!!.authenticate(object : BiometricCallback {
+                    override fun onSdkVersionNotSupported() {
+                        if (lastLocation != null) {
+                            MarkOutDuty(date.text.toString(), reason.text.toString(), lastLocation!!.latitude.toString(), lastLocation!!.longitude.toString())
+                            alertDialog.dismiss()
+                        } else {
+                            utilityofActivity!!.toast("Error fetching location please try again")
+                        }
+                        Toast.makeText(context, getString(R.string.biometric_error_sdk_not_supported), Toast.LENGTH_LONG).show()
+                    }
+
+                    override fun onBiometricAuthenticationNotSupported() {
+                        if (lastLocation != null) {
+                            MarkOutDuty(date.text.toString(), reason.text.toString(), lastLocation!!.latitude.toString(), lastLocation!!.longitude.toString())
+                            alertDialog.dismiss()
+                        } else {
+                            utilityofActivity!!.toast("Error fetching location please try again")
+                        }
+                        Toast.makeText(context, getString(R.string.biometric_error_hardware_not_supported), Toast.LENGTH_LONG).show()
+                    }
+
+                    override fun onBiometricAuthenticationNotAvailable() {
+                        Toast.makeText(context, getString(R.string.biometric_error_fingerprint_not_available), Toast.LENGTH_LONG).show()
+                    }
+
+                    override fun onBiometricAuthenticationPermissionNotGranted() {
+                        Toast.makeText(context, getString(R.string.biometric_error_permission_not_granted), Toast.LENGTH_LONG).show()
+                    }
+
+                    override fun onBiometricAuthenticationInternalError(error: String?) {
+                        Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+                    }
+
+                    override fun onAuthenticationFailed() { //        Toast.makeText(getApplicationContext(), getString(R.string.biometric_failure), Toast.LENGTH_LONG).show();
+                    }
+
+                    override fun onAuthenticationCancelled() {
+                        if (mBiometricManager != null)
+                            mBiometricManager!!.cancelAuthentication()
+                        Toast.makeText(context, getString(R.string.biometric_cancelled), Toast.LENGTH_LONG).show()
+                    }
+
+                    override fun onAuthenticationSuccessful() {
+                        if (lastLocation != null) {
+                            MarkOutDuty(date.text.toString(), reason.text.toString(), lastLocation!!.latitude.toString(), lastLocation!!.longitude.toString())
+                            alertDialog.dismiss()
+                        } else {
+                            utilityofActivity!!.toast("Error fetching location please try again")
+                        }
+                    }
+
+                    override fun onAuthenticationHelp(helpCode: Int, helpString: CharSequence?) { //        Toast.makeText(getApplicationContext(), helpString, Toast.LENGTH_LONG).show();
+                    }
+
+                    override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) { //        Toast.makeText(getApplicationContext(), errString, Toast.LENGTH_LONG).show();
+                    }
+
+                })
 
             }
             negative.setOnClickListener {
@@ -688,6 +929,7 @@ class CheckAttendanceLoc : Fragment() {
             }
         })
     }
+
 
     companion object {
         private var app: App? = null

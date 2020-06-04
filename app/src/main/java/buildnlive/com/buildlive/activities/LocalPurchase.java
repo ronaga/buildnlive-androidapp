@@ -1,5 +1,6 @@
 package buildnlive.com.buildlive.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import buildnlive.com.buildlive.App;
@@ -17,6 +19,7 @@ import buildnlive.com.buildlive.R;
 import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.fragments.LocalPurchaseListFragment;
 import buildnlive.com.buildlive.fragments.PaymentFragment;
+import buildnlive.com.buildlive.fragments.ViewPurchaseFragment;
 import buildnlive.com.buildlive.utils.UtilityofActivity;
 import io.realm.Realm;
 
@@ -43,7 +46,7 @@ public class LocalPurchase extends AppCompatActivity {
         setContentView(R.layout.activity_local_purchase);
         app = (App) getApplication();
         realm = Realm.getDefaultInstance();
-        fragment = LocalPurchaseListFragment.newInstance(app);
+        fragment = ViewPurchaseFragment.newInstance();
 
         utilityofActivity=new UtilityofActivity(appCompatActivity);
         utilityofActivity.configureToolbar(appCompatActivity);
@@ -51,7 +54,15 @@ public class LocalPurchase extends AppCompatActivity {
         TextView toolbar_title=findViewById(R.id.toolbar_title);
         TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
         toolbar_subtitle.setText(App.projectName);
-        toolbar_title.setText("Puchase");
+        toolbar_title.setText(getString(R.string.purchases));
+
+        ImageView addItem = findViewById(R.id.addItem);
+        addItem.setVisibility(View.VISIBLE);
+        addItem.setOnClickListener(view -> {
+            fragment = LocalPurchaseListFragment.newInstance(app);
+            changeScreen();
+        });
+
         changeScreen();
         /*edit = findViewById(R.id.edit);
         edit.setOnClickListener(new View.OnClickListener() {

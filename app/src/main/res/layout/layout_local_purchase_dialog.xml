@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="#00ffffff"
+    android:elevation="7dp"
+    card_view:cardCornerRadius="3dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/alert_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="5dp"
+            android:text="Item Name"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="25sp" />
+
+        <View
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/alert_title"
+            android:background="#e8e8e8" />
+
+        <LinearLayout
+            android:layout_below="@+id/separator"
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/quant"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/border"
+                android:hint="@string/quantity"
+                android:layout_weight="0.30"
+                android:inputType="numberDecimal"
+                android:padding="10dp"
+                android:textSize="16sp" />
+
+            <TextView
+                android:text="@string/units"
+                android:id="@+id/unit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="0.15"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+
+            <!--<Spinner-->
+            <!--android:id="@+id/unit"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:layout_weight="0.6"-->
+            <!--android:textSize="16dp"-->
+            <!--android:entries="@array/units"-->
+            <!--android:textStyle="bold"-->
+            <!--android:spinnerMode="dialog"-->
+            <!--android:prompt="@string/unit"/>-->
+
+        </LinearLayout>
+
+        <EditText
+            android:layout_below="@id/container"
+            android:id="@+id/rate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/border"
+            android:hint="Tax Amount"
+            android:inputType="numberDecimal"
+            android:padding="10dp"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_below="@id/rate"
+            android:id="@+id/rateHeader"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tax Rate"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp"/>
+
+        <Spinner
+            android:layout_below="@+id/rateHeader"
+            android:id="@+id/tax"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/border"
+            android:entries="@array/taxRate"
+            android:inputType="numberDecimal"
+            android:padding="10dp"
+            android:textSize="16sp" />
+
+
+        <LinearLayout
+            android:layout_below="@id/tax"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="5dp">
+
+            <Button
+                android:id="@+id/negative"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:background="@color/transparent"
+                android:text="@string/close"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/positive"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:background="@drawable/home_button_rectangle"
+                android:text="@string/submit"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

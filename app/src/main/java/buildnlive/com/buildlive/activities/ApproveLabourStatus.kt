@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import buildnlive.com.buildlive.App
+import buildnlive.com.buildlive.Approvals.EditPayment
 import buildnlive.com.buildlive.Approvals.EditStoreDetails
 import buildnlive.com.buildlive.Approvals.EditSubContractorReport
 import buildnlive.com.buildlive.Interfaces
@@ -60,7 +61,6 @@ class ApproveLabourStatus : AppCompatActivity() {
                 "dept_labour" -> {
                 }
                 "store_request" -> {
-
                     val intent = Intent(context, EditStoreDetails::class.java)
                     intent.putExtra("store_request_id", id)
                     startActivity(intent)
@@ -91,6 +91,11 @@ class ApproveLabourStatus : AppCompatActivity() {
                 "asset_job" -> {
 
                 }
+                "site_payments" -> {
+                    val intent = Intent(context, EditPayment::class.java)
+                    intent.putExtra("account_details_id", id)
+                    startActivity(intent)
+                }
                 else -> {
                 }
             }
@@ -110,8 +115,6 @@ class ApproveLabourStatus : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_approve_labour_status)
-
-        builder = AlertDialog.Builder(context!!)
 
         context = this
         app = application as App

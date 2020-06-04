@@ -1,5 +1,6 @@
 package buildnlive.com.buildlive.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -67,7 +68,7 @@ public class PurchaseOrderListing extends AppCompatActivity {
     private String imagePath;
     private ArrayList<Packet> images;
     private SingleImageAdapter imagesAdapter;
-    private EditText challan, invoice, inward_no;
+    private EditText challan, invoice, inward_no, vehicle_no;
     private ProgressBar progress;
     private TextView hider;
     public static final int REQUEST_GALLERY_IMAGE = 7191;
@@ -95,6 +96,7 @@ public class PurchaseOrderListing extends AppCompatActivity {
         challan = findViewById(R.id.challan);
         invoice = findViewById(R.id.invoice);
         inward_no = findViewById(R.id.inward_no);
+        vehicle_no = findViewById(R.id.vehicle_no);
         progress = findViewById(R.id.progress);
         hider = findViewById(R.id.hider);
         itemList = new ArrayList<>();
@@ -267,6 +269,7 @@ public class PurchaseOrderListing extends AppCompatActivity {
         params.put("challan", challan.getText().toString());
         params.put("invoice", invoice.getText().toString());
         params.put("inward_no", inward_no.getText().toString());
+        params.put("vehicle_no", vehicle_no.getText().toString());
         JSONArray imageArray = new JSONArray();
         for (Packet p : images) {
             if (p.getName() != null) {
@@ -359,8 +362,9 @@ public class PurchaseOrderListing extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CAPTURE_IMAGE) {
-            if (resultCode == android.app.Activity.RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK) {
                 Packet packet = images.remove(0);
                 packet.setName(imagePath);
 //                Uri uri=data.getData();
@@ -369,7 +373,7 @@ public class PurchaseOrderListing extends AppCompatActivity {
                 images.add(0, new Packet());
                 images.add(packet);
                 imagesAdapter.notifyDataSetChanged();
-            } else if (resultCode == android.app.Activity.RESULT_CANCELED) {
+            } else if (resultCode == Activity.RESULT_CANCELED) {
                 console.log("Canceled");
             }
         } else if (requestCode == REQUEST_GALLERY_IMAGE) {

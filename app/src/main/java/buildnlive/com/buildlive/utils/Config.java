@@ -23,6 +23,7 @@ public class Config {
     public static final String REQ_LOGIN = "https://buildnlive.com/app/mobileapp/index.php?r=site/UserLogin";
     public static final String SEND_ISSUED_ITEM = "https://buildnlive.com/app/mobileapp/index.php?r=site/GetIssueItem";
     public static final String UpdateStoreRequestDetail = "https://buildnlive.com/app/mobileapp/index.php?r=Approvals/UpdateStoreRequestDetail";
+    public static final String UpdateSitePaymentDetail = "https://buildnlive.com/app/mobileapp/index.php?r=Approvals/UpdateSitePaymentDetail";
     public static final String SEND_STOCK_ITEM = "https://buildnlive.com/app/mobileapp/index.php?r=site/GetStockRequest";
     public static final String REQ_DAILY_WORK = "https://buildnlive.com/app/mobileapp/index.php?r=site/WorkActivityDaily&user_id=[0]&project_id=[1]&type=Work&project_work_list_id=[2]";
     public static final String ShowWorkList = "https://buildnlive.com/app/mobileapp/index.php?r=site/ShowWorkList&user_id=[0]&project_id=[1]&structure_id=[2]";
@@ -41,7 +42,9 @@ public class Config {
     public static final String SEND_REQUEST_SITE_LIST = "https://buildnlive.com/app/mobileapp/index.php?r=site/SiteRequestItem&user_id=[0]";
     public static final String SEND_REQUEST_STATUS = "https://buildnlive.com/app/mobileapp/index.php?r=site/SendRequestStatus&user_id=[0] ";
     public static final String SEND_LOCAL_PURCHASE = "https://buildnlive.com/app/mobileapp/index.php?r=site/LocalPurchase";
+    public static final String SEND_LOCAL_PURCHASE_MULTI = "https://buildnlive.com/app/mobileapp/index.php?r=site/LocalPurchaseMultiple";
     public static final String SEND_LOCAL_PURCHASE_CONT = "https://buildnlive.com/app/mobileapp/index.php?r=site/LocalPurchaseCont";
+    public static final String SEND_LOCAL_PURCHASE_MULTI_CONT = "https://buildnlive.com/app/mobileapp/index.php?r=site/LocalPurchaseMultipleCont";
     public static final String SEND_SITE_PAYMENTS = "https://buildnlive.com/app/mobileapp/index.php?r=site/SitePayments";
     public static final String SEND_SITE_PAYMENTS_CONT = "https://buildnlive.com/app/mobileapp/index.php?r=site/SitePaymentsCont";
     public static final String SEND_NOTIFICATIONS = "https://buildnlive.com/app/mobileapp/index.php?r=site/SendNotifications&user_id=[0]&project_id=[1]";
@@ -52,7 +55,7 @@ public class Config {
     public static final String GET_LABOUR_VENDOR_LIST = "https://buildnlive.com/app/mobileapp/index.php?r=site/GetContractorList&user_id=[0]&project_id=[1]";
     public static final String GET_LABOUR_LIST = "https://buildnlive.com/app/mobileapp/index.php?r=site/GetLabourCount&user_id=[0]&project_id=[1]&vendor_id=[2]";
     public static final String SEND_LABOUR_LIST = "https://buildnlive.com/app/mobileapp/index.php?r=site/SaveLabourTransfer";
-    public static final String VIEW_LABOUR_LIST = "https://buildnlive.com/app/mobileapp/index.php?r=site/SendTransferDetails&user_id=[0]&project_id=[1]";
+    public static final String VIEW_LABOUR_LIST = "https://buildnlive.com/app/mobileapp/index.php?RFr=site/SendTransferDetails&user_id=[0]&project_id=[1]";
     public static final String SEND_COMMENTS = "https://buildnlive.com/app/mobileapp/index.php?r=site/UpdateLabourTransfer";
     public static final String FORGOT_PASSWORD = "https://buildnlive.com/app/mobileapp/index.php?r=site/ForgotPassword";
     public static final String RESET_PASSWORD = "https://buildnlive.com/app/mobileapp/index.php?r=site/ChangePassword";

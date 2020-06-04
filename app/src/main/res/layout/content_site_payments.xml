@@ -36,10 +36,10 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:singleLine="true"
-                android:text="Site Payments"
+                android:text="@string/view_payments"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/view"
@@ -50,10 +50,10 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:singleLine="true"
-                android:text="Receive Imprest"
+                android:text="@string/receive_imprest"
                 android:textAlignment="center"
                 android:textColor="@color/color2"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
         </LinearLayout>
     </LinearLayout>
@@ -75,6 +75,5 @@
     <FrameLayout
         android:id="@+id/site_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/action" />
+        android:layout_height="match_parent" />
 </LinearLayout>

@@ -180,6 +180,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         labour_deployment.setOnClickListener(this);
         labourRequest.setOnClickListener(this);
         agenda.setOnClickListener(this);
+/*
+        workProgress.setVisibility(View.VISIBLE);
+        planning.setVisibility(View.VISIBLE);
+        workProgress.setVisibility(View.VISIBLE);
+        labourReport.setVisibility(View.VISIBLE);
+        manageInventory.setVisibility(View.VISIBLE);
+        manageInventory.setVisibility(View.VISIBLE);
+        issuedItems.setVisibility(View.VISIBLE);
+        purchaseOrder.setVisibility(View.VISIBLE);
+        localPurchase.setVisibility(View.VISIBLE);
+        sitePayment.setVisibility(View.VISIBLE);
+        labour.setVisibility(View.VISIBLE);
+        machine.setVisibility(View.VISIBLE);
+        requestItems.setVisibility(View.VISIBLE);
+        siteRequest.setVisibility(View.VISIBLE);
+        repairRequest.setVisibility(View.VISIBLE);
+        transferRequest.setVisibility(View.VISIBLE);
+        markAttendance.setVisibility(View.VISIBLE);
+        markEmployeeAttendance.setVisibility(View.VISIBLE);
+        approval.setVisibility(View.VISIBLE);
+        storeRequest.setVisibility(View.VISIBLE);
+        labour_deployment.setVisibility(View.VISIBLE);
+        agenda.setVisibility(View.VISIBLE);
+        labourRequest.setVisibility(View.VISIBLE);*/
 
 
         ArrayList<String> permissionList = PrefernceFile.Companion.getInstance(context).getArrayList("Perm");

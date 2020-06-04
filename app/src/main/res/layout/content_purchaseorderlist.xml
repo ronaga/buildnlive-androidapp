@@ -36,7 +36,7 @@
             android:layout_weight="0.2"
             android:gravity="center"
             android:orientation="horizontal"
-            android:weightSum="3">
+            android:weightSum="4">
 
             <EditText
                 android:id="@+id/challan"
@@ -47,7 +47,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/border"
                 android:gravity="center"
-                android:hint="Challan Number"
+                android:hint="Challan No."
                 android:padding="10dp" />
 
             <EditText
@@ -59,7 +59,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/border"
                 android:gravity="center"
-                android:hint="Invoice Number"
+                android:hint="Invoice No."
                 android:padding="10dp" />
 
             <EditText
@@ -71,7 +71,19 @@
                 android:layout_weight="1"
                 android:background="@drawable/border"
                 android:gravity="center"
-                android:hint="Inward Number"
+                android:hint="Inward No."
+                android:padding="10dp" />
+
+            <EditText
+                android:id="@+id/vehicle_no"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/border"
+                android:gravity="center"
+                android:hint="Vehicle No."
                 android:padding="10dp" />
 
 
@@ -114,7 +126,6 @@
                 android:scrollbars="horizontal" />
 
         </LinearLayout>
-
 
 
         <androidx.recyclerview.widget.RecyclerView

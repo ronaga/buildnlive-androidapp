@@ -60,7 +60,7 @@ public class StoreRequestFragment extends Fragment {
     IssueItemListAdapter.OnItemClickListener listener= (item, pos, view) -> {
         Intent intent=new Intent(getActivity(), StoreRequestForm.class);
         Bundle bundle= new Bundle();
-        bundle.putSerializable("Items",item);
+        bundle.putParcelable("Items",item);
         intent.putExtras(bundle);
         startActivity(intent);
 

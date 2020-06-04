@@ -190,6 +190,50 @@
     <string name="submit">Submit</string>
     <string name="description">Description</string>
     <string name="edit">edit</string>
+    <string name="add_payment">Add Payment</string>
+    <string name="view_payments">View Payments</string>
+    <string name="delete">Delete</string>
+    <string name="Rs">\u20B9</string>
+    <string name="amount">Amount: \u20B9 %1$s</string>
+    <string name="dateLabel">Date: %1$s</string>
+    <string name="nameLabel">Name: %1$s</string>
+    <string name="vendorLabel">Vendor: %1$s</string>
+    <string name="payeeLabel">Payee: %1$s</string>
+    <string name="payTypeLabel">Pay Type: %1$s</string>
+    <string name="descriptionLabel">Description: %1$s</string>
+    <string name="view_purchases">View Purchases</string>
+    <string name="purchases">Purchases</string>
+    <string name="quantityLabel">"Quantity: %1$s"</string>
+    <string name="rateLabel">"Rate: %1$s"</string>
+    <string name="taxLabel">"Tax: %1$s"</string>
+    <string name="units">Units</string>
+    <string name="quantity">Quantity</string>
+    <string name="rate">Rate</string>
+    <string name="tax_amount">Tax Amount</string>
+    <string name="please_fill_details">Please fill details.</string>
+
+    <string name="biometric_title">Login into CRM</string>
+    <string name="biometric_subtitle">Login into your account</string>
+    <string name="biometric_description">Place your finger on the scanner to verify your identity.</string>
+    <string name="biometric_negative_button_text">Cancel</string>
+
+    <string name="biometric_error_sdk_not_supported">Sdk version not supported</string>
+    <string name="biometric_error_hardware_not_supported">Device does not support biometric authentication</string>
+    <string name="biometric_error_fingerprint_not_available">Fingerprint is not registered in device</string>
+    <string name="biometric_error_permission_not_granted">Permission is not granted by user</string>
+    <string name="biometric_failure">Login not successful!</string>
+    <string name="biometric_cancelled">Authentication cancelled by user</string>
+    <string name="biometric_success">Login Successful</string>
+    <string name="site_payment">Site Payment</string>
+    <string name="attendance">Attendance</string>
+
+    <string-array name="taxRate">
+        <item>0%</item>
+        <item>5%</item>
+        <item>12%</item>
+        <item>18%</item>
+        <item>28%</item>
+    </string-array>
 
 </resources>
 

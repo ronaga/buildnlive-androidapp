@@ -1,14 +1,18 @@
 package buildnlive.com.buildlive.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import buildnlive.com.buildlive.App;
@@ -18,6 +22,7 @@ import buildnlive.com.buildlive.console;
 import buildnlive.com.buildlive.fragments.ImpressFragment;
 import buildnlive.com.buildlive.fragments.LocalPurchaseListFragment;
 import buildnlive.com.buildlive.fragments.PaymentFragment;
+import buildnlive.com.buildlive.fragments.ViewPaymentFragment;
 import buildnlive.com.buildlive.utils.UtilityofActivity;
 import io.realm.Realm;
 
@@ -30,7 +35,7 @@ public class SitePayment extends AppCompatActivity {
     private ImageButton back;
 
     private UtilityofActivity utilityofActivity;
-    private AppCompatActivity appCompatActivity=this;
+    private AppCompatActivity appCompatActivity = this;
 
     @Override
     protected void onDestroy() {
@@ -44,15 +49,23 @@ public class SitePayment extends AppCompatActivity {
         setContentView(R.layout.activity_site_payments);
         app = (App) getApplication();
         realm = Realm.getDefaultInstance();
-        fragment = PaymentFragment.newInstance();
+        fragment = ViewPaymentFragment.newInstance();
 
-        utilityofActivity=new UtilityofActivity(appCompatActivity);
+        utilityofActivity = new UtilityofActivity(appCompatActivity);
         utilityofActivity.configureToolbar(appCompatActivity);
 
-        TextView toolbar_title=findViewById(R.id.toolbar_title);
-        TextView toolbar_subtitle=findViewById(R.id.toolbar_subtitle);
+
+        TextView toolbar_title = findViewById(R.id.toolbar_title);
+        TextView toolbar_subtitle = findViewById(R.id.toolbar_subtitle);
         toolbar_subtitle.setText(App.projectName);
         toolbar_title.setText("Payments");
+
+        ImageView addItem = findViewById(R.id.addItem);
+        addItem.setVisibility(View.VISIBLE);
+        addItem.setOnClickListener(view -> {
+            startActivity(new Intent(this, AddSitePayment.class));
+        });
+
         changeScreen();
         edit = findViewById(R.id.edit);
         edit.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +73,7 @@ public class SitePayment extends AppCompatActivity {
             public void onClick(View v) {
                 enableEdit();
                 disableView();
-                fragment = PaymentFragment.newInstance();
+                fragment = ViewPaymentFragment.newInstance();
                 changeScreen();
             }
         });
@@ -75,6 +88,7 @@ public class SitePayment extends AppCompatActivity {
             }
         });
     }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
@@ -114,6 +128,7 @@ public class SitePayment extends AppCompatActivity {
                 .replace(R.id.site_content, fragment)
                 .commit();
     }
+
     private void disableView() {
         int sdk = android.os.Build.VERSION.SDK_INT;
         if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
@@ -153,9 +168,6 @@ public class SitePayment extends AppCompatActivity {
         }
         edit.setTextColor(getResources().getColor(R.color.white));
     }
-
-
-
 
 
 }

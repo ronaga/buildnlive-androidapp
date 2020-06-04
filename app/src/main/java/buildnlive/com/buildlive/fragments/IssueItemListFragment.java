@@ -60,7 +60,7 @@ public class IssueItemListFragment extends Fragment {
     IssueItemListAdapter.OnItemClickListener listener= (item, pos, view) -> {
         Intent intent=new Intent(getActivity(), IssuedItemsForm.class);
         Bundle bundle= new Bundle();
-        bundle.putSerializable("Items",item);
+        bundle.putParcelable("Items",item);
         intent.putExtras(bundle);
         startActivity(intent);
 

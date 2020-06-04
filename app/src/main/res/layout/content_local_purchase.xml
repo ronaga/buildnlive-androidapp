@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_request_items"
+    tools:showIn="@layout/activity_local_purchase"
     tools:context=".activities.LocalPurchase">
 
     <LinearLayout
@@ -17,10 +17,7 @@
 
         >
 
-
-
 <!--
-
         <LinearLayout
             android:id="@+id/action"
             android:layout_width="match_parent"
@@ -37,12 +34,12 @@
                 android:background="@drawable/round_right_selected"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:text="Local Purchase"
+                android:text="@string/view_purchases"
                 android:singleLine="true"
                 android:ellipsize="marquee"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/view"
@@ -58,8 +55,7 @@
                 android:textColor="@color/color2"
                 android:textSize="20dp" />
 
-        </LinearLayout>
--->
+        </LinearLayout>-->
     </LinearLayout>
 
     <!--<Spinner-->
