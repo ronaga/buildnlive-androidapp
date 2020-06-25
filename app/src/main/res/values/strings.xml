@@ -212,8 +212,8 @@
     <string name="tax_amount">Tax Amount</string>
     <string name="please_fill_details">Please fill details.</string>
 
-    <string name="biometric_title">Login into CRM</string>
-    <string name="biometric_subtitle">Login into your account</string>
+    <string name="biometric_title">Authenticate Attendance</string>
+    <string name="biometric_subtitle">Approve the update of attendance status</string>
     <string name="biometric_description">Place your finger on the scanner to verify your identity.</string>
     <string name="biometric_negative_button_text">Cancel</string>
 

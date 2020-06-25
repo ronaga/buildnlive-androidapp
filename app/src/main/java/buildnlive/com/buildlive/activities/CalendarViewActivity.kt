@@ -197,6 +197,7 @@ class CalendarViewActivity : AppCompatActivity() {
                                                         if (j.startTime != null) {
                                                             checkin.text = j.startTime
                                                         }
+
                                                         if (j.endTime != null) {
                                                             checkout.text = j.endTime
                                                         }
